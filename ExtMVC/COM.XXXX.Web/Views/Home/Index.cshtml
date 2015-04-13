@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "后台主页";
+}
+
+@section Head
+{
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Ext/src/widgets/MessageBox.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Ext/src/widgets/tree/TreePanel.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Ext/src/widgets/TabPanel.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Ext/TabPage.js")" ></script>
+    <style>
+       
+   </style>
+    <script type="text/javascript">
+        //Ext.MessageBox.alert("Alert", "页面加载完成!");
+
+        //导航
+        var treePanel = function (title, data) {
+            return {
+                region: 'west',
+                xtype: 'treepanel',
+                collapsible: true,
+                title: title,
+                width: 200,
+                autoScroll: true,
+                split: true,
+                loader: new Ext.tree.TreeLoader(),
+                root: new Ext.tree.AsyncTreeNode({
+                    children: data
+                }),
+                border: false,
+                rootVisible: false,
+                listeners: {
+                    click: function (n) {
+                        tab.AddTabItem(n.attributes.url, n.attributes.text, n.attributes.id, Ext.getCmp("content"))
+                    }
+                }
+            };
+        }
+
+        Ext.onReady(function () {
+            Ext.QuickTips.init();
+            //模块项
+            Init();
+
+        });
+
+
+        function Init() {
+            var modulemenus = new Array();
+            Ext.Ajax.request({
+                url: '@Url.Content("~/Api/Module/GetModuleMenus")',
+                method: "Get",
+                success: function (response) {
+                    data = Ext.util.JSON.decode(response.responseText);
+                    Ext.each(data, function (menu) {
+                        modulemenus.push(treePanel(menu.title, menu.menus));
+                    })
+                    //布局
+                    new Ext.Viewport({
+                        title: "Viewport",
+                        layout: "border",
+                        defaults: {
+                            bodyStyle: "background-color: #FFFFFF;",
+                        },
+                        items: [
+                                   new Ext.Panel({
+                                       title: "菜单列表",
+                                       layout: "accordion",  //设置为手风琴布局
+                                       layoutConfig: {
+                                           animate: true
+                                       },
+                                       width: 250,
+                                       minWidth: 90,
+                                       region: "west", //设置方位
+                                       split: true,
+                                       collapsible: true,
+                                       items: modulemenus
+                                   }),
+                                    {
+                                        region: "north",
+                                        height: 100,
+                                        collapsible: false,
+                                        html: "<img width='100%' height='100%' src='@Url.Content("~/Content/Images/Header.jpg")' /><span style='color:#FFF;font-size:10px;position:absolute;float:right;right:0;margin:5px'><span id='currentuser'></span>|<span id='logout' style='cursor:pointer;'>退出登陆</span></span>"
+                                   },
+                                new Ext.TabPanel({
+                                    id: "content",
+                                    region: "center",
+                                    activeTab: 0,
+                                    enableTabScroll: true,
+                                    frame: true,
+                                }),
+                       ]
+                   });
+
+                   //当前用户
+                   Ext.DomHelper.append(Ext.get("currentuser"), "当前用户:@ViewBag.UserName");
+
+                   //安全退出
+                   Ext.get("logout").on("click", function () {
+                       Ext.Ajax.request({
+                           url: '@Url.Content("~/Account/Logout")',
+                           method: "Post",
+                           success: function (response) {
+                               if (response.responseText == "OK")
+                                   window.location.href = '@Url.Content("~/Account/Login")';
+                    }
+                       });
+                   });
+               }
+            });
+
+}
+
+    </script>
+}
+
+
+
+

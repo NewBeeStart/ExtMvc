@@ -1,0 +1,172 @@
+﻿
+<div id="dd2" icon="icon-save" style="padding: 5px; width: 400px; height: auto; overflow: hidden">
+    <form id="ff">
+        <div id="divU" style="height: auto">
+            <input type="hidden" id="OrganizationID" name ="OrganizationID"/> 
+            <input type="hidden" id="PassWord" name="PassWord"/>
+            <table cellpadding="0" cellspacing="1px" border="0" style="width: 100%;" bgcolor="b5d6e6">
+                
+                <tr style="background-color: White; height: 32px;">
+                    <td style="width: 80px; padding-left: 5px">真实姓名：</td>
+                    <td style="padding: 5px">
+                        <input class="easyui-validatebox textbox" id="RealName" name="RealName" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" /></td>
+                </tr>
+                <tr style="background-color: White; height: 32px;">
+                    <td style="width: 80px; padding-left: 5px">用户名：</td>
+                    <td style="padding: 5px">
+                        <input class="easyui-validatebox textbox" id="UserName"  name="UserName" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" /></td>
+                </tr>
+                <tr style="background-color: White; height: 32px;">
+                    <td style="width: 80px; padding-left: 5px">入职时间：</td>
+                    <td style="padding: 5px">
+                        <input class="Wdate" type="text" id="OfferTime" name="OfferTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                    </td>
+                </tr>
+                <tr style="background-color: White; height: 32px;">
+                    <td style="width: 80px; padding-left: 5px">学历：</td>
+                    <td style="padding: 5px">
+                        <input class="easyui-combobox" id="Education" name="Education" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                    </td>
+                </tr>
+                <tr style="background-color: White; height: 32px;">
+                    <td style="width: 80px; padding-left: 5px">婚否：</td>
+                    <td style="padding: 5px">
+                        <input class="easyui-combobox" id="IsMarry" name="IsMarry" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                    </td>
+                </tr>
+                <tr style="background-color: White; height: 32px;">
+                    <td style="width: 80px; padding-left: 5px">专业：</td>
+                    <td style="padding: 5px">
+                        <input class="easyui-validatebox textbox" id="Professional" name="Professional" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" /></td>
+                </tr>
+                <tr style="background-color: White; height: 32px;">
+                    <td style="width: 80px; padding-left: 5px">启用：</td>
+                    <td style="padding: 5px">
+                        <input class="easyui-combobox" id="InUse" name="InUse" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                    </td>
+                </tr>
+                <tr style="background-color: White; height: 50px;">
+                    <td style="padding: 5px">生日</td>
+                    <td style="padding: 5px">
+                        <input class="Wdate" type="text" id="BirthDay"  name="BirthDay" onfocus="WdatePicker({lang:'zh-cn',skin:'whyGreen',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                    </td>
+                </tr>
+                <tr style="background-color: White; height: 50px;">
+                    <td style="padding: 5px">备注</td>
+                    <td style="padding: 5px">
+                        <textarea id="Remark" rows="3"   name="Remark" style="width: 280px; border: 1px solid #8DB2E3;"></textarea></td>
+                </tr>
+                <tr style="background-color: White; height: 50px;">
+                    <td style="padding: 5px; text-align: right" colspan="2" rowspan="2"> 
+                        <div style="text-align:center"> 
+                            <input type="button"  class="button1" style=" margin-left:5px;" onclick="Save()" value="保存">
+                            <input type="button"  class="button1" style=" margin-left:5px;" onclick="window.location='OrganizationManage'+'@Html.Raw(Request.Url.Query)    ';" value="返回">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var ID = '@Request["id"]';
+    var type = '@Request["type"]';
+    var method;
+    function initCombotree() {
+        $("#Education").combobox({
+            separator:true,            
+            valueField: 'id',
+            panelHeight:'150',
+            textField: 'text',
+            data:
+                [
+                    { id: '001', text: '小学' },
+                    { id: '002', text: '高中' },
+                    { id: '003', text: '中专' },
+                    { id: '004', text: '大专' },
+                    { id: '005', text: '本科' },
+                    { id: '006', text: '硕士' },
+                    { id: '007', text: '博士' }
+                ]   
+        });
+        $("#IsMarry").combobox({
+            separator: true,
+            panelHeight: '50',
+            valueField: 'id',
+            textField: 'text',
+            data: [
+                { id: true, text: '已婚' },
+                { id: false, text: '未婚' }
+            ]
+        });
+        $("#InUse").combobox({
+            separator: true,
+            panelHeight: '50',
+            valueField: 'id',
+            textField: 'text',
+            data: [
+                { id:true, text: '启用' },
+                { id: false, text: '停用' }
+            ]
+        })
+
+    }
+
+    $(function () {
+        if (type == "user"){ 
+            //编辑操作
+            formEditInit();
+            method = "PUT";
+        }
+        else {
+            //新增操作
+            $("#OrganizationID").val(ID);
+            initCombotree();
+            method = "POST";
+        }
+    });
+
+    function formEditInit() {
+        //$('#ff').form("reset");
+        initCombotree();
+        //加载form数据
+        $.ajax({
+            url: '/Api/User/' + ID,
+            type: 'Get',
+            success: function (data) {
+                $('#ff').form("load",data);
+                //console.log(data)
+                //$("#BirthDay").val(data.BirthDay);
+                //$("#Education").combobox("setValue", data.Education);
+                //$("#PassWord").val(data.PassWord);
+                //$("#InUse").combobox("setValue", data.InUse);
+                //$("#IsMarry").combobox("setValue", data.IsMarry);
+                //$("#OrganizationID").val(data.OrganizationID);
+                //$("#OfferTime").val(data.OfferTime);
+                //$("#Professional").val(data.Professional);
+                //$("#RealName").val(data.RealName);
+                //$("#Remark").val(data.Remark);
+                //$("#UserName").val(data.UserName);
+            }
+        });
+    }
+
+    function Save() {
+        if ($("#ff").form('enableValidation').form('validate')) {
+            //加载form数据
+            $.ajax({
+                url: '/Api/User/' + ID,
+                type: method,
+                data: $('#ff').serialize(),
+                success: function (data) {
+                    $.messager.alert('提示', data.message,'info',function(){
+                        parent.location.reload();
+                    });
+                  
+                }
+            });
+        }
+    }
+ 
+</script>

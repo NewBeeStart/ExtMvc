@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "字典管理";
+}
+
+<div id="cc" class="easyui-layout" data-options="fit:true" style="overflow:hidden">
+    <div data-options="region:'west',split:true" style="width: 200px; overflow: hidden">
+        <div id="p" style="padding: 10px; height: 100%; width: 100%">
+            <ul id="tree" class="easyui-tree" data-options="url: '/Api/Dictionary/GetDictionaryTree?id=null'" style="width: 100%"></ul>
+        </div>
+    </div>
+    <div data-options="region:'center',title:'center title'" style="overflow:hidden">
+        <div id="p2" style="padding: 10px; height: 100%; width: 100%;overflow:hidden">
+          
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    $('#tree').tree({
+        onLoadSuccess: function () {
+            $("#tree").tree("collapseAll");
+        },
+        onClick: function (node) {
+            OpenPanel("/Admin/Dictionary/DictionaryManage?id="+node.id);
+        }
+    });
+
+    $('#p').panel({
+        border: false,
+        title: '字典名称',
+    });
+
+    OpenPanel("/Admin/Dictionary/DictionaryManage");
+
+    function OpenPanel(href) {
+        $('#p2').panel({
+            fit: true,
+            content: '<iframe id="orgiframe" scrolling="no" frameborder="0"  src="' + href + '" style="width:100%;height:100%;overflow:hidden"></iframe>',
+        });
+    }
+ 
+</script>

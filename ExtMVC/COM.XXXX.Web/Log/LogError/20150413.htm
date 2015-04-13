@@ -1,0 +1,224 @@
+<HR COLOR=red>
+异常时间：2015-04-13 11:20:02,997 [40] <BR>
+异常级别：ERROR     <BR>
+异 常 类：logerror [(null)] <BR>
+/Api/Organization/GetOrganizationsAndUser <BR>
+ <HR Size=1>System.Data.Entity.Core.EntityCommandExecutionException: 执行命令定义时出错。有关详细信息，请参阅内部异常。 ---> System.Data.SqlClient.SqlException: 列名 'iconCls' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   在 System.Data.Entity.Infrastructure.Interception.InternalDispatcher`1.Dispatch[TTarget,TInterceptionContext,TResult](TTarget target, Func`3 operation, TInterceptionContext interceptionContext, Action`3 executing, Action`3 executed)
+   在 System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.Reader(DbCommand command, DbCommandInterceptionContext interceptionContext)
+   在 System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   在 System.Data.Entity.Core.Objects.Internal.ObjectQueryExecutionPlan.Execute[TResultType](ObjectContext context, ObjectParameterCollection parameterValues)
+   在 System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass3.<GetResults>b__1()
+   在 System.Data.Entity.SqlServer.DefaultSqlExecutionStrategy.Execute[TResult](Func`1 operation)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.GetResults(Nullable`1 forMergeOption)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<System.Collections.Generic.IEnumerable<T>.GetEnumerator>b__0()
+   在 System.Data.Entity.Internal.LazyEnumerator`1.MoveNext()
+   在 System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   在 System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   在 COM.XXXX.WebApi.Admin.Controllers.OrganizationApiController.GetOrganizationsAndUser(Nullable`1 id) 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\COM.XXXX.WebApi\Admin\Controllers\OrganizationApiController.cs:行号 157
+   在 lambda_method(Closure , Object , Object[] )
+   在 System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass13.<GetExecutor>b__c(Object instance, Object[] methodParameters)
+   在 System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.Execute(Object instance, Object[] arguments)
+   在 System.Threading.Tasks.TaskHelpers.RunSynchronously[TResult](Func`1 func, CancellationToken cancellationToken)
+<HR COLOR=red>
+异常时间：2015-04-13 11:21:12,411 [42] <BR>
+异常级别：ERROR     <BR>
+异 常 类：logerror [(null)] <BR>
+/Api/Organization/GetOrganizationsAndUser <BR>
+ <HR Size=1>System.Data.Entity.Core.EntityCommandExecutionException: 执行命令定义时出错。有关详细信息，请参阅内部异常。 ---> System.Data.SqlClient.SqlException: 列名 'iconCls' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   在 System.Data.Entity.Infrastructure.Interception.InternalDispatcher`1.Dispatch[TTarget,TInterceptionContext,TResult](TTarget target, Func`3 operation, TInterceptionContext interceptionContext, Action`3 executing, Action`3 executed)
+   在 System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.Reader(DbCommand command, DbCommandInterceptionContext interceptionContext)
+   在 System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   在 System.Data.Entity.Core.Objects.Internal.ObjectQueryExecutionPlan.Execute[TResultType](ObjectContext context, ObjectParameterCollection parameterValues)
+   在 System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass3.<GetResults>b__1()
+   在 System.Data.Entity.SqlServer.DefaultSqlExecutionStrategy.Execute[TResult](Func`1 operation)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.GetResults(Nullable`1 forMergeOption)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<System.Collections.Generic.IEnumerable<T>.GetEnumerator>b__0()
+   在 System.Data.Entity.Internal.LazyEnumerator`1.MoveNext()
+   在 System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   在 System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   在 COM.XXXX.WebApi.Admin.Controllers.OrganizationApiController.GetOrganizationsAndUser(Nullable`1 id) 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\COM.XXXX.WebApi\Admin\Controllers\OrganizationApiController.cs:行号 157
+   在 lambda_method(Closure , Object , Object[] )
+   在 System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass13.<GetExecutor>b__c(Object instance, Object[] methodParameters)
+   在 System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.Execute(Object instance, Object[] arguments)
+   在 System.Threading.Tasks.TaskHelpers.RunSynchronously[TResult](Func`1 func, CancellationToken cancellationToken)
+<HR COLOR=red>
+异常时间：2015-04-13 16:04:01,598 [8] <BR>
+异常级别：ERROR     <BR>
+异 常 类：logerror [(null)] <BR>
+/Admin/Organization/OrganizationManage <BR>
+ <HR Size=1>System.InvalidOperationException: 未找到分部视图“_ChooseBox”或没有视图引擎支持搜索的位置。搜索了以下位置: 
+~/Areas/Admin/Views/Organization/_ChooseBox.aspx
+~/Areas/Admin/Views/Organization/_ChooseBox.ascx
+~/Areas/Admin/Views/Shared/_ChooseBox.aspx
+~/Areas/Admin/Views/Shared/_ChooseBox.ascx
+~/Views/Organization/_ChooseBox.aspx
+~/Views/Organization/_ChooseBox.ascx
+~/Views/Shared/_ChooseBox.aspx
+~/Views/Shared/_ChooseBox.ascx
+~/Areas/Admin/Views/Organization/_ChooseBox.cshtml
+~/Areas/Admin/Views/Organization/_ChooseBox.vbhtml
+~/Areas/Admin/Views/Shared/_ChooseBox.cshtml
+~/Areas/Admin/Views/Shared/_ChooseBox.vbhtml
+~/Views/Organization/_ChooseBox.cshtml
+~/Views/Organization/_ChooseBox.vbhtml
+~/Views/Shared/_ChooseBox.cshtml
+~/Views/Shared/_ChooseBox.vbhtml
+   在 System.Web.Mvc.HtmlHelper.FindPartialView(ViewContext viewContext, String partialViewName, ViewEngineCollection viewEngineCollection)
+   在 System.Web.Mvc.HtmlHelper.RenderPartialInternal(String partialViewName, ViewDataDictionary viewData, Object model, TextWriter writer, ViewEngineCollection viewEngineCollection)
+   在 System.Web.Mvc.Html.PartialExtensions.Partial(HtmlHelper htmlHelper, String partialViewName, Object model, ViewDataDictionary viewData)
+   在 ASP._Page_Areas_Admin_Views_Organization_OrganizationManage_cshtml.Execute() 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\COM.XXXX.Web\Areas\Admin\Views\Organization\OrganizationManage.cshtml:行号 44
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+<HR COLOR=red>
+异常时间：2015-04-13 16:04:12,613 [20] <BR>
+异常级别：ERROR     <BR>
+异 常 类：logerror [(null)] <BR>
+/Admin/Organization/OrganizationManage <BR>
+ <HR Size=1>System.InvalidOperationException: 未找到分部视图“_ChooseBox”或没有视图引擎支持搜索的位置。搜索了以下位置: 
+~/Areas/Admin/Views/Organization/_ChooseBox.aspx
+~/Areas/Admin/Views/Organization/_ChooseBox.ascx
+~/Areas/Admin/Views/Shared/_ChooseBox.aspx
+~/Areas/Admin/Views/Shared/_ChooseBox.ascx
+~/Views/Organization/_ChooseBox.aspx
+~/Views/Organization/_ChooseBox.ascx
+~/Views/Shared/_ChooseBox.aspx
+~/Views/Shared/_ChooseBox.ascx
+~/Areas/Admin/Views/Organization/_ChooseBox.cshtml
+~/Areas/Admin/Views/Organization/_ChooseBox.vbhtml
+~/Areas/Admin/Views/Shared/_ChooseBox.cshtml
+~/Areas/Admin/Views/Shared/_ChooseBox.vbhtml
+~/Views/Organization/_ChooseBox.cshtml
+~/Views/Organization/_ChooseBox.vbhtml
+~/Views/Shared/_ChooseBox.cshtml
+~/Views/Shared/_ChooseBox.vbhtml
+   在 System.Web.Mvc.HtmlHelper.FindPartialView(ViewContext viewContext, String partialViewName, ViewEngineCollection viewEngineCollection)
+   在 System.Web.Mvc.HtmlHelper.RenderPartialInternal(String partialViewName, ViewDataDictionary viewData, Object model, TextWriter writer, ViewEngineCollection viewEngineCollection)
+   在 System.Web.Mvc.Html.PartialExtensions.Partial(HtmlHelper htmlHelper, String partialViewName, Object model, ViewDataDictionary viewData)
+   在 ASP._Page_Areas_Admin_Views_Organization_OrganizationManage_cshtml.Execute() 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\COM.XXXX.Web\Areas\Admin\Views\Organization\OrganizationManage.cshtml:行号 44
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+<HR COLOR=red>
+异常时间：2015-04-13 16:04:55,736 [8] <BR>
+异常级别：ERROR     <BR>
+异 常 类：logerror [(null)] <BR>
+/Admin/Organization/OrganizationManage <BR>
+ <HR Size=1>Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: “object”未包含“ID”的定义
+   在 CallSite.Target(Closure , CallSite , Object )
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   在 ASP._Page_Areas_Admin_Views_Organization__ChooseBox_cshtml.Execute() 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\COM.XXXX.Web\Areas\Admin\Views\Organization\_ChooseBox.cshtml:行号 11
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.Html.PartialExtensions.Partial(HtmlHelper htmlHelper, String partialViewName, Object model, ViewDataDictionary viewData)
+   在 ASP._Page_Areas_Admin_Views_Organization_OrganizationManage_cshtml.Execute() 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\COM.XXXX.Web\Areas\Admin\Views\Organization\OrganizationManage.cshtml:行号 44
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+<HR COLOR=red>
+异常时间：2015-04-13 16:05:13,465 [22] <BR>
+异常级别：ERROR     <BR>
+异 常 类：logerror [(null)] <BR>
+/Admin/Organization/OrganizationManage <BR>
+ <HR Size=1>Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: “object”未包含“ID”的定义
+   在 CallSite.Target(Closure , CallSite , Object )
+   在 ASP._Page_Areas_Admin_Views_Organization__ChooseBox_cshtml.Execute() 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\COM.XXXX.Web\Areas\Admin\Views\Organization\_ChooseBox.cshtml:行号 11
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.Html.PartialExtensions.Partial(HtmlHelper htmlHelper, String partialViewName, Object model, ViewDataDictionary viewData)
+   在 ASP._Page_Areas_Admin_Views_Organization_OrganizationManage_cshtml.Execute() 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\COM.XXXX.Web\Areas\Admin\Views\Organization\OrganizationManage.cshtml:行号 44
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+<HR COLOR=red>
+异常时间：2015-04-13 20:25:46,941 [10] <BR>
+异常级别：ERROR     <BR>
+异 常 类：logerror [(null)] <BR>
+/Api/Module/GetModuleMenus <BR>
+ <HR Size=1>System.Data.Entity.Core.EntityCommandExecutionException: 执行命令定义时出错。有关详细信息，请参阅内部异常。 ---> System.Data.SqlClient.SqlException: 列名 'iconCls' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   在 System.Data.Entity.Infrastructure.Interception.InternalDispatcher`1.Dispatch[TTarget,TInterceptionContext,TResult](TTarget target, Func`3 operation, TInterceptionContext interceptionContext, Action`3 executing, Action`3 executed)
+   在 System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.Reader(DbCommand command, DbCommandInterceptionContext interceptionContext)
+   在 System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   在 System.Data.Entity.Core.Objects.Internal.ObjectQueryExecutionPlan.Execute[TResultType](ObjectContext context, ObjectParameterCollection parameterValues)
+   在 System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass3.<GetResults>b__1()
+   在 System.Data.Entity.SqlServer.DefaultSqlExecutionStrategy.Execute[TResult](Func`1 operation)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.GetResults(Nullable`1 forMergeOption)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<System.Collections.Generic.IEnumerable<T>.GetEnumerator>b__0()
+   在 System.Data.Entity.Internal.LazyEnumerator`1.MoveNext()
+   在 System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   在 System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   在 Repository.Domain.Infrastructure.Repository`1.List() 位置 f:\PrimaryFile\project\MVCAPP\MvcApplication1\Repository.Domain\Infrastructure\Repository.cs:行号 56
+   在 COM.XXXX.WebApi.ApiControllerBase`2.Get() 位置 d:\Projects\ExtMvc\ExtMVC\COM.XXXX.WebApi\ApiControllerBase.cs:行号 69
+   在 COM.XXXX.WebApi.Admin.Controllers.ModuleApiController.GetModuleMenus() 位置 d:\Projects\ExtMvc\ExtMVC\COM.XXXX.WebApi\Admin\Controllers\ModuleApiController.cs:行号 43
+   在 System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass13.<GetExecutor>b__c(Object instance, Object[] methodParameters)
+   在 System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.Execute(Object instance, Object[] arguments)
+   在 System.Threading.Tasks.TaskHelpers.RunSynchronously[TResult](Func`1 func, CancellationToken cancellationToken)

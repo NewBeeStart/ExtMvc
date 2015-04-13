@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "border",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [
+                        {
+                            region: 'west',
+                            collapsible: true,
+                            title: '组织机构',
+                            xtype: 'treepanel',
+                            width: 200,
+                            autoScroll: true,
+                            split: true,
+                            loader: new Ext.tree.TreeLoader({
+                                url: '/Api/Organization/GetOrganizationsAndUser?id=null'
+                            }),
+                            root: new Ext.tree.AsyncTreeNode({
+                                expanded: true,
+                            }),
+                            rootVisible: false,
+                            listeners: {
+                                click: function (n) {
+
+                                }
+                            }
+                        },
+                        {
+                            region: "center",
+                            split: true,
+                            border: false,
+                            collapsible: false,
+                            xtype: "panel",
+                            autoScroll: true,
+                            layout: "fit",
+                            items: [{
+                                html: '<iframe id ="contentIframe" frameborder="0" height="100%" width="100%" src="/Admin/Organization/OrganizationManage"></iframe>'
+                            }]
+                        }
+
+            ]
+        });
+    });
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div id="cc" class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'west',title:'组织机构',split:true" style="width: 150px; overflow: hidden">
+         <ul id="orgtree"></ul>
+    </div>
+    <div data-options="region:'center'"  style="overflow: hidden;">
+         
+        
+        <div id="p" style="overflow: hidden;"></div>   
+    </div>
+</div>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<script type="text/javascript">
+    $("#orgtree").tree({
+        url: '/Api/Organization/GetOrganizationsAndUser?id=null',
+        animate: true,
+        onLoadSuccess: function () {
+            $("#orgtree").tree("collapseAll");
+        },
+        onClick: function (node) {
+            if(node.attributes.Type=="user")
+                OpenPanel("/Admin/Organization/UserManage?id=" + node.id + "&type=" + node.attributes.Type);
+            else 
+                OpenPanel("/Admin/Organization/OrganizationManage?id=" + node.id + "&type=" + node.attributes.Type);
+        }
+    });
+
+    OpenPanel("/Admin/Organization/OrganizationAdd");
+
+    function OpenPanel(href) {
+        $('#p').panel({
+            fit: true,
+            content: '<iframe id="orgiframe" scrolling="no" frameborder="0"  src="' + href + '" style="width:100%;height:100%;overflow:hidden"></iframe>',
+        }); 
+    }
+
+   
+</script>*@

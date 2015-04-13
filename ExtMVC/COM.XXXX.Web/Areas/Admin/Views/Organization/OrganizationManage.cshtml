@@ -1,0 +1,117 @@
+﻿<style>
+    .itemscls {
+        margin-top: 20px;
+    }
+</style>
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+
+        new Ext.Viewport({
+            layout: "fit",
+            border: false,
+            items: [
+                new Ext.FormPanel({
+                    buttonAlign: 'center',
+                    labelAlign: "right",
+                    labelWidth: 200,
+                    layout: "form",
+                    title: "           ",
+                    itemCls: "itemscls",
+                    items: [
+                        {
+                            xtype: 'fieldset',
+                            collapsible: true,
+                            items: [
+                                {
+                                    fieldLabel: '名称',
+                                    name: 'Name',
+                                    xtype: 'textfield',
+                                    width: 300
+                                }, {
+                                    fieldLabel: '类型',
+                                    name: 'OrgType',
+                                    xtype: 'combo',
+                                    //本地数据源  local/remote
+                                    mode: 'local',
+                                    //设置为选项的text的字段
+                                    displayField: "Name",
+                                    //设置为选项的value的字段 
+                                    valueField: "Id",
+                                    //是否可以输入，还是只能选择下拉框中的选项
+                                    editable: false,
+                                    typeAhead: true,
+                                    //必须选择一项
+                                    forceSelection: true,
+                                    //输入部分选项内容匹配的时候显示所有的选项
+                                    triggerAction: 'all',
+                                    //selectOnFocus:true,
+                                    //数据
+                                    store: new Ext.data.SimpleStore({
+                                        fields: ['Id', 'Name'],
+                                        data: [[1, '单位'], [2, '部门'], [3, '岗位']]
+                                    }),
+                                    width: 300
+                                }, {
+                                    fieldLabel: '状态',
+                                    name: 'InUse',
+                                    xtype: 'combo',
+                                    //本地数据源  local/remote
+                                    mode: 'local',
+                                    //设置为选项的text的字段
+                                    displayField: "Name",
+                                    //设置为选项的value的字段 
+                                    valueField: "Id",
+                                    //是否可以输入，还是只能选择下拉框中的选项
+                                    editable: false,
+                                    typeAhead: true,
+                                    //必须选择一项
+                                    forceSelection: true,
+                                    //输入部分选项内容匹配的时候显示所有的选项
+                                    triggerAction: 'all',
+                                    //selectOnFocus:true,
+                                    //数据
+                                    store: new Ext.data.SimpleStore({
+                                        fields: ['Id', 'Name'],
+                                        data: [[1, '启用'], [2, '停用']]
+                                    }),
+                                    width: 300
+                                }, {
+                                    fieldLabel: '备注',
+                                    xtype: 'textarea',
+                                    name: "Remark",
+                                    value: '可以输好多字！',
+                                    height: 50,
+                                    width: 300
+                                },
+                                {
+                                    xtype: 'compositefield',
+                                    itemCls :"itemcls1",
+                                    fieldLabel: '移动',
+                                    items: [
+                                        { xtype: 'textfield', name: 'phone-1', width: 250, allowBlank: false },
+                                        { xtype: 'button', width: 50, text: "选择",style:"margin-left:0px;margin-right:0px;" },
+                                        { xtype: 'button', width: 50, text: "确定移动", style: "margin-left:0px;margin-right:0px;" },
+                                    ]
+                                }]
+                        }
+                    ],
+                    buttons: [{
+                        text: "保 存"
+                        , handler: function () {
+                            MsgInfo('保存');
+                        }
+                    }, {
+                        text: "取 消"
+                        , handler: function () {
+                            form1.form.reset();
+                        }
+                    }]
+                })]
+        });
+
+    })
+
+
+</script>
