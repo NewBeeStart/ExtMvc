@@ -35,7 +35,7 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                     id = item.ID.ToString(), 
                     text = item.DisplayName,
                     iconCls = item.iconCls,
-                    leaf=item.IsLeaf,
+                    leaf=true,
                     url=string.Format("/{0}/{1}/{2}", item.Module.Code, item.Controller, item.Action),
                     attributes = new
                     {
@@ -47,8 +47,9 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                 if (!item.IsLeaf)
                 {
                     var sub = GetMenusByModule(modulecode,item.ID);
-                    if (sub != null)
+                    if (sub != null&&sub.Count()>0)
                     {
+                        menu.leaf = false;
                         menu.children.AddRange(sub);
                     }
                 }
