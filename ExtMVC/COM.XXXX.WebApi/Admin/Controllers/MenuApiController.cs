@@ -8,6 +8,7 @@ using COM.XXXX.EasyUIModels;
 using COM.XXXX.Models;
 using COM.XXXX.Models.Admin;
 using Repository.DAL.Repository;
+using System.IO;
 
 namespace COM.XXXX.WebApi.Admin.Controllers
 {
@@ -25,18 +26,18 @@ namespace COM.XXXX.WebApi.Admin.Controllers
             {
                 return null;
             }
-            var  moduleMenus= Repository.Query(menu => menu.Module.Code == modulecode && menu.PMenuID == id).OrderBy(menu => menu.SortKey).ToList();
+            var moduleMenus = Repository.Query(menu => menu.Module.Code == modulecode && menu.PMenuID == id).OrderBy(menu => menu.SortKey).ToList();
 
             List<ExtTree> menulst = new List<ExtTree>();
             foreach (Menu item in moduleMenus)
             {
-                ExtTree menu = new ExtTree() 
+                ExtTree menu = new ExtTree()
                 {
-                    id = item.ID.ToString(), 
+                    id = item.ID.ToString(),
                     text = item.DisplayName,
                     iconCls = item.iconCls,
-                    leaf=true,
-                    url=string.Format("/{0}/{1}/{2}", item.Module.Code, item.Controller, item.Action),
+                    leaf = true,
+                    url = string.Format("/{0}/{1}/{2}", item.Module.Code, item.Controller, item.Action),
                     attributes = new
                     {
                         Width = item.Width,
@@ -46,8 +47,8 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                 };
                 if (!item.IsLeaf)
                 {
-                    var sub = GetMenusByModule(modulecode,item.ID);
-                    if (sub != null&&sub.Count()>0)
+                    var sub = GetMenusByModule(modulecode, item.ID);
+                    if (sub != null && sub.Count() > 0)
                     {
                         menu.leaf = false;
                         menu.children.AddRange(sub);
@@ -138,15 +139,15 @@ namespace COM.XXXX.WebApi.Admin.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        public IEnumerable<Menu> GetMenuTreeByModule(Guid? id,Guid? moduleid)
+        public IEnumerable<Menu> GetMenuTreeByModule(Guid? id, Guid? moduleid)
         {
             List<Menu> lst = new List<Menu>();
-            Guid module=Guid.Parse(moduleid.ToString());
+            Guid module = Guid.Parse(moduleid.ToString());
             if (string.IsNullOrEmpty(moduleid.ToString()))
             {
                 return null;
             }
-            if (string.IsNullOrEmpty(id.ToString()) && string.IsNullOrEmpty(moduleid.ToString())) 
+            if (string.IsNullOrEmpty(id.ToString()) && string.IsNullOrEmpty(moduleid.ToString()))
             {
                 lst.AddRange(Repository.Query(menu => menu.PMenuID == null && menu.ModuleID == module).OrderBy(org => org.SortKey).ToList());
             }
@@ -157,7 +158,7 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
             for (int i = 0; i < lst.Count; i++)
             {
-                var children = GetMenuTreeByModule(lst[i].ID,moduleid);
+                var children = GetMenuTreeByModule(lst[i].ID, moduleid);
                 if (children.Any() && children != null)
                 {
                     lst[i].children = new List<Menu>();
@@ -166,6 +167,26 @@ namespace COM.XXXX.WebApi.Admin.Controllers
             }
 
             return lst;
+        }
+
+
+        [HttpPost]
+        public dynamic GetMenuIcon()
+        {
+            
+            //System.Text.StringBuilder innerhtml = new System.Text.StringBuilder();
+         
+            List<object> lst = new List<object>();
+            DirectoryInfo icondir = new DirectoryInfo(@"F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Web\Scripts\icons\");
+
+            foreach (FileInfo item in icondir.GetFiles())
+            {
+                lst.Add(new {
+                    name = "icon-" + item.Name.Split('.')[0],
+                });
+                //innerhtml.Append("<span class='iconwidth " + iconclass + "' value='" + iconclass + "' onclick='seticon(this)'>&nbsp;&nbsp;</span>");
+            }
+            return lst ;
         }
     }
 }

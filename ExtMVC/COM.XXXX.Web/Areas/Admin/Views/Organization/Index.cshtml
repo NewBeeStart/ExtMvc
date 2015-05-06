@@ -13,26 +13,22 @@
 
 <script type="text/javascript">
 
-    var from1 = new Ext.FormPanel({
+    var form1 = new Ext.FormPanel({
         buttonAlign: 'center',
+        id:"orgform",
         labelAlign: "right",
-        layout: "hbox",
-
-        layoutConfig: {
-            padding: '5',
-            pack: 'center',
-            align: 'middle'
-        },
+        hidden: true,
+        plain: true,
+        anchor: '100% 100%',
+        layout:"anchor",
+        frame:true,
         defaults: { margins: '0 5 0 0' },
-        title: "Good",
-
+        title: "组织机构信息",
         items: [
             {
                 xtype: 'fieldset',
-                width: 600,
-                layout: "form",
-                itemCls: "itemscls",
                 collapsible: false,
+                anchor:'100% 100%',
                 items: [
                     {
                         fieldLabel: '名称',
@@ -60,7 +56,7 @@
                         //数据
                         store: new Ext.data.SimpleStore({
                             fields: ['Id', 'Name'],
-                            data: [[1, '单位'], [2, '部门'], [3, '岗位']]
+                            data: [[1, '单位'], [2, '部门'], [3, '岗位']],
                         }),
                         width: 300
                     }, {
@@ -85,47 +81,112 @@
                         //数据
                         store: new Ext.data.SimpleStore({
                             fields: ['Id', 'Name'],
-                            data: [[1, '启用'], [2, '停用']]
+                            data: [[1, '启用'], [2, '停用']],
+                          
                         }),
                         width: 300
                     }, {
                         fieldLabel: '备注',
                         xtype: 'textarea',
                         name: "Remark",
-                        height: 50,
-                        width: 300
-                    }, {
-                        xtype: 'compositefield',
-                        style: "margin-top:30px",
-                        fieldLabel: '移动',
-                        items: [
-                            { xtype: 'textfield', id: "move", readonly: true, width: 250 },
-                            {
-                                xtype: 'button', width: 50, text: "选择", style: "left:250px", listeners: {
-                                    click: function (btn, e) {
-                                        CreateMoveWindow().show();
-                                    },
-                                    render: function (btn, e) {
-                                        console.log(btn);
-                                    }
-                                }
-                            },
-                            { xtype: 'button', width: 50, text: "确定移动", style: "margin-left:0px;margin-right:0px;" },
-                        ]
-                    }, {
-                        xtype: "button",
-                        text: "123",
-                        style:"float:right"
-                    }, {
-                        xtype: "button",
-                        text: "1234",
-                        style:"float:right"
+                        height: 150,
+                        anchor: '95%'
                     }
                 ]
             }
-        ],
-
+        ], buttons: [{
+            xtype: "button",
+            text: "保存",
+            style: "float:right"
+        }, {
+            xtype: "button",
+            text: "取消",
+            style: "float:right"
+        }]
     });
+    var form2 = new Ext.FormPanel({
+        buttonAlign: 'center',
+        id: "userform",
+        defaults: { margins: '0 5 0 0' },
+        anchor: '100% 100%',
+        layout: "anchor",
+        plain: true,
+        hidden: true,
+        frame: true,
+        labelAlign: "right",
+        title: "用户信息",
+        hidden:true,
+        items: [{
+            xtype: 'fieldset',
+            collapsible: false,
+            anchor: '100% 100%',
+            labelWidth: 75,
+            items: [
+                 {
+                     fieldLabel: '真实姓名',
+                     name: 'RealName',
+                     xtype: 'textfield',
+                     width:300
+                    
+                 }, {
+                     fieldLabel: '用户名',
+                     xtype: 'textfield',
+                     name: "UserName",
+                    
+                     width:300
+                 }, {
+                     fieldLabel: '入职时间',
+                     xtype: 'textfield',
+                     name: "OfferTime",
+                     width: 300
+                 }, {
+                     fieldLabel: '学历',
+                     xtype: 'textfield',
+                     name: "Education",
+                     width: 300
+                    
+                 }, {
+                     fieldLabel: '婚否',
+                     xtype: 'textfield',
+                     name: "IsMarry",
+                     width: 300
+                   
+                 }, {
+                     fieldLabel: '专业',
+                     xtype: 'textfield',
+                     name: "Professional",
+                     width: 300
+                 }, {
+                     fieldLabel: '启用',
+                     xtype: 'textfield',
+                     name: "InUse",
+                     width: 300
+                 }, {
+                     fieldLabel: '生日',
+                     xtype: 'textfield',
+                     name: "BirthDay",
+                     width: 300
+                 
+                 }, {
+                     fieldLabel: '备注',
+                     xtype: 'textarea',
+                     name: "Remark",
+                     height: 150,
+                     anchor: '95%'
+                 } 
+            ]}
+           
+        ], buttons: [{
+            xtype: "button",
+            text: "保存",
+            style: "float:right"
+        }, {
+            xtype: "button",
+            text: "取消",
+            style: "float:right"
+        }]
+    });
+
 
     Ext.onReady(function () {
         Ext.QuickTips.init();
@@ -152,7 +213,13 @@
                             listeners: {
                                 click: function (n) {
                                     var panel1 = Ext.getCmp("panel1");
-                                    panel1.add(from1)
+                                    if (n.attributes.attributes.Type == "user") {
+                                        form2.show();
+                                        form1.hide();
+                                    } else {
+                                        form1.show();
+                                        form2.hide();
+                                    }
                                     panel1.doLayout();
                                 }
                             }
@@ -164,8 +231,9 @@
                             border: false,
                             collapsible: false,
                             xtype: "panel",
+                            layout:"anchor",
                             autoScroll: true,
-                            layout: "fit",
+                            items:[form1,form2]
                             //items: [{
                             //    html: '<iframe id ="contentIframe" frameborder="0" height="100%" width="100%" src="/Admin/Organization/OrganizationManage"></iframe>'
                             //}]

@@ -69,5 +69,21 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
            return treelst;
        }
+
+       //public string GetIconClass() { 
+       //System.Text.StringBuilder innerhtml = new System.Text.StringBuilder();
+       //             string path = Server.MapPath(Com.XXXX.Class.ConstHelper.IconPath);
+
+       //             DirectoryInfo icondir = new DirectoryInfo(path);
+
+       //             foreach (FileInfo item in icondir.GetFiles())
+       //             {
+
+       //                  string iconclass = "icon-" + item.Name.Split('.')[0];
+       
+       //                  innerhtml.Append("<span class='iconwidth "+iconclass+"' value='"+iconclass+"' onclick='seticon(this)'>&nbsp;&nbsp;</span>
+         
+       //              } 
+       //}
     }
 }

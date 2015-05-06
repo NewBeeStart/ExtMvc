@@ -1,45 +1,133 @@
 ﻿@{
     ViewBag.Title = "字典管理";
 }
-
-<div id="cc" class="easyui-layout" data-options="fit:true" style="overflow:hidden">
-    <div data-options="region:'west',split:true" style="width: 200px; overflow: hidden">
-        <div id="p" style="padding: 10px; height: 100%; width: 100%">
-            <ul id="tree" class="easyui-tree" data-options="url: '/Api/Dictionary/GetDictionaryTree?id=null'" style="width: 100%"></ul>
-        </div>
-    </div>
-    <div data-options="region:'center',title:'center title'" style="overflow:hidden">
-        <div id="p2" style="padding: 10px; height: 100%; width: 100%;overflow:hidden">
-          
-        </div>
-    </div>
-</div>
-
-
-
-<script type="text/javascript">
-
-    $('#tree').tree({
-        onLoadSuccess: function () {
-            $("#tree").tree("collapseAll");
-        },
-        onClick: function (node) {
-            OpenPanel("/Admin/Dictionary/DictionaryManage?id="+node.id);
-        }
-    });
-
-    $('#p').panel({
-        border: false,
-        title: '字典名称',
-    });
-
-    OpenPanel("/Admin/Dictionary/DictionaryManage");
-
-    function OpenPanel(href) {
-        $('#p2').panel({
-            fit: true,
-            content: '<iframe id="orgiframe" scrolling="no" frameborder="0"  src="' + href + '" style="width:100%;height:100%;overflow:hidden"></iframe>',
-        });
+<style>
+    .iconwidth {
+        width:16px;
+        height:16px;
+        margin:1px;
+        display: inline-block;
     }
+</style>
+ 
+<script type="text/javascript">
+  
+    var iconCombox = new Ext.form.ComboBox({
+        fieldLabel: '图标',
+        store: new Ext.data.JsonStore({
+            url: '/Api/Menu/GetMenuIcon',
+            storeId: 'myStore',
+            autoDestroy: true,
+            idProperty: 'name',
+            fields:['name'],
+        }),
+        tpl: '<tpl for="."><span class="iconwidth  {name}" value="{name}" onclick="seticon(this)">&nbsp;&nbsp;</span></tpl>',
+        //tpl: '<tpl for="."><div x-combo-list-item :qtip="{url}" class="x-combo-list-item"><img src="{url}" width="16px" height="16px">&nbsp;{name}</div></tpl>',
+        //tpl :'<table><tr><tpl for="."><td class="x-combo-list-item"><img width=16 height=16 src="{url}" /></td><tpl if="xindex % 3 === 0"></tr><tr></tpl></tpl></tr></table>',
+        triggerAction: 'all',
+        emptyText: '请选择图标...',
+        name: 'iconCls',
+        width: 300,
+    });
+    function seticon(span) {
+        
+    }
+    var addform = new Ext.FormPanel({
+        buttonAlign: 'center',
+        id: "addform",
+        labelAlign: "right",
+        plain: true,
+        anchor: '100% 100%',
+        layout: "anchor",
+        frame: true,
+        defaults: { margins: '0 5 0 0' },
+        title: "新增字典",
+        items: [
+            {
+                xtype: 'fieldset',
+                collapsible: false,
+                anchor: '100% 100%',
+                items: [
+                    {
+                        fieldLabel: '字典键',
+                        name: 'Title',
+                        xtype: 'textfield',
+                        width: 300
+                    }, {
+                        fieldLabel: '字典值',
+                        name: 'Value',
+                        xtype: 'textfield',
+                        width: 300
+                    }, {
+                        fieldLabel: '字典排序',
+                        name: 'Sort',
+                        xtype: 'textfield',
+                        width: 300
+                    }, iconCombox, {
+                        fieldLabel: '备注',
+                        xtype: 'textarea',
+                        name: "Remark",
+                        height: 150,
+                        anchor: '95%'
+                    }
+                ]
+            }
+        ], buttons: [{
+            xtype: "button",
+            text: "保存",
+            style: "float:right"
+        }, {
+            xtype: "button",
+            text: "取消",
+            style: "float:right"
+        }]
+    });
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "border",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [
+                        {
+                            region: 'west',
+                            title: '组织机构',
+                            xtype: 'treepanel',
+                            width: 200,
+                            autoScroll: true,
+                            loader: new Ext.tree.TreeLoader({
+                                url: '/Api/Dictionary/GetDictionaryTree?id=null'
+                            }),
+                            root: new Ext.tree.AsyncTreeNode({
+                                expanded: true,
+                            }),
+                            rootVisible: false,
+                            listeners: {
+                                click: function (n) {
+                                    
+                                }
+                            }
+                        },
+                        {
+                            region: "center",
+                            id: "panel1",
+                            split: true,
+                            border: false,
+                            collapsible: false,
+                            xtype: "panel",
+                            layout: "anchor",
+                            autoScroll: true,
+                            items: [addform]
+                            //items: [{
+                            //    html: '<iframe id ="contentIframe" frameborder="0" height="100%" width="100%" src="/Admin/Organization/OrganizationManage"></iframe>'
+                            //}]
+                        }
+
+            ]
+        });
+        
+    });
  
 </script>
