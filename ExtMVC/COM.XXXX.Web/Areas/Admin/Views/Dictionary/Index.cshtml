@@ -13,9 +13,9 @@
 <script type="text/javascript">
   
     var iconCombox = new Ext.form.ComboBox({
-        fieldLabel: '图标',
+        //fieldLabel: '图标',
         store: new Ext.data.JsonStore({
-            url: '/Api/Menu/GetMenuIcon',
+            url: '/Api/Menu/GetMenuIcon?path='+"@Server.UrlEncode( Server.MapPath(Com.XXXX.Class.ConstHelper.IconPath))",
             storeId: 'myStore',
             autoDestroy: true,
             idProperty: 'name',
@@ -30,7 +30,14 @@
         width: 300,
     });
     function seticon(span) {
-        
+        var type=Ext.get(span).dom.attributes.value.value;
+        //"<span class='iconwidth " + type + "' value='" + type + "'>&nbsp;&nbsp;</span>"
+        //console.log(Ext.get(span).dom.attributes.value.value)
+        iconCombox.setValue(type);
+        Ext.getCmp("iconimage").addClass(type);
+        console.log(Ext.getCmp("iconimage"));
+       // Ext.getCmp("iconimage").removeClass(iconCombox.getValue())
+       // iconCombox.getValue()
     }
     var addform = new Ext.FormPanel({
         buttonAlign: 'center',
@@ -63,7 +70,15 @@
                         name: 'Sort',
                         xtype: 'textfield',
                         width: 300
-                    }, iconCombox, {
+                    }, {
+                        xtype: 'compositefield',
+                        fieldLabel: '图标',
+                        items: [
+                            iconCombox,
+                            { xtype: 'displayfield', id:"iconimage" },
+                        ]
+                    }, //iconCombox,
+                    {
                         fieldLabel: '备注',
                         xtype: 'textarea',
                         name: "Remark",

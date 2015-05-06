@@ -9,6 +9,7 @@ using COM.XXXX.Models;
 using COM.XXXX.Models.Admin;
 using Repository.DAL.Repository;
 using System.IO;
+using System.Web;
 
 namespace COM.XXXX.WebApi.Admin.Controllers
 {
@@ -171,13 +172,13 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
 
         [HttpPost]
-        public dynamic GetMenuIcon()
+        public dynamic GetMenuIcon(string path)
         {
-            
+          
             //System.Text.StringBuilder innerhtml = new System.Text.StringBuilder();
          
             List<object> lst = new List<object>();
-            DirectoryInfo icondir = new DirectoryInfo(@"F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Web\Scripts\icons\");
+            DirectoryInfo icondir = new DirectoryInfo(HttpUtility.UrlDecode(path));
 
             foreach (FileInfo item in icondir.GetFiles())
             {

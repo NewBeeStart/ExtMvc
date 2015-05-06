@@ -54,7 +54,6 @@ D:\Projects\ExtMvc\ExtMVC\COM.XXXX.Model\bin\Debug\EntityFramework.xml
 D:\Projects\ExtMvc\ExtMVC\COM.XXXX.Model\bin\Debug\EntityFramework.SqlServer.xml
 D:\Projects\ExtMvc\ExtMVC\COM.XXXX.Model\bin\Debug\zh-Hans\EntityFramework.resources.dll
 D:\Projects\ExtMvc\ExtMVC\COM.XXXX.Model\bin\Debug\zh-Hans\EntityFramework.SqlServer.resources.dll
-D:\Projects\ExtMvc\ExtMVC\COM.XXXX.Model\obj\Debug\4.COM.XXXX.Models.csprojResolveAssemblyReference.cache
 D:\Projects\ExtMvc\ExtMVC\COM.XXXX.Model\obj\Debug\COM.XXXX.Models.dll
 D:\Projects\ExtMvc\ExtMVC\COM.XXXX.Model\obj\Debug\COM.XXXX.Models.pdb
 F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Model\bin\Debug\COM.XXXX.Models.dll.config
