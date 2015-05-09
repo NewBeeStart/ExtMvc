@@ -11,7 +11,7 @@
 </style>
  
 <script type="text/javascript">
-  
+    var pid;
     var iconCombox = new Ext.form.ComboBox({
         //fieldLabel: '图标',
         store: new Ext.data.JsonStore({
@@ -47,14 +47,27 @@
         anchor: '100% 100%',
         layout: "anchor",
         frame: true,
+        reader: new Ext.data.JsonReader(
+            { successProperty: 'success', root: 'message' },
+            ['ID','PDictionaryID', 'Title', 'Value', 'Sort', 'iconCls', 'Remark']
+         ),
         defaults: { margins: '0 5 0 0' },
-        title: "新增字典",
+        title: "字典信息",
         items: [
             {
                 xtype: 'fieldset',
                 collapsible: false,
                 anchor: '100% 100%',
-                items: [
+                items: [{
+                    xtype: "hidden",
+                    name: "PDictionaryID",
+                    id: "pid"
+                },
+                {
+                    xtype: "hidden",
+                    name: "ID",
+                    id:'id'
+                },
                     {
                         fieldLabel: '字典键',
                         name: 'Title',
@@ -89,14 +102,94 @@
             }
         ], buttons: [{
             xtype: "button",
-            text: "保存",
-            style: "float:right"
+            text: "新增子项",
+            id: 'subadd',
+            style: "float:right",
+            handler: function () {
+                addform.form.reset();
+                Ext.getCmp("pid").setValue(pid);
+                console.log(pid)
+                Ext.getCmp("update").hide();
+                Ext.getCmp("subadd").hide();
+                Ext.getCmp("add").show();
+                Ext.getCmp("return").show()
+                Ext.getCmp("reset").show()
+            }
         }, {
             xtype: "button",
-            text: "取消",
-            style: "float:right"
+            text: "更新",
+            id:"update",
+            style: "float:right",
+            handler: function () {
+                addform.getForm().submit({
+                    url: '/Api/Dictionary/' + Ext.getCmp("id").getValue(),
+                    method: "Put",
+                    waitTitle: '请等待',
+                    waitMsg: '正在提交中',
+                    success: function (form, action) {
+                        //url后台返回的数据{success:true,message:'成功'}	
+                        //console.log(action)
+                        Ext.Msg.alert('提示', action.result.message);
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "新增",
+            hidden:true,
+            id: "add",
+            style: "float:right",
+            handler: function () {
+                addform.getForm().submit({
+                    url: '/Api/Dictionary/',
+                    method: "Post",
+                    waitTitle: '请等待',
+                    waitMsg: '正在提交中',
+                    success: function (form, action) {
+                        //url后台返回的数据{success:true,message:'成功'}	
+                        //console.log(action)
+                        Ext.Msg.alert('提示', action.result.message);
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "返回",
+            id: "return",
+            hidden: true,
+            style: "float:right",
+            handler: function () {
+                addform.form.reset();
+                Ext.getCmp("update").show();
+                Ext.getCmp("subadd").show();
+                Ext.getCmp("add").hide();
+                Ext.getCmp("return").hide();
+                Ext.getCmp("reset").hide();
+                addform.form.load({
+                    url: '@Url.Content("/Api//Dictionary/GetForm/")' + pid,
+                    method: "Get",
+                    waitMsg: 'Loading'
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "重置",
+            id: "reset",
+            hidden: true,
+            style: "float:right",
+            handler: function () {
+                addform.form.reset();
+                Ext.getCmp("pid").setValue(pid);
+            }
         }]
     });
+
     Ext.onReady(function () {
         Ext.QuickTips.init();
         new Ext.Viewport({
@@ -108,7 +201,7 @@
             items: [
                         {
                             region: 'west',
-                            title: '组织机构',
+                            title: '字典信息',
                             xtype: 'treepanel',
                             width: 200,
                             autoScroll: true,
@@ -120,8 +213,27 @@
                             }),
                             rootVisible: false,
                             listeners: {
-                                click: function (n) {
-                                    
+                                click: function (node) {
+                                    pid = node.id;
+                                    Ext.getCmp("update").show();
+                                    Ext.getCmp("subadd").show();
+                                    Ext.getCmp("add").hide();
+                                    Ext.getCmp("return").hide();
+                                    Ext.getCmp("reset").hide();
+                                    addform.form.load({
+                                        url: '@Url.Content("/Api//Dictionary/GetForm/")' + node.id,
+                                        method:"Get",
+                                        waitMsg: 'Loading'
+                                    });
+                                    @*//加载页面数据
+                                        Ext.Ajax.request({
+                                            url: '@Url.Content("/Api//Dictionary/")' + node.id,
+                                            method: "Get",
+                                            success: function (response) {
+                                                var jsonData = Ext.util.JSON.decode(response.responseText);
+                                               addform.loa
+                                            }
+                                        });*@
                                 }
                             }
                         },

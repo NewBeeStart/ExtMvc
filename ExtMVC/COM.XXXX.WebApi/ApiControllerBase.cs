@@ -75,6 +75,16 @@ namespace COM.XXXX.WebApi
         {
             return Repository.Query(M => M.ID == id).First();
         }
+        public UISuccess GetForm(Guid id)
+        {
+            M temp = Repository.Query(M => M.ID == id).First();
+            
+            if (temp != null)
+            {
+                return new UISuccess() { success = true, message = new List<M>() { temp} };
+            }
+            return new UISuccess() { success = false, message = "数据获取失败！" };
+        }
 
         // POST api/<controller>
         public HttpResponseMessage Post([FromBody]M model)
@@ -83,7 +93,7 @@ namespace COM.XXXX.WebApi
 
             if (UnitOfWork.Save() == 1)
             {
-                return toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~编辑成功了耶！" });
+                return toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~添加数据成功了耶！" });
             }
             return toJson(new UISuccess() { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
         }
@@ -95,7 +105,7 @@ namespace COM.XXXX.WebApi
             Repository.Update(model);
             if (UnitOfWork.Save() == 1)
             {
-                return  toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~更新成功了耶！" });
+                return  toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~更新数据成功了耶！" });
             }
             return toJson(new UISuccess() { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
         }
@@ -106,7 +116,7 @@ namespace COM.XXXX.WebApi
             Repository.Delete(new M { ID = id });
             if (UnitOfWork.Save() == 1)
             {
-                return toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~删除成功了耶！" });
+                return toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~删除数据成功了耶！" });
             }
             return toJson(new UISuccess() { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" }); ;
         }
