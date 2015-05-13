@@ -21,7 +21,11 @@
         plain: true,
         anchor: '100% 100%',
         layout:"anchor",
-        frame:true,
+        frame: true,
+        reader: new Ext.data.JsonReader(
+         { successProperty: 'success', root: 'message' },
+         ['ID', 'Name', 'OrgType', 'InUse', 'POrganizationID', 'iconCls', 'Remark', 'Sort', 'ChargeLeaderIDs', 'ChargeLeaderNames', 'LeaderIDs', 'LeaderNames']
+        ),
         defaults: { margins: '0 5 0 0' },
         title: "组织机构信息",
         items: [
@@ -29,8 +33,15 @@
                 xtype: 'fieldset',
                 collapsible: false,
                 anchor:'100% 100%',
-                items: [
-                    {
+                items: [{
+                        xtype: "hidden",
+                        name: "POrganizationID",
+                        id: 'pid'
+                    },{
+                         xtype: "hidden",
+                         name: "ID",
+                         id: 'id'
+                     },{
                         fieldLabel: '名称',
                         name: 'Name',
                         xtype: 'textfield',
@@ -40,7 +51,7 @@
                         name: 'OrgType',
                         xtype: 'combo',
                         //本地数据源  local/remote
-                        mode: 'local',
+                        mode: 'remote',
                         //设置为选项的text的字段
                         displayField: "Name",
                         //设置为选项的value的字段 
@@ -48,28 +59,39 @@
                         //是否可以输入，还是只能选择下拉框中的选项
                         editable: false,
                         typeAhead: true,
+                        autoLoad: true,
                         //必须选择一项
                         forceSelection: true,
                         //输入部分选项内容匹配的时候显示所有的选项
                         triggerAction: 'all',
-                        //selectOnFocus:true,
+                        displayField: "Name",
+                        //设置为选项的value的字段 
+                        valueField: "Id",
                         //数据
-                        store: new Ext.data.SimpleStore({
-                            fields: ['Id', 'Name'],
-                            data: [[1, '单位'], [2, '部门'], [3, '岗位']],
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            method: 'Get',
+                            idProperty: 'ID',
+                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=OrgType",
+                            fields: [{
+                                name: 'Name',
+                                mapping: 'Title'
+                            }, {
+                                name: 'Id',
+                                mapping: 'Value'
+                            }]
+                            //fields: ['Id', 'Name'],
+                            //data: [[1, '单位'], [2, '部门'], [3, '岗位']],
                         }),
                         width: 300
                     }, {
                         fieldLabel: '状态',
                         name: 'InUse',
-
                         xtype: 'combo',
                         //本地数据源  local/remote
-                        mode: 'local',
+                        mode: 'remote',
                         //设置为选项的text的字段
-                        displayField: "Name",
-                        //设置为选项的value的字段 
-                        valueField: "Id",
+                       
                         //是否可以输入，还是只能选择下拉框中的选项
                         editable: false,
                         typeAhead: true,
@@ -79,12 +101,48 @@
                         triggerAction: 'all',
                         //selectOnFocus:true,
                         //数据
-                        store: new Ext.data.SimpleStore({
-                            fields: ['Id', 'Name'],
-                            data: [[1, '启用'], [2, '停用']],
-                          
+                        autoLoad: true,
+                        displayField: "Name",
+                        //设置为选项的value的字段 
+                        valueField: "Id",
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            method: 'Get',
+                            idProperty: 'ID',
+                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                            fields: [{
+                                name: 'Name',
+                                mapping: 'Title'
+                            }, {
+                                name: 'Id',
+                                mapping: 'Value'
+                            }]
+                            //fields: ['Id', 'Name'],
+                            //data: [[1, '单位'], [2, '部门'], [3, '岗位']],
                         }),
+                        //store: new Ext.data.SimpleStore({
+                        //    fields: ['Id', 'Name'],
+                        //    data: [[1, '启用'], [2, '停用']],
+                        //}),
                         width: 300
+                    },{
+                         fieldLabel: '分管领导',
+                         name: 'ChargeLeaderNames',
+                         xtype: 'textfield',
+                         width: 300
+                    }, {
+                        xtype: "hidden",
+                        name: "ChargeLeaderIDs",
+                        id: 'id'
+                    }, {
+                          fieldLabel: '部门/岗位领导',
+                          name: 'LeaderNames',
+                          xtype: 'textfield',
+                          width: 300
+                    }, {
+                        xtype: "hidden",
+                        name: "LeaderIDs",
+                        id: 'id'
                     }, {
                         fieldLabel: '备注',
                         xtype: 'textarea',
@@ -217,6 +275,11 @@
                                         form2.show();
                                         form1.hide();
                                     } else {
+                                        form1.form.load({
+                                            url: '@Url.Content("/Api//Organization/GetForm/")' + n.id,
+                                             method: "Get",
+                                             waitMsg: 'Loading'
+                                         });
                                         form1.show();
                                         form2.hide();
                                     }

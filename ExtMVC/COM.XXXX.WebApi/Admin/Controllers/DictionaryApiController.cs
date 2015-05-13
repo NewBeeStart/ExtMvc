@@ -17,6 +17,7 @@ namespace COM.XXXX.WebApi.Admin.Controllers
         {
             base.SetRepository();
         }
+
        [HttpPost]
        public dynamic GetAllDictionary()
        {
@@ -70,20 +71,18 @@ namespace COM.XXXX.WebApi.Admin.Controllers
            return treelst;
        }
 
-       //public string GetIconClass() { 
-       //System.Text.StringBuilder innerhtml = new System.Text.StringBuilder();
-       //             string path = Server.MapPath(Com.XXXX.Class.ConstHelper.IconPath);
-
-       //             DirectoryInfo icondir = new DirectoryInfo(path);
-
-       //             foreach (FileInfo item in icondir.GetFiles())
-       //             {
-
-       //                  string iconclass = "icon-" + item.Name.Split('.')[0];
+       /// <summary>
+       /// 根据Code获取子字典的元素
+       /// </summary>
+       /// <param name="pcode"></param>
+       /// <returns></returns>
+       [HttpPost]
+       public IEnumerable<Dictionary> GetDictionaryByPCode(string pcode) 
+       {
+           Dictionary pdic= base.Repository.Query(dic => dic.Code == pcode).First();
+           var lst=  base.Repository.Query(dic => dic.PDictionaryID == pdic.ID).ToList();
+           return lst;
+       }
        
-       //                  innerhtml.Append("<span class='iconwidth "+iconclass+"' value='"+iconclass+"' onclick='seticon(this)'>&nbsp;&nbsp;</span>
-         
-       //              } 
-       //}
     }
 }
