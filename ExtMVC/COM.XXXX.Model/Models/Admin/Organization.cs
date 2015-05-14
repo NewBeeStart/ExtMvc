@@ -106,6 +106,7 @@ namespace COM.XXXX.Models.Admin
         [DataMember]
         public bool InUse { get; set; }
 
+        [DataMember]
         public string iconCls { get; set; }
         /// <summary>
         /// easyui加载界面使用

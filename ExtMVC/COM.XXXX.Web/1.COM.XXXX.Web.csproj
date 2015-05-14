@@ -458,6 +458,7 @@
     <Content Include="Scripts\Ext\adapter\prototype\ext-prototype-adapter.js" />
     <Content Include="Scripts\Ext\adapter\yui\ext-yui-adapter-debug.js" />
     <Content Include="Scripts\Ext\adapter\yui\ext-yui-adapter.js" />
+    <Content Include="Scripts\Ext\ComboBoxTree.js" />
     <Content Include="Scripts\Ext\docs\index.html" />
     <Content Include="Scripts\Ext\docs\output\Array.html" />
     <Content Include="Scripts\Ext\docs\output\Date.html" />
@@ -4992,6 +4993,7 @@
     <Content Include="Scripts\Ext\test\unit\widgets\layout\HBoxLayout.js" />
     <Content Include="Scripts\Ext\test\unit\widgets\layout\VBoxLayout.js" />
     <Content Include="Scripts\Ext\test\unit\widgets\Slider.js" />
+    <Content Include="Scripts\Ext\treeCombo.js" />
     <Content Include="Scripts\Ext\welcome\images\bg-x.png" />
     <Content Include="Scripts\Ext\welcome\images\button_join_us.png" />
     <Content Include="Scripts\Ext\welcome\images\ext-comp.png" />

@@ -145,7 +145,7 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
             return treelst;
         }
-
+        [HttpGet]
         [HttpPost]
         public IEnumerable<ExtTree> GetOrganizationsAndUser(Guid? id)
         {
@@ -205,6 +205,25 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
             return treelst;
         }
+        [HttpGet]
+        [HttpPost]
+        public dynamic GetOrganizationsUserComboBox()
+        {
+            var orgList=base.Get();
+            var userList= new UserApiController().Get();
+            var result=new List<object>();
+            foreach (var item in orgList)
+	        {
+                result.Add(new { VALUE = item.ID, TEXT = item.Name, PID = item.POrganizationID == null ? Guid.Empty : item.POrganizationID, iconCls =item.iconCls});
+	        }
+            foreach (var item in userList)
+            {
+                result.Add(new { VALUE = item.ID, TEXT = item.RealName, PID = item.OrganizationID, iconCls = "icon-1" });
+            }
+            return  new { msg=result}; 
+        }
+
+
 
         /// <summary>
         /// 根据OrganizationID获取Users

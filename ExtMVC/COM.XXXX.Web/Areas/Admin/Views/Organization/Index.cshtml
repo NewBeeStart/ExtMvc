@@ -5,22 +5,55 @@
 <style>
     .itemscls {
         margin-top: 40px;
-        margin-bottom:40px;
+        margin-bottom: 40px;
+    }
+
+    .iconwidth {
+        width: 16px;
+        height: 16px;
+        margin: 1px;
+        display: inline-block;
     }
 </style>
-
-
-
+<script src="../../../../Scripts/Ext/treeCombo.js"></script>
 <script type="text/javascript">
+    var iconCombox = new Ext.form.ComboBox({
+        fieldLabel: '图标',
+        store: new Ext.data.JsonStore({
+            url: '/Api/Menu/GetMenuIcon?path=' + "@Server.UrlEncode(Server.MapPath(Com.XXXX.Class.ConstHelper.IconPath))",
+            storeId: 'myStore',
+            autoDestroy: true,
+            idProperty: 'name',
+            fields: ['name'],
+        }),
+        tpl: '<tpl for="."><span class="iconwidth  {name}" value="{name}" onclick="seticon(this)">&nbsp;&nbsp;</span></tpl>',
+        //tpl: '<tpl for="."><div x-combo-list-item :qtip="{url}" class="x-combo-list-item"><img src="{url}" width="16px" height="16px">&nbsp;{name}</div></tpl>',
+        //tpl :'<table><tr><tpl for="."><td class="x-combo-list-item"><img width=16 height=16 src="{url}" /></td><tpl if="xindex % 3 === 0"></tr><tr></tpl></tpl></tr></table>',
+        triggerAction: 'all',
+        emptyText: '请选择图标...',
+        name: 'iconCls',
+        width: 300,
+    });
+
+    function seticon(span) {
+        var type = Ext.get(span).dom.attributes.value.value;
+        //"<span class='iconwidth " + type + "' value='" + type + "'>&nbsp;&nbsp;</span>"
+        //console.log(Ext.get(span).dom.attributes.value.value)
+        iconCombox.setValue(type);
+        Ext.getCmp("iconimage").addClass(type);
+        console.log(Ext.getCmp("iconimage"));
+        // Ext.getCmp("iconimage").removeClass(iconCombox.getValue())
+        // iconCombox.getValue()
+    }
 
     var form1 = new Ext.FormPanel({
         buttonAlign: 'center',
-        id:"orgform",
+        id: "orgform",
         labelAlign: "right",
         hidden: true,
         plain: true,
         anchor: '100% 100%',
-        layout:"anchor",
+        layout: "anchor",
         frame: true,
         reader: new Ext.data.JsonReader(
          { successProperty: 'success', root: 'message' },
@@ -32,130 +65,176 @@
             {
                 xtype: 'fieldset',
                 collapsible: false,
-                anchor:'100% 100%',
+                anchor: '100% 100%',
                 items: [{
-                        xtype: "hidden",
-                        name: "POrganizationID",
-                        id: 'pid'
-                    },{
-                         xtype: "hidden",
-                         name: "ID",
-                         id: 'id'
-                     },{
-                        fieldLabel: '名称',
-                        name: 'Name',
-                        xtype: 'textfield',
-                        width: 300
-                    }, {
-                        fieldLabel: '类型',
-                        name: 'OrgType',
-                        xtype: 'combo',
-                        //本地数据源  local/remote
-                        mode: 'remote',
-                        //设置为选项的text的字段
-                        displayField: "Name",
-                        //设置为选项的value的字段 
-                        valueField: "Id",
-                        //是否可以输入，还是只能选择下拉框中的选项
-                        editable: false,
-                        typeAhead: true,
+                    xtype: "hidden",
+                    name: "POrganizationID",
+                    id: 'pid'
+                }, {
+                    xtype: "hidden",
+                    name: "ID",
+                    id: 'orgid'
+                }, {
+                    fieldLabel: '名称',
+                    name: 'Name',
+                    xtype: 'textfield',
+                    width: 300
+                }, {
+                    fieldLabel: '类型',
+                    name: 'OrgType',
+                    xtype: 'combo',
+                    //本地数据源  local/remote
+                    mode: 'remote',
+                    //设置为选项的text的字段
+                    displayField: "Name",
+                    //设置为选项的value的字段 
+                    valueField: "Id",
+                    //是否可以输入，还是只能选择下拉框中的选项
+                    editable: false,
+                    typeAhead: true,
+                    autoLoad: true,
+                    //必须选择一项
+                    forceSelection: true,
+                    //输入部分选项内容匹配的时候显示所有的选项
+                    triggerAction: 'all',
+                    displayField: "Name",
+                    //设置为选项的value的字段 
+                    valueField: "Id",
+                    //数据
+                    store: new Ext.data.JsonStore({
                         autoLoad: true,
-                        //必须选择一项
-                        forceSelection: true,
-                        //输入部分选项内容匹配的时候显示所有的选项
-                        triggerAction: 'all',
-                        displayField: "Name",
-                        //设置为选项的value的字段 
-                        valueField: "Id",
-                        //数据
-                        store: new Ext.data.JsonStore({
-                            autoLoad: true,
-                            method: 'Get',
-                            idProperty: 'ID',
-                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=OrgType",
-                            fields: [{
-                                name: 'Name',
-                                mapping: 'Title'
-                            }, {
-                                name: 'Id',
-                                mapping: 'Value'
-                            }]
-                            //fields: ['Id', 'Name'],
-                            //data: [[1, '单位'], [2, '部门'], [3, '岗位']],
-                        }),
-                        width: 300
-                    }, {
-                        fieldLabel: '状态',
-                        name: 'InUse',
-                        xtype: 'combo',
-                        //本地数据源  local/remote
-                        mode: 'remote',
-                        //设置为选项的text的字段
-                       
-                        //是否可以输入，还是只能选择下拉框中的选项
-                        editable: false,
-                        typeAhead: true,
-                        //必须选择一项
-                        forceSelection: true,
-                        //输入部分选项内容匹配的时候显示所有的选项
-                        triggerAction: 'all',
-                        //selectOnFocus:true,
-                        //数据
+                        method: 'Post',
+                        idProperty: 'ID',
+                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=OrgType",
+                        fields: [{
+                            name: 'Name',
+                            mapping: 'Title'
+                        }, {
+                            name: 'Id',
+                            mapping: 'Value'
+                        }]
+                        //fields: ['Id', 'Name'],
+                        //data: [[1, '单位'], [2, '部门'], [3, '岗位']],
+                    }),
+                    width: 300
+                }, {
+                    fieldLabel: '状态',
+                    name: 'InUse',
+                    xtype: 'combo',
+                    //本地数据源  local/remote
+                    mode: 'remote',
+                    //设置为选项的text的字段
+
+                    //是否可以输入，还是只能选择下拉框中的选项
+                    editable: false,
+                    typeAhead: true,
+                    //必须选择一项
+                    forceSelection: true,
+                    //输入部分选项内容匹配的时候显示所有的选项
+                    triggerAction: 'all',
+                    //selectOnFocus:true,
+                    //数据
+                    autoLoad: true,
+                    displayField: "Name",
+                    //设置为选项的value的字段 
+                    valueField: "Id",
+                    store: new Ext.data.JsonStore({
                         autoLoad: true,
-                        displayField: "Name",
-                        //设置为选项的value的字段 
-                        valueField: "Id",
-                        store: new Ext.data.JsonStore({
-                            autoLoad: true,
-                            method: 'Get',
-                            idProperty: 'ID',
-                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
-                            fields: [{
-                                name: 'Name',
-                                mapping: 'Title'
-                            }, {
-                                name: 'Id',
-                                mapping: 'Value'
-                            }]
-                            //fields: ['Id', 'Name'],
-                            //data: [[1, '单位'], [2, '部门'], [3, '岗位']],
-                        }),
-                        //store: new Ext.data.SimpleStore({
-                        //    fields: ['Id', 'Name'],
-                        //    data: [[1, '启用'], [2, '停用']],
-                        //}),
-                        width: 300
-                    },{
-                         fieldLabel: '分管领导',
-                         name: 'ChargeLeaderNames',
-                         xtype: 'textfield',
-                         width: 300
-                    }, {
-                        xtype: "hidden",
-                        name: "ChargeLeaderIDs",
-                        id: 'id'
-                    }, {
-                          fieldLabel: '部门/岗位领导',
-                          name: 'LeaderNames',
-                          xtype: 'textfield',
-                          width: 300
-                    }, {
-                        xtype: "hidden",
-                        name: "LeaderIDs",
-                        id: 'id'
-                    }, {
-                        fieldLabel: '备注',
-                        xtype: 'textarea',
-                        name: "Remark",
-                        height: 150,
-                        anchor: '95%'
-                    }
+                        method: 'Post',
+                        idProperty: 'ID',
+                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                        fields: [{
+                            name: 'Name',
+                            mapping: 'Title'
+                        }, {
+                            name: 'Id',
+                            mapping: 'Value'
+                        }]
+                        //fields: ['Id', 'Name'],
+                        //data: [[1, '单位'], [2, '部门'], [3, '岗位']],
+                    }),
+                    //store: new Ext.data.SimpleStore({
+                    //    fields: ['Id', 'Name'],
+                    //    data: [[1, '启用'], [2, '停用']],
+                    //}),
+                    width: 300
+                }, new Ext.form.ComboBoxTree({
+                    mode: "local",
+                    fieldLabel: "多选下拉",
+                    hiddenName: "mutliselect",
+                    name: "mutliselect",
+                    url: "/Api/Organization/GetOrganizationsUserComboBox",
+                    selectNodeModel: "leaf",
+                    displayField: "TEXT",
+                    valueField: "VALUE",
+                    parentField: "PID",
+                    rootValue: "00000000-0000-0000-0000-000000000000",
+                    width: 220,
+                    dataRoot: "msg",
+                    resizable: true,
+                    value: "5,584",
+                    store: new Ext.data.JsonStore({
+                        autoLoad: true,
+                        root: "msg",
+                        url: "/Api/Organization/GetOrganizationsUserComboBox",
+                        fields: [
+                            { name: "TEXT" },
+                            { name: "VALUE" },
+                            { name: "PID" }
+                        ]
+                    })
+                }), {
+                    fieldLabel: '分管领导',
+                    name: 'ChargeLeaderNames',
+                    xtype: 'textfield',
+                    width: 300
+                }, {
+                    xtype: "hidden",
+                    name: "ChargeLeaderIDs",
+                    id: 'id'
+                }, {
+                    fieldLabel: '部门/岗位领导',
+                    name: 'LeaderNames',
+                    xtype: 'textfield',
+                    width: 300
+                }, {
+                    xtype: "hidden",
+                    name: "LeaderIDs",
+                    id: 'id'
+                }, {
+                    xtype: 'compositefield',
+                    fieldLabel: '图标',
+                    items: [
+                      iconCombox,
+                        { xtype: 'displayfield', id: "iconimage" },
+                    ]
+                }, {
+                    fieldLabel: '备注',
+                    xtype: 'textarea',
+                    name: "Remark",
+                    height: 150,
+                    anchor: '95%'
+                }
                 ]
             }
         ], buttons: [{
             xtype: "button",
-            text: "保存",
-            style: "float:right"
+            text: "保存组织",
+            style: "float:right",
+            handler: function () {
+                form1.getForm().submit({
+                    url: '/Api/Organization/' + Ext.getCmp("orgid").getValue(),
+                    method: "Put",
+                    waitTitle: '请等待',
+                    waitMsg: '正在提交中',
+                    success: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
         }, {
             xtype: "button",
             text: "取消",
@@ -171,77 +250,110 @@
         plain: true,
         hidden: true,
         frame: true,
+        reader: new Ext.data.JsonReader(
+         { successProperty: 'success', root: 'message' },
+         ["OrganizationID", "ID", 'RealName', 'UserName', 'OfferTime', 'Education', 'IsMarry', 'Professional', 'InUse', 'BirthDay', 'Remark', "PassWord"]
+        ),
         labelAlign: "right",
         title: "用户信息",
-        hidden:true,
+        hidden: true,
         items: [{
             xtype: 'fieldset',
             collapsible: false,
             anchor: '100% 100%',
             labelWidth: 75,
             items: [
-                 {
-                     fieldLabel: '真实姓名',
-                     name: 'RealName',
-                     xtype: 'textfield',
-                     width:300
-                    
-                 }, {
-                     fieldLabel: '用户名',
-                     xtype: 'textfield',
-                     name: "UserName",
-                    
-                     width:300
-                 }, {
-                     fieldLabel: '入职时间',
-                     xtype: 'textfield',
-                     name: "OfferTime",
-                     width: 300
-                 }, {
-                     fieldLabel: '学历',
-                     xtype: 'textfield',
-                     name: "Education",
-                     width: 300
-                    
-                 }, {
-                     fieldLabel: '婚否',
-                     xtype: 'textfield',
-                     name: "IsMarry",
-                     width: 300
-                   
-                 }, {
-                     fieldLabel: '专业',
-                     xtype: 'textfield',
-                     name: "Professional",
-                     width: 300
-                 }, {
-                     fieldLabel: '启用',
-                     xtype: 'textfield',
-                     name: "InUse",
-                     width: 300
-                 }, {
-                     fieldLabel: '生日',
-                     xtype: 'textfield',
-                     name: "BirthDay",
-                     width: 300
-                 
-                 }, {
-                     fieldLabel: '备注',
-                     xtype: 'textarea',
-                     name: "Remark",
-                     height: 150,
-                     anchor: '95%'
-                 } 
-            ]}
-           
+                {
+                    name: 'OrganizationID',
+                    xtype: 'hidden',
+                }, {
+                    name: 'ID',
+                    xtype: 'hidden',
+                    id: "userid"
+                }, {
+                    fieldLabel: '真实姓名',
+                    name: 'RealName',
+                    xtype: 'textfield',
+                    width: 300
+
+                }, {
+                    fieldLabel: '用户名',
+                    xtype: 'textfield',
+                    name: "UserName",
+
+                    width: 300
+                }, {
+                    fieldLabel: '密码',
+                    xtype: 'textfield',
+                    name: "PassWord",
+                    width: 300
+                }, {
+                    fieldLabel: '入职时间',
+                    xtype: 'textfield',
+                    name: "OfferTime",
+                    width: 300
+                }, {
+                    fieldLabel: '学历',
+                    xtype: 'textfield',
+                    name: "Education",
+                    width: 300
+
+                }, {
+                    fieldLabel: '婚否',
+                    xtype: 'textfield',
+                    name: "IsMarry",
+                    width: 300
+
+                }, {
+                    fieldLabel: '专业',
+                    xtype: 'textfield',
+                    name: "Professional",
+                    width: 300
+                }, {
+                    fieldLabel: '启用',
+                    xtype: 'textfield',
+                    name: "InUse",
+                    width: 300
+                }, {
+                    fieldLabel: '生日',
+                    xtype: 'textfield',
+                    name: "BirthDay",
+                    width: 300
+
+                }, {
+                    fieldLabel: '备注',
+                    xtype: 'textarea',
+                    name: "Remark",
+                    height: 150,
+                    anchor: '95%'
+                }
+            ]
+        }
+
         ], buttons: [{
             xtype: "button",
-            text: "保存",
-            style: "float:right"
+            text: "保存用户",
+            style: "float:right",
+            handler: function () {
+                form2.getForm().submit({
+                    url: '/Api/User/' + Ext.getCmp("userid").getValue(),
+                    method: "Put",
+                    waitTitle: '请等待',
+                    waitMsg: '正在提交中',
+                    success: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
         }, {
             xtype: "button",
             text: "取消",
-            style: "float:right"
+            style: "float:right",
+
+
         }]
     });
 
@@ -272,14 +384,19 @@
                                 click: function (n) {
                                     var panel1 = Ext.getCmp("panel1");
                                     if (n.attributes.attributes.Type == "user") {
+                                        form2.form.load({
+                                            url: '@Url.Content("/Api/User/GetForm/")' + n.id,
+                                            method: "Get",
+                                            waitMsg: 'Loading'
+                                        });
                                         form2.show();
                                         form1.hide();
                                     } else {
                                         form1.form.load({
-                                            url: '@Url.Content("/Api//Organization/GetForm/")' + n.id,
-                                             method: "Get",
-                                             waitMsg: 'Loading'
-                                         });
+                                            url: '@Url.Content("/Api/Organization/GetForm/")' + n.id,
+                                            method: "Get",
+                                            waitMsg: 'Loading'
+                                        });
                                         form1.show();
                                         form2.hide();
                                     }
@@ -289,14 +406,14 @@
                         },
                         {
                             region: "center",
-                            id:"panel1",
+                            id: "panel1",
                             split: true,
                             border: false,
                             collapsible: false,
                             xtype: "panel",
-                            layout:"anchor",
+                            layout: "anchor",
                             autoScroll: true,
-                            items:[form1,form2]
+                            items: [form1, form2]
                             //items: [{
                             //    html: '<iframe id ="contentIframe" frameborder="0" height="100%" width="100%" src="/Admin/Organization/OrganizationManage"></iframe>'
                             //}]
