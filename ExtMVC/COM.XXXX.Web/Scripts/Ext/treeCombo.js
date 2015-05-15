@@ -23,7 +23,8 @@ Ext.form.ComboBoxTree = Ext.extend( Ext.form.ComboBox, {
 	rootText		: "主菜单",
 	rootValue		: -1,
 	rootVisible		: false,
-	triggerAction	: "all",
+	triggerAction: "all",
+	checkedType: "all",
 	//lazyInit		: false,
 	/** @selectNodeModel
 	 * all : 所有结点都可选中
@@ -195,7 +196,11 @@ Ext.form.ComboBoxTree = Ext.extend( Ext.form.ComboBox, {
 		this.tree.getRootNode().appendChild(treedata);
 		this.tree.getRootNode().expandChildNodes();
 	},
-	
+	filterChecked: function (node) {
+	    if (node.Type != this.checkedType) {
+	        delete node.checked;
+	    }
+	},
 	formatData : function (data){
 		var len = data.length;
 		var r = [], b = {},
@@ -207,7 +212,10 @@ Ext.form.ComboBoxTree = Ext.extend( Ext.form.ComboBox, {
 			var item = data[i];
 				item["text"]=item[d];
 				item["id"]=item[v];
-				item.checked = false;
+		        item.checked = false;
+		        if (this.checkedType!="all") {
+		            this.filterChecked(item);
+		        }
 			if(item[p]==s){
 				r.push(item);
 				continue;
@@ -224,7 +232,10 @@ Ext.form.ComboBoxTree = Ext.extend( Ext.form.ComboBox, {
 						t.leaf = false;
 						t["children"].push(item);
 						item.leaf = true;
-						item.checked = false;
+					    item.checked = false;
+					    if (this.checkedType != "all") {
+					        this.filterChecked(item);
+					    }
 						break;
 					}
 				}
@@ -235,7 +246,10 @@ Ext.form.ComboBoxTree = Ext.extend( Ext.form.ComboBox, {
 				b["_"+item[p]].leaf = false;
 			}
 			item.leaf = true;
-			item.checked = false;
+		    item.checked = false;
+		    if (this.checkedType != "all") {
+		        this.filterChecked(item);
+		    }
 			b["_"+item[p]]["children"].push(item);
 			continue;
 		}
@@ -297,7 +311,8 @@ Ext.form.ComboBoxTree = Ext.extend( Ext.form.ComboBox, {
 	},
 
 	getValue: function() {
-		return typeof this.value != 'undefined' ? this.value : '';
+	    //return typeof this.value != 'undefined' ? this.value : '';
+	    return this.getCheckedValue();
 	},
 
 	onSelect : Ext.emptyFn,

@@ -6143,15 +6143,15 @@ td.grid-hd-group-cell {
     background-color:#c3daf9;
     border-color:#3399bb;
 }.x-tree-node-expanded .x-tree-node-icon{
-	/*background-image:url(../images/default/tree/folder-open.gif);*/
+	background-image:url(../images/default/tree/folder-open.gif);
 }
 
 .x-tree-node-leaf .x-tree-node-icon{
-	/*--background-image:url(../images/default/tree/leaf.gif);*/
+	background-image:url(../images/default/tree/leaf.gif);
 }
 
 .x-tree-node-collapsed .x-tree-node-icon{
-	/*background-image:url(../images/default/tree/folder.gif);*/
+	background-image:url(../images/default/tree/folder.gif);
 }
 
 .x-tree-node-loading .x-tree-node-icon{

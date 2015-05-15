@@ -214,11 +214,11 @@ namespace COM.XXXX.WebApi.Admin.Controllers
             var result=new List<object>();
             foreach (var item in orgList)
 	        {
-                result.Add(new { VALUE = item.ID, TEXT = item.Name, PID = item.POrganizationID == null ? Guid.Empty : item.POrganizationID, iconCls =item.iconCls});
+                result.Add(new { VALUE = item.ID, TEXT = item.Name, PID = item.POrganizationID == null ? Guid.Empty : item.POrganizationID, Type="org"});
 	        }
             foreach (var item in userList)
             {
-                result.Add(new { VALUE = item.ID, TEXT = item.RealName, PID = item.OrganizationID, iconCls = "icon-1" });
+                result.Add(new { VALUE = item.ID, TEXT = item.RealName, PID = item.OrganizationID, Type="user" });
             }
             return  new { msg=result}; 
         }

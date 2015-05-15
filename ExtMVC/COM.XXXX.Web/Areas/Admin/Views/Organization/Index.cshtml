@@ -159,10 +159,11 @@
                     //}),
                     width: 300
                 }, new Ext.form.ComboBoxTree({
+                    id: 'ChargeLeaderIDs',
                     mode: "local",
-                    fieldLabel: "多选下拉",
-                    hiddenName: "mutliselect",
-                    name: "mutliselect",
+                    fieldLabel: "分管领导",
+                    //hiddenName: "ChargeLeaderIDs",
+                    name: "ChargeLeader",
                     url: "/Api/Organization/GetOrganizationsUserComboBox",
                     selectNodeModel: "leaf",
                     displayField: "TEXT",
@@ -172,7 +173,7 @@
                     width: 220,
                     dataRoot: "msg",
                     resizable: true,
-                    value: "5,584",
+                    checkedType: "user",
                     store: new Ext.data.JsonStore({
                         autoLoad: true,
                         root: "msg",
@@ -180,28 +181,40 @@
                         fields: [
                             { name: "TEXT" },
                             { name: "VALUE" },
-                            { name: "PID" }
+                            { name: "PID" },
+                            { name: "Type" } //要过滤的节点类型
                         ]
                     })
-                }), {
-                    fieldLabel: '分管领导',
-                    name: 'ChargeLeaderNames',
-                    xtype: 'textfield',
-                    width: 300
-                }, {
-                    xtype: "hidden",
-                    name: "ChargeLeaderIDs",
-                    id: 'id'
-                }, {
-                    fieldLabel: '部门/岗位领导',
-                    name: 'LeaderNames',
-                    xtype: 'textfield',
-                    width: 300
-                }, {
-                    xtype: "hidden",
-                    name: "LeaderIDs",
-                    id: 'id'
-                }, {
+                }),
+                 new Ext.form.ComboBoxTree({
+                     id: 'LeaderIDs',
+                     mode: "local",
+                     fieldLabel: "部门/岗位领导",
+                     //hiddenName: "ChargeLeaderIDs",
+                     name: "Leader",
+                     url: "/Api/Organization/GetOrganizationsUserComboBox",
+                     selectNodeModel: "leaf",
+                     displayField: "TEXT",
+                     valueField: "VALUE",
+                     parentField: "PID",
+                     rootValue: "00000000-0000-0000-0000-000000000000",
+                     width: 220,
+                     dataRoot: "msg",
+                     resizable: true,
+                     checkedType: "user",
+                     store: new Ext.data.JsonStore({
+                         autoLoad: true,
+                         root: "msg",
+                         url: "/Api/Organization/GetOrganizationsUserComboBox",
+                         fields: [
+                             { name: "TEXT" },
+                             { name: "VALUE" },
+                             { name: "PID" },
+                             { name: "Type" } //要过滤的节点类型
+                         ]
+                     })
+                 }),
+                {
                     xtype: 'compositefield',
                     fieldLabel: '图标',
                     items: [
@@ -219,12 +232,40 @@
             }
         ], buttons: [{
             xtype: "button",
-            text: "保存组织",
+            text: "添加单位/部门/岗位",
+            style: "float:right",
+            handler: function () {
+                var orgpid=Ext.getCmp("").
+                form1.form.reset();
+            }
+        }, {
+            xtype: "button",
+            text: "移动",
+            style: "float:right",
+            handler: function () {
+
+            }
+        }, {
+            xtype: "button",
+            text: "增加人员",
+            style: "float:right",
+            handler: function () {
+                
+            }
+        }, {
+            xtype: "button",
+            text: "保存",
             style: "float:right",
             handler: function () {
                 form1.getForm().submit({
                     url: '/Api/Organization/' + Ext.getCmp("orgid").getValue(),
                     method: "Put",
+                    params: {
+                        ChargeLeaderIDs: Ext.getCmp("ChargeLeaderIDs").getCheckedValue(),
+                        ChargeLeaderNames: Ext.getCmp("ChargeLeaderIDs").getCheckedDisplay(),
+                        LeaderNames: Ext.getCmp("LeaderIDs").getCheckedDisplay(),
+                        LeaderIDs: Ext.getCmp("LeaderIDs").getCheckedValue()
+                    },
                     waitTitle: '请等待',
                     waitMsg: '正在提交中',
                     success: function (form, action) {
@@ -387,15 +428,21 @@
                                         form2.form.load({
                                             url: '@Url.Content("/Api/User/GetForm/")' + n.id,
                                             method: "Get",
-                                            waitMsg: 'Loading'
+                                            waitMsg: 'Loading',
                                         });
+                                       
                                         form2.show();
                                         form1.hide();
                                     } else {
+                                        form1.form.reset()
                                         form1.form.load({
                                             url: '@Url.Content("/Api/Organization/GetForm/")' + n.id,
                                             method: "Get",
-                                            waitMsg: 'Loading'
+                                            waitMsg: 'Loading',
+                                            success: function (form, response) {
+                                               // Ext.getCmp("ChargeLeaderIDs").setValue(response.result.data.ChargeLeaderIDs)
+                                                //Ext.getCmp("LeaderIDs").setValue(response.result.data.LeaderIDs)
+                                            }
                                         });
                                         form1.show();
                                         form2.hide();
