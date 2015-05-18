@@ -48,3 +48,4 @@ F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Common\bin\Debug\log4net.dll
 F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Common\bin\Debug\log4net.xml
 F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Common\obj\Debug\COM.XXXX.Common.dll
 F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Common\obj\Debug\COM.XXXX.Common.pdb
+F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Common\obj\Debug\6.COM.XXXX.Common.csprojResolveAssemblyReference.cache

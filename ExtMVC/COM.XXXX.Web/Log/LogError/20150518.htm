@@ -1,0 +1,17 @@
+<HR COLOR=red>
+异常时间：2015-05-18 15:55:50,197 [19] <BR>
+异常级别：ERROR     <BR>
+异 常 类：logerror [(null)] <BR>
+/Api/Organization/d829c465-8ce1-e411-8811-93db4d633673 <BR>
+ <HR Size=1>System.InvalidOperationException: 附加类型“COM.XXXX.Models.Admin.Organization”的实体失败，因为相同类型的其他实体已具有相同的主键值。在使用 "Attach" 方法或者将实体的状态设置为 "Unchanged" 或 "Modified" 时如果图形中的任何实体具有冲突键值，则可能会发生上述行为。这可能是因为某些实体是新的并且尚未接收数据库生成的键值。在此情况下，使用 "Add" 方法或者 "Added" 实体状态跟踪该图形，然后将非新实体的状态相应设置为 "Unchanged" 或 "Modified"。
+   在 System.Data.Entity.Core.Objects.ObjectContext.VerifyRootForAdd(Boolean doAttach, String entitySetName, IEntityWrapper wrappedEntity, EntityEntry existingEntry, EntitySet& entitySet, Boolean& isNoOperation)
+   在 System.Data.Entity.Core.Objects.ObjectContext.AttachTo(String entitySetName, Object entity)
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.ActOnSet(Action action, EntityState newState, Object entity, String methodName)
+   在 System.Data.Entity.Internal.Linq.InternalSet`1.Attach(Object entity)
+   在 System.Data.Entity.DbSet`1.Attach(TEntity entity)
+   在 Repository.Domain.Infrastructure.Repository`1.Delete(TEntity entity) 位置 f:\PrimaryFile\project\ExtMvc\ExtMVC\Repository.Domain\Infrastructure\Repository.cs:行号 70
+   在 COM.XXXX.WebApi.ApiControllerBase`2.Delete(Guid id) 位置 f:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.WebApi\ApiControllerBase.cs:行号 116
+   在 lambda_method(Closure , Object , Object[] )
+   在 System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass13.<GetExecutor>b__c(Object instance, Object[] methodParameters)
+   在 System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.Execute(Object instance, Object[] arguments)
+   在 System.Threading.Tasks.TaskHelpers.RunSynchronously[TResult](Func`1 func, CancellationToken cancellationToken)

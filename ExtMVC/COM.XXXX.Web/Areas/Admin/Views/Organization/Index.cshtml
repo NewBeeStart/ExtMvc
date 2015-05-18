@@ -50,7 +50,6 @@
         buttonAlign: 'center',
         id: "orgform",
         labelAlign: "right",
-        hidden: true,
         plain: true,
         anchor: '100% 100%',
         layout: "anchor",
@@ -69,7 +68,7 @@
                 items: [{
                     xtype: "hidden",
                     name: "POrganizationID",
-                    id: 'pid'
+                    id: 'orgpid'
                 }, {
                     xtype: "hidden",
                     name: "ID",
@@ -233,33 +232,53 @@
         ], buttons: [{
             xtype: "button",
             text: "添加单位/部门/岗位",
+            id:"addorgbtn",
             style: "float:right",
             handler: function () {
-                var orgpid=Ext.getCmp("").
+               
+                form1.show();
+                form2.hide();
+                Ext.getCmp("panel1").doLayout();
+                var orgpid = Ext.getCmp("orgid").getValue();
                 form1.form.reset();
+                if (orgpid) {
+                    Ext.getCmp("orgpid").setValue(orgpid);
+                }
             }
         }, {
             xtype: "button",
             text: "移动",
+            id:"moveorgbtn",
             style: "float:right",
             handler: function () {
-
+                Ext.getCmp("orgtree").root.reload()
             }
         }, {
             xtype: "button",
             text: "增加人员",
+            id:"adduserbtn",
             style: "float:right",
             handler: function () {
-                
+                form2.show();
+                form2.form.reset();
+                form1.hide();
+                Ext.getCmp("panel1").doLayout();
+                var orgpid = Ext.getCmp("orgid").getValue();
+                if (orgpid) {
+                    Ext.getCmp("organizationid").setValue(orgpid);
+                }
             }
         }, {
             xtype: "button",
             text: "保存",
             style: "float:right",
+            id:"saveorgbtn",
             handler: function () {
+                var orgid = Ext.getCmp("orgid").getValue();
+                var type = orgid ? "Put" : "Post";
                 form1.getForm().submit({
-                    url: '/Api/Organization/' + Ext.getCmp("orgid").getValue(),
-                    method: "Put",
+                    url: '/Api/Organization/' + orgid,
+                    method: type,
                     params: {
                         ChargeLeaderIDs: Ext.getCmp("ChargeLeaderIDs").getCheckedValue(),
                         ChargeLeaderNames: Ext.getCmp("ChargeLeaderIDs").getCheckedDisplay(),
@@ -269,6 +288,7 @@
                     waitTitle: '请等待',
                     waitMsg: '正在提交中',
                     success: function (form, action) {
+                        Ext.getCmp("orgtree").root.reload()
                         Ext.Msg.alert('提示', action.result.message);
                     },
                     failure: function (form, action) {
@@ -278,8 +298,52 @@
             }
         }, {
             xtype: "button",
-            text: "取消",
-            style: "float:right"
+            text: "返回",
+            id:"returnorgbtn",
+            style: "float:right",
+            handler: function () {
+                form1.show();
+                form2.hide();
+                Ext.getCmp("panel1").doLayout();
+                var id = Ext.getCmp("orgpid").getValue();
+                form1.form.load({
+                    url: '@Url.Content("/Api/Organization/GetForm/")' + id,
+                     method: "Get",
+                     waitMsg: 'Loading',
+                     success: function (form, response) {
+                     }
+                 });
+            }
+        }, {
+            xtype: "button",
+            text: "删除",
+            id:"removeorgbtn",
+            style: "float:right",
+            handler: function () {
+                form1.show();
+                form2.hide();
+                Ext.getCmp("panel1").doLayout();
+                var id = Ext.getCmp("orgid").getValue();
+                form1.form.submit({
+                    url: '@Url.Content("/Api/Organization/")' + id,
+                    method: "Delete",
+                    waitMsg: 'Loading',
+                    success: function (form, action) {
+                        Ext.getCmp("orgtree").root.reload()
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "重置",
+            id: "resetorgbtn",
+            style: "float:right",
+            handler: function () {
+                form1.show();
+                form2.hide();
+                form1.form.reset();
+            }
         }]
     });
     var form2 = new Ext.FormPanel({
@@ -307,6 +371,7 @@
                 {
                     name: 'OrganizationID',
                     xtype: 'hidden',
+                    id:"organizationid"
                 }, {
                     name: 'ID',
                     xtype: 'hidden',
@@ -376,12 +441,15 @@
             text: "保存用户",
             style: "float:right",
             handler: function () {
+                var userid= Ext.getCmp("userid").getValue();
+                var type = userid ? "Put" : "Post";;
                 form2.getForm().submit({
-                    url: '/Api/User/' + Ext.getCmp("userid").getValue(),
-                    method: "Put",
+                    url: '/Api/User/' + userid,
+                    method: type,
                     waitTitle: '请等待',
                     waitMsg: '正在提交中',
                     success: function (form, action) {
+                        Ext.getCmp("orgtree").root.reload()
                         Ext.Msg.alert('提示', action.result.message);
                     },
                     failure: function (form, action) {
@@ -391,9 +459,41 @@
             }
         }, {
             xtype: "button",
-            text: "取消",
+            text: "返回",
             style: "float:right",
+            handler: function () {
+                form1.show();
+                form2.hide();
+                Ext.getCmp("panel1").doLayout();
+                var id = Ext.getCmp("orgpid").getValue();
+                form1.form.load({
+                    url: '@Url.Content("/Api/Organization/GetForm/")' + id,
+                    method: "Get",
+                    waitMsg: 'Loading',
+                    success: function (form, response) {
+                    }
+                });
+             }
 
+        }, {
+            xtype: "button",
+            text: "删除",
+            style: "float:right",
+            handler: function () {
+                form1.show();
+                form2.hide();
+                Ext.getCmp("panel1").doLayout();
+                var id = Ext.getCmp("userid").getValue();
+                form1.form.load({
+                    url: '@Url.Content("/Api/User/")' + id,
+                    method: "Delete",
+                    waitMsg: 'Loading',
+                    success: function (form, action) {
+                        Ext.getCmp("orgtree").root.reload()
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
 
         }]
     });
@@ -412,6 +512,7 @@
                             region: 'west',
                             title: '组织机构',
                             xtype: 'treepanel',
+                            id:"orgtree",
                             width: 200,
                             autoScroll: true,
                             loader: new Ext.tree.TreeLoader({
@@ -423,7 +524,7 @@
                             rootVisible: false,
                             listeners: {
                                 click: function (n) {
-                                    var panel1 = Ext.getCmp("panel1");
+                                    
                                     if (n.attributes.attributes.Type == "user") {
                                         form2.form.load({
                                             url: '@Url.Content("/Api/User/GetForm/")' + n.id,
@@ -433,6 +534,7 @@
                                        
                                         form2.show();
                                         form1.hide();
+                                      
                                     } else {
                                         form1.form.reset()
                                         form1.form.load({
@@ -446,8 +548,16 @@
                                         });
                                         form1.show();
                                         form2.hide();
+                                        Ext.getCmp("addorgbtn").show();
+                                        Ext.getCmp("moveorgbtn").show();
+                                        Ext.getCmp("adduserbtn").show();
+                                        Ext.getCmp("saveorgbtn").show();
+                                        Ext.getCmp("returnorgbtn").hide();
+                                        Ext.getCmp("removeorgbtn").show();
+                                        Ext.getCmp("resetorgbtn").show();
+
                                     }
-                                    panel1.doLayout();
+                                    Ext.getCmp("panel1").doLayout();
                                 }
                             }
                         },
@@ -466,8 +576,16 @@
                             //}]
                         }
 
+
             ]
         });
+        Ext.getCmp("addorgbtn").show();
+        Ext.getCmp("moveorgbtn").hide();
+        Ext.getCmp("adduserbtn").hide();
+        Ext.getCmp("saveorgbtn").show();
+        Ext.getCmp("returnorgbtn").hide();
+        Ext.getCmp("removeorgbtn").hide();
+        Ext.getCmp("resetorgbtn").show();
     });
 
 
