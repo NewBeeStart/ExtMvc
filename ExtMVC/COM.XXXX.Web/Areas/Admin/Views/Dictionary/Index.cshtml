@@ -113,48 +113,26 @@
                 addform.form.reset();
                 Ext.getCmp("pid").setValue(pid);
                 console.log(pid)
-                Ext.getCmp("update").hide();
+                Ext.getCmp("update").show();
                 Ext.getCmp("subadd").hide();
-                Ext.getCmp("add").show();
                 Ext.getCmp("return").show()
-                Ext.getCmp("reset").show()
+                Ext.getCmp("reset").hide()
             }
         }, {
             xtype: "button",
-            text: "更新",
+            text: "保存",
             id:"update",
             style: "float:right",
             handler: function () {
+                var pid = Ext.getCmp("id").getValue();
+                var type = pid ? "Put" : "Post";
                 addform.getForm().submit({
-                    url: '/Api/Dictionary/' + Ext.getCmp("id").getValue(),
-                    method: "Put",
+                    url: '/Api/Dictionary/' + pid,
+                    method: type,
                     waitTitle: '请等待',
                     waitMsg: '正在提交中',
                     success: function (form, action) {
-                        //url后台返回的数据{success:true,message:'成功'}	
-                        //console.log(action)
-                        Ext.Msg.alert('提示', action.result.message);
-                    },
-                    failure: function (form, action) {
-                        Ext.Msg.alert('提示', action.result.message);
-                    }
-                });
-            }
-        }, {
-            xtype: "button",
-            text: "新增",
-            hidden:true,
-            id: "add",
-            style: "float:right",
-            handler: function () {
-                addform.getForm().submit({
-                    url: '/Api/Dictionary/',
-                    method: "Post",
-                    waitTitle: '请等待',
-                    waitMsg: '正在提交中',
-                    success: function (form, action) {
-                        //url后台返回的数据{success:true,message:'成功'}	
-                        //console.log(action)
+                        Ext.getCmp("dictree").root.reload()
                         Ext.Msg.alert('提示', action.result.message);
                     },
                     failure: function (form, action) {
@@ -169,17 +147,37 @@
             hidden: true,
             style: "float:right",
             handler: function () {
-                addform.form.reset();
+                addform.form.reset()
                 Ext.getCmp("update").show();
                 Ext.getCmp("subadd").show();
-                Ext.getCmp("add").hide();
                 Ext.getCmp("return").hide();
                 Ext.getCmp("reset").hide();
                 addform.form.load({
                     url: '@Url.Content("/Api//Dictionary/GetForm/")' + pid,
                     method: "Get",
-                    waitMsg: 'Loading'
+                    waitMsg: 'Loading',
+                    success: function (form, action) {
+                      //  ;
+                    }
                 });
+            }
+        }, {
+            xtype: "button",
+            text: "删除",
+            id: "delete",
+            style: "float:right",
+            handler: function () {
+                addform.form.submit({
+                    url: '@Url.Content("/Api/Dictionary/")' + Ext.getCmp("id").getValue(),
+                     method: "Delete",
+                     waitMsg: 'Loading',
+                     success: function (form, action) {
+                         Ext.getCmp("dictree").root.reload()
+                         addform.form.reset();
+                         Ext.Msg.alert('提示', action.result.message);
+                     }
+                });
+                
             }
         }, {
             xtype: "button",
@@ -207,6 +205,7 @@
                             region: 'west',
                             title: '字典信息',
                             xtype: 'treepanel',
+                            id:"dictree",
                             width: 200,
                             autoScroll: true,
                             loader: new Ext.tree.TreeLoader({
@@ -221,9 +220,8 @@
                                     pid = node.id;
                                     Ext.getCmp("update").show();
                                     Ext.getCmp("subadd").show();
-                                    Ext.getCmp("add").hide();
                                     Ext.getCmp("return").hide();
-                                    Ext.getCmp("reset").hide();
+                                    Ext.getCmp("reset").show();
                                     addform.form.load({
                                         url: '@Url.Content("/Api//Dictionary/GetForm/")' + node.id,
                                         method:"Get",
