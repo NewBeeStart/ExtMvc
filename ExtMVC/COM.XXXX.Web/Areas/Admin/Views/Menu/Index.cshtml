@@ -1,26 +1,3 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
-<div id="cc" class="easyui-layout" data-options="fit:true">
-    <div data-options="region:'west',split:true" style="width: 150px; overflow: hidden">
-        @Html.Partial("_ModuleManage")
-    </div>
-    <div data-options="region:'center',title:'center title'">
-       @Html.Partial("_MenuManage")
-    </div>
-</div>
-
-<script type="text/javascript">
-    $("#moduletree").tree({
-        onClick: function (node) {
-            //加载form数据
-            $.ajax({
-                url: '/Api/Menu/GetMenuTreeByModule?id=null&moduleid=' + node.id,
-                type: 'POST',
-                success: function (data) {
-                    $('#tt3').treegrid("loadData", data);
-                }
-            });
-        }
-    })
-</script>

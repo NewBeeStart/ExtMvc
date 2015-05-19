@@ -75,6 +75,7 @@ namespace COM.XXXX.WebApi
         {
             return Repository.Query(M => M.ID == id).First();
         }
+
         public UISuccess GetForm(Guid id)
         {
             M temp = Repository.Query(M => M.ID == id).First();
@@ -84,6 +85,24 @@ namespace COM.XXXX.WebApi
                 return new UISuccess() { success = true, message = new List<M>() { temp} };
             }
             return new UISuccess() { success = false, message = "数据获取失败！" };
+        }
+
+        public dynamic GetGridPager(string start, string limit)
+        {
+            int startrecord, recordcount;
+            if (int.TryParse(start, out startrecord) && int.TryParse(limit, out recordcount))
+            {
+                var result = Repository.List().Skip<M>(startrecord).Take<M>(recordcount);
+                return new { data = result, count = result.Count() };
+            }
+
+            return new { data = "", count = 0 };
+        }
+
+        public dynamic GetGridPager()  
+        {
+            var result = Repository.List();
+            return new { data = result, count =result==null?0:result.Count() };
         }
 
         // POST api/<controller>
