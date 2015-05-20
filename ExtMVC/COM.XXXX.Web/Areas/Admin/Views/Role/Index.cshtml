@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+<style>
+    .itemscls {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .iconwidth {
+        width: 16px;
+        height: 16px;
+        margin: 1px;
+        display: inline-block;
+    }
+</style>
+<script src="../../../../Scripts/Ext/treeCombo.js"></script>
+<script type="text/javascript">
+ 
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "border",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [
+                        {
+                            region: 'west',
+                            title: '',
+                            xtype: 'treepanel',
+                            id:"orgtree",
+                            width: 200,
+                            autoScroll: true,
+                            loader: new Ext.tree.TreeLoader({
+                                url: '/Api/Organization/GetOrganizationsAndUser?id=null'
+                            }),
+                            root: new Ext.tree.AsyncTreeNode({
+                                expanded: true,
+                            }),
+                            rootVisible: false,
+                            listeners: {
+                                click: function (n) {
+                                    
+                                    if (n.attributes.attributes.Type == "user") {
+                                        form2.form.load({
+                                            url: '@Url.Content("/Api/User/GetForm/")' + n.id,
+                                            method: "Get",
+                                            waitMsg: 'Loading',
+                                        });
+                                       
+                                        form2.show();
+                                        form1.hide();
+                                      
+                                    } else {
+                                        form1.form.reset()
+                                        form1.form.load({
+                                            url: '@Url.Content("/Api/Organization/GetForm/")' + n.id,
+                                            method: "Get",
+                                            waitMsg: 'Loading',
+                                            success: function (form, response) {
+                                               // Ext.getCmp("ChargeLeaderIDs").setValue(response.result.data.ChargeLeaderIDs)
+                                                //Ext.getCmp("LeaderIDs").setValue(response.result.data.LeaderIDs)
+                                            }
+                                        });
+                                        form1.show();
+                                        form2.hide();
+                                       
+                                    }
+                                    Ext.getCmp("panel1").doLayout();
+                                }
+                            }
+                        },
+                        {
+                            region: "center",
+                            id: "panel1",
+                            split: true,
+                            border: false,
+                            collapsible: false,
+                            xtype: "panel",
+                            layout: "anchor",
+                            autoScroll: true,
+                            items: [form1, form2]
+                            //items: [{
+                            //    html: '<iframe id ="contentIframe" frameborder="0" height="100%" width="100%" src="/Admin/Organization/OrganizationManage"></iframe>'
+                            //}]
+                        }
+
+
+            ]
+        });
+        Ext.getCmp("addorgbtn").show();
+        Ext.getCmp("moveorgbtn").hide();
+        Ext.getCmp("adduserbtn").hide();
+        Ext.getCmp("saveorgbtn").show();
+        Ext.getCmp("returnorgbtn").hide();
+        Ext.getCmp("removeorgbtn").hide();
+        Ext.getCmp("resetorgbtn").show();
+    });
+</script>
