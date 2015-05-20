@@ -61,14 +61,21 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                 var dicchildren = Repository.Query(dic => dic.PDictionaryID == item.ID).OrderBy(dic => dic.Sort).ToList();
                 foreach (var child in dicchildren)
                 {
+                    var children=GetDictionaryTree(child.ID).ToList();
                     tree.children.Add(new ExtTree()
                     {
                         id = child.ID.ToString(),
                         text = child.Title,
                         iconCls = child.iconCls,
-                        children = GetDictionaryTree(child.ID).ToList(),
+                        children = children,
+                        leaf = children.Count()==0?true:false
                     });
                 }
+                if (dicchildren.Count() > 0)
+                {
+                    tree.leaf = false;
+                }
+                else { tree.leaf = true; }
                 treelst.Add(tree);
             }
 

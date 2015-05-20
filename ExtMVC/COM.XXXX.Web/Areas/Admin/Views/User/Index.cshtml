@@ -4,10 +4,13 @@
 
 <script type="text/javascript">
     var store = new Ext.data.Store({
-        autoLoad: true,
+        paramNames :{
+            start : 'start',  // The parameter name which specifies the start row
+            limit : 'limit',  // The parameter name which specifies number of rows to return
+        },
         proxy: new Ext.data.HttpProxy({
             url: "@Url.Content("/Api/User/GetGridPager")",
-            method:"Get"
+            method:"Post"
         }),
         reader: new Ext.data.JsonReader({
             root: "data",
@@ -27,6 +30,7 @@
              { name: 'OrganizationID' }
         ])
     });
+
     Ext.onReady(function () {
         Ext.QuickTips.init();
         new Ext.Viewport({
@@ -40,21 +44,20 @@
               layout:"fit",
                title: '用户列表',
                store: store,
+               stripeRows: true,
                columnLines: true,
                trackMouseOver: false,
-               disableSelection: true,
                loadMask: true,
                columns: [
                { id: 'ID', header: "ID", dataIndex: 'ID', width: 10, sortable: true },
                { header: "姓名", dataIndex: 'RealName', width: 20, hidden: false, sortable: true },
                { header: "用户名", dataIndex: 'UserName', width: 20, hidden: false, sortable: true },
-               //{ header: "密码", dataIndex: 'PassWord', width: 20, align: 'right', sortable: true },
                { header: "入职时间", dataIndex: 'OfferTime', width: 10, sortable: true },
-                { header: "学历", dataIndex: 'Education', width: 10, sortable: true },
+               { header: "学历", dataIndex: 'Education', width: 10, sortable: true },
                { header: "专业", dataIndex: 'Professional', width: 10, sortable: true },
-                { header: "婚否", dataIndex: 'IsMarry', width: 10, sortable: true },
-                { header: "生日", dataIndex: 'BirthDay', width: 10, sortable: true },
-                { header: "备注", dataIndex: 'Remark', width: 10, sortable: true }
+               { header: "婚否", dataIndex: 'IsMarry', width: 10, sortable: true },
+               { header: "生日", dataIndex: 'BirthDay', width: 10, sortable: true },
+               { header: "备注", dataIndex: 'Remark', width: 10, sortable: true }
                ],
                viewConfig: {
                    loadMask: true,
@@ -66,9 +69,16 @@
                    displayInfo: true,
                    displayMsg: '当前{0}到{1}条,共{2}条',
                    emptyMsg: '没有符合条件的数据'
-               })
-           }
-            ]
+               }),
+               tbar: [{
+                   text:"设置角色",  
+                   handler: function () {
+                     
+                   }
+               }]
+            }]
         });
-    });
+        store.load({ params: { start: 0, limit: 10 } });
+    }
+    );
 </script>

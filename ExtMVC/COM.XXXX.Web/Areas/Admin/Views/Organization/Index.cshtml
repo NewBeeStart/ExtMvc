@@ -37,13 +37,9 @@
 
     function seticon(span) {
         var type = Ext.get(span).dom.attributes.value.value;
-        //"<span class='iconwidth " + type + "' value='" + type + "'>&nbsp;&nbsp;</span>"
-        //console.log(Ext.get(span).dom.attributes.value.value)
         iconCombox.setValue(type);
         Ext.getCmp("iconimage").addClass(type);
         console.log(Ext.getCmp("iconimage"));
-        // Ext.getCmp("iconimage").removeClass(iconCombox.getValue())
-        // iconCombox.getValue()
     }
 
     var form1 = new Ext.FormPanel({
@@ -484,7 +480,7 @@
                 form2.hide();
                 Ext.getCmp("panel1").doLayout();
                 var id = Ext.getCmp("userid").getValue();
-                form1.form.load({
+                form1.form.submit({
                     url: '@Url.Content("/Api/User/")' + id,
                     method: "Delete",
                     waitMsg: 'Loading',
@@ -587,74 +583,4 @@
         Ext.getCmp("removeorgbtn").hide();
         Ext.getCmp("resetorgbtn").show();
     });
-
-
-
-
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*<div id="cc" class="easyui-layout" data-options="fit:true">
-    <div data-options="region:'west',title:'组织机构',split:true" style="width: 150px; overflow: hidden">
-         <ul id="orgtree"></ul>
-    </div>
-    <div data-options="region:'center'"  style="overflow: hidden;">
-         
-        
-        <div id="p" style="overflow: hidden;"></div>   
-    </div>
-</div>*@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*<script type="text/javascript">
-    $("#orgtree").tree({
-        url: '/Api/Organization/GetOrganizationsAndUser?id=null',
-        animate: true,
-        onLoadSuccess: function () {
-            $("#orgtree").tree("collapseAll");
-        },
-        onClick: function (node) {
-            if(node.attributes.Type=="user")
-                OpenPanel("/Admin/Organization/UserManage?id=" + node.id + "&type=" + node.attributes.Type);
-            else 
-                OpenPanel("/Admin/Organization/OrganizationManage?id=" + node.id + "&type=" + node.attributes.Type);
-        }
-    });
-
-    OpenPanel("/Admin/Organization/OrganizationAdd");
-
-    function OpenPanel(href) {
-        $('#p').panel({
-            fit: true,
-            content: '<iframe id="orgiframe" scrolling="no" frameborder="0"  src="' + href + '" style="width:100%;height:100%;overflow:hidden"></iframe>',
-        }); 
-    }
-
-   
-</script>*@

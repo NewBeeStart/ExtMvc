@@ -28,7 +28,25 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                     rows = list
                 };
         }
-
+        //[HttpPost]
+        //public dynamic GetGridPager()
+        //{
+        //    string start=string.Empty;
+        //    string limit=string.Empty;
+        //    var dicparams=this.ControllerContext.Request.GetQueryNameValuePairs();
+        //    foreach (var item in dicparams)
+        //    {
+        //        if(item.Key=="start")
+        //        {
+        //            start=item.Value;
+        //        }
+        //        if(item.Key=="limit")
+        //        {
+        //            limit=item.Value;
+        //        }
+        //    }
+        //    return base.PostGridPager(start, limit);
+        //}
       
         public dynamic PutInitPassword(Guid? id)
         {

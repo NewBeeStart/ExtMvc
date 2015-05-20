@@ -1,3 +1,421 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
+<style>
+    .itemscls {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .iconwidth {
+        width: 16px;
+        height: 16px;
+        margin: 1px;
+        display: inline-block;
+    }
+</style>
+<script src="../../../../Scripts/Ext/treeCombo.js"></script>
+
+<script type="text/javascript">
+    
+
+    function seticon(span,id) {
+        var type = Ext.get(span).dom.attributes.value.value;
+        Ext.getCmp(id).setValue(type);
+    }
+
+    var form1 = new Ext.FormPanel({
+        buttonAlign: 'center',
+        id: "moduleform",
+        labelAlign: "right",
+        plain: true,
+        anchor: '100% 100%',
+        layout: "anchor",
+        frame: true,
+        reader: new Ext.data.JsonReader(
+             { successProperty: 'success', root: 'message' },
+             ["ID", 'Code', 'Name', 'Desc', 'iconCls', 'Sort']
+        ),
+        defaults: { margins: '0 5 0 0' },
+        title: "模块信息",
+        items: [
+                  {
+                      xtype: 'fieldset',
+                      collapsible: false,
+                      anchor: '100% 100%',
+                      items: [{
+                          name: 'ID',
+                          xtype: 'hidden',
+                          id: "moduleid"
+                      }, {
+                          fieldLabel: '模块编号',
+                          name: 'Code',
+                          xtype: 'textfield',
+                          width: 300
+
+                      }, {
+                          fieldLabel: '模块名称',
+                          xtype: 'textfield',
+                          name: "Name",
+
+                          width: 300
+                      }, {
+                          fieldLabel: '模块描述',
+                          xtype: 'textfield',
+                          name: "Desc",
+                          width: 300
+                      }, {
+                          xtype: 'compositefield',
+                          fieldLabel: '图标',
+                          items: [
+                              new Ext.form.ComboBox({
+                                  fieldLabel: '图标',
+                                  id: "moduleicon",
+                                  store: new Ext.data.JsonStore({
+                                      url: '/Api/Menu/GetMenuIcon?path=' + "@Server.UrlEncode(Server.MapPath(Com.XXXX.Class.ConstHelper.IconPath))",
+                                        //storeId: 'myStore',
+                                        autoDestroy: true,
+                                        idProperty: 'name',
+                                        fields: ['name'],
+                                    }),
+                                  tpl: '<tpl for="."><span class="iconwidth  {name}" value="{name}" onclick="seticon(this,\'moduleicon\')">&nbsp;&nbsp;</span></tpl>',
+                                  triggerAction: 'all',
+                                  emptyText: '请选择图标...',
+                                  name: 'iconCls',
+                                  width: 300,
+                              })
+                          ]
+                      }, {
+                          fieldLabel: '排序',
+                          xtype: 'textfield',
+                          name: "Sort",
+                          width: 300
+
+                      }]
+                  }
+        ], buttons: [  {
+            xtype: "button",
+            text: "增加子菜单",
+            style: "float:right",
+            handler: function () {
+                form1.hide();
+                form2.show();
+                form2.form.reset();
+                var moduleid=Ext.getCmp("moduleid").getValue();
+                Ext.getCmp("menumoduleid").setValue(moduleid);
+                Ext.getCmp("panel1").doLayout();
+            }
+        }, {
+            xtype: "button",
+            text: "保存",
+            style: "float:right",
+            handler: function () {
+                var id = Ext.getCmp("moduleid").getValue();
+                var type = id ? "Put" : "Post";
+                form1.getForm().submit({
+                    url: '/Api/Module/' + id,
+                    method: type,
+                    waitTitle: '请等待',
+                    waitMsg: '正在提交中',
+                    success: function (form, action) {
+                        Ext.getCmp("menutree").root.reload()
+                        Ext.Msg.alert('提示', action.result.message);
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "删除",
+            style: "float:right",
+            handler: function () {
+                Ext.getCmp("panel1").doLayout();
+                var id = Ext.getCmp("moduleid").getValue();
+                form1.form.submit({
+                    url: '@Url.Content("/Api/Module/")' + id,
+                    method: "Delete",
+                    waitMsg: 'Loading',
+                    success: function (form, action) {
+                        Ext.getCmp("menutree").root.reload()
+                        form1.form.reset();
+                        form2.form.reset();
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "重置",
+            style: "float:right",
+            handler: function () {
+                form1.form.reset();
+            }
+        }]
+    });
+    var form2 = new Ext.FormPanel({
+        buttonAlign: 'center',
+        id: "menuform",
+        defaults: { margins: '0 5 0 0' },
+        anchor: '100% 100%',
+        layout: "anchor",
+        plain: true,
+        hidden: true,
+        frame: true,
+        reader: new Ext.data.JsonReader(
+         { successProperty: 'success', root: 'message' },
+         ['ID', 'DisplayName', 'Width', 'Height', 'SortKey', 'Controller', 'Action', 'iconCls', 'IsLeaf', 'OpenModel', 'PMenuID', 'ModuleID', "Desc"]
+        ),
+        labelAlign: "right",
+        title: "用户信息",
+        hidden: true,
+        items: [{
+            xtype: 'fieldset',
+            collapsible: false,
+            anchor: '100% 100%',
+            labelWidth: 75,
+            items: [{
+                     xtype: 'fieldset',
+                     collapsible: false,
+                     anchor: '100% 100%',
+                     items: [{
+                         xtype: "hidden",
+                         name: "PMenuID",
+                         id: 'menupid'
+                     }, {
+                         xtype: "hidden",
+                         name: "ID",
+                         id: 'menuid'
+                     }, {
+                         fieldLabel: '菜单名称',
+                         name: 'DisplayName',
+                         xtype: 'textfield',
+                         width: 300
+                     }, {
+                         fieldLabel: '宽度',
+                         name: 'Width',
+                         xtype: 'textfield',
+                         width: 300
+                     }, {
+                         fieldLabel: '高度',
+                         name: 'Height',
+                         xtype: 'textfield',
+                         width: 300
+                     }, {
+                         fieldLabel: '排序',
+                         name: 'SortKey',
+                         xtype: 'textfield',
+                         width: 300
+                     }, {
+                         fieldLabel: '控制器',
+                         name: 'Controller',
+                         xtype: 'textfield',
+                         width: 300
+                     }, {
+                         fieldLabel: 'Action',
+                         name: 'Action',
+                         xtype: 'textfield',
+                         width: 300
+                     }, {
+                         xtype: 'compositefield',
+                         fieldLabel: '图标',
+                         items: [
+                          new Ext.form.ComboBox({
+                              fieldLabel: '图标',
+                              id: "menuicon",
+                              store: new Ext.data.JsonStore({
+                                  url: '/Api/Menu/GetMenuIcon?path=' + "@Server.UrlEncode(Server.MapPath(Com.XXXX.Class.ConstHelper.IconPath))",
+                                      //storeId: 'myStore',
+                                      autoDestroy: true,
+                                      idProperty: 'name',
+                                      fields: ['name'],
+                                  }),
+                              tpl: '<tpl for="."><span class="iconwidth  {name}" value="{name}" onclick="seticon(this,\'menuicon\')">&nbsp;&nbsp;</span></tpl>',
+                              triggerAction: 'all',
+                              emptyText: '请选择图标...',
+                              name: 'iconCls',
+                              width: 300,
+                          })
+                         ]
+                     }, {
+                         fieldLabel: '是否叶子',
+                         name: 'IsLeaf',
+                         xtype: 'textfield',
+                         width: 300
+                     }, {
+                         fieldLabel: '打开类型',
+                         name: 'OpenModel',
+                         xtype: 'textfield',
+                         width: 300
+                     }, {
+                         fieldLabel: '所属模块',
+                         name: 'ModuleID',
+                         xtype: 'textfield',
+                         id:"menumoduleid",
+                         width: 300
+                     }, {
+                         fieldLabel: '描述',
+                         xtype: 'textarea',
+                         name: "Desc",
+                         height: 150,
+                         anchor: '95%'
+                     }
+            ]}],
+            buttons: [{
+                xtype: "button",
+                text: "增加子菜单",
+                style: "float:right",
+                handler: function () {
+                    form1.hide();
+                    form2.show();
+                    var menuid = Ext.getCmp("menuid").getValue();
+                    var moduleid = Ext.getCmp("menumoduleid").getValue();
+                    form2.form.reset();
+                    Ext.getCmp("menupid").setValue(menuid);
+                    Ext.getCmp("menumoduleid").setValue(moduleid);
+                    Ext.getCmp("panel1").doLayout();
+                }
+            },{
+            xtype: "button",
+            text: "保存",
+            style: "float:right",
+            handler: function () {
+                var menuid = Ext.getCmp("menuid").getValue();
+                var type = menuid ? "Put" : "Post";;
+                form2.getForm().submit({
+                    url: '/Api/Menu/' + menuid,
+                    method: type,
+                    waitTitle: '请等待',
+                    waitMsg: '正在提交中',
+                    success: function (form, action) {
+                        Ext.getCmp("menutree").root.reload()
+                        Ext.Msg.alert('提示', action.result.message);
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "返回",
+            style: "float:right",
+            handler: function () {
+                var menupid=Ext.getCmp("menupid").getValue();
+                if (menupid) {
+                    form2.form.load({
+                        url: '@Url.Content("/Api/Menu/GetForm/")' + menupid,
+                        method: "Get",
+                        waitMsg: 'Loading',
+                        success: function (form, response) {
+
+                        }
+                    });
+                } else {
+                    form2.hide();
+                    form1.show();
+                    Ext.getCmp("panel1").doLayout();
+                    var moduleid = Ext.getCmp("moduleid").getValue();
+                    if (moduleid) {
+                        form1.form.load({
+                            url: '@Url.Content("/Api/Module/GetForm/")' + moduleid,
+                        method: "Get",
+                        waitMsg: 'Loading',
+                        success: function (form, response) {
+
+                        }
+                    });
+                    }
+                }
+                
+            }}, {
+            xtype: "button",
+            text: "删除",
+            style: "float:right",
+            handler: function () {
+                var id = Ext.getCmp("menuid").getValue();
+                form1.form.submit({
+                    url: '@Url.Content("/Api/Menu/")' + id,
+                    method: "Delete",
+                    waitMsg: 'Loading',
+                    success: function (form, action) {
+                        form1.form.reset();
+                        form2.form.reset();
+                        Ext.getCmp("menutree").root.reload()
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
+        }]
+        }]
+    });
+
+
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "border",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [
+                        {
+                            region: 'west',
+                            title: '菜单资源',
+                            xtype: 'treepanel',
+                            id: "menutree",
+                            width: 200,
+                            autoScroll: true,
+                            loader: new Ext.tree.TreeLoader({
+                                url: '/Api/Module/GetModuleMenusTree'
+                            }),
+                            root: new Ext.tree.AsyncTreeNode({
+                                expanded: true,
+                            }),
+                            rootVisible: false,
+                            listeners: {
+                                click: function (n) {
+                                    if (n.attributes.attributes.type == "module") {
+                                        form1.form.load({
+                                            url: '@Url.Content("/Api/Module/GetForm/")' + n.id,
+                                            method: "Get",
+                                            waitMsg: 'Loading',
+                                            success: function (form, response) {
+                                            }
+                                        });
+                                        form1.show();
+                                        form2.hide();
+                                    } else {
+                                        form2.form.load({
+                                            url: '@Url.Content("/Api/Menu/GetForm/")' + n.id,
+                                            method: "Get",
+                                            waitMsg: 'Loading',
+                                            success: function (form, response) {
+                                            }
+                                        });
+                                        form2.show();
+                                        form1.hide();
+                                    }
+                                    Ext.getCmp("panel1").doLayout();
+                                }
+                            }
+                        },
+                        {
+                            region: "center",
+                            id: "panel1",
+                            split: true,
+                            border: false,
+                            collapsible: false,
+                            xtype: "panel",
+                            layout: "anchor",
+                            autoScroll: true,
+                            items: [form1, form2]
+                        }
+            ]
+        });
+    });
+
+
+</script>

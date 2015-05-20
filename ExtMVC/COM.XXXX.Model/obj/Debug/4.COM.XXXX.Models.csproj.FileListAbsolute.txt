@@ -67,4 +67,3 @@ F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Model\bin\Debug\zh-Hans\EntityFram
 F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Model\bin\Debug\zh-Hans\EntityFramework.SqlServer.resources.dll
 F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Model\obj\Debug\COM.XXXX.Models.dll
 F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Model\obj\Debug\COM.XXXX.Models.pdb
-F:\PrimaryFile\project\ExtMvc\ExtMVC\COM.XXXX.Model\obj\Debug\4.COM.XXXX.Models.csprojResolveAssemblyReference.cache

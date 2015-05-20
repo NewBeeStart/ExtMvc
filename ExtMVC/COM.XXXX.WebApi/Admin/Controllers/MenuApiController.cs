@@ -43,7 +43,8 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                     {
                         Width = item.Width,
                         Height = item.Height,
-                        OpenType = item.OpenModel
+                        OpenType = item.OpenModel,
+                        type="menu"
                     }
                 };
                 if (!item.IsLeaf)
@@ -189,5 +190,8 @@ namespace COM.XXXX.WebApi.Admin.Controllers
             }
             return lst ;
         }
+
+
+      
     }
 }

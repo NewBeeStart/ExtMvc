@@ -37,7 +37,10 @@ namespace COM.XXXX.WebApi.Admin.Controllers
             return treelst;
         }
 
-
+        /// <summary>
+        /// 获取模块及模块下菜单
+        /// </summary>
+        /// <returns></returns>
         public dynamic GetModuleMenus()
         {
             List<Module> modules = base.Get().ToList();
@@ -49,6 +52,33 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                   menus = new List<object>(new MenuApiController().GetMenusByModule(item.Code, null))
                 });
 	        }
+
+            return ModuleMenu;
+        }
+
+
+        /// <summary>
+        /// 获取模块及模块下菜单Tree
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public dynamic GetModuleMenusTree()
+        {
+            List<Module> modules = base.Get().ToList();
+            List<object> ModuleMenu = new List<object>();
+            foreach (var item in modules)
+            {
+                ExtTree module = new ExtTree()
+                {
+                    id = item.ID.ToString(),
+                    text = item.Name,
+                    iconCls = item.iconCls,
+                    leaf = false,
+                    attributes = new  { type="module"}
+                };
+                module.children.AddRange(new MenuApiController().GetMenusByModule(item.Code, null));
+                ModuleMenu.Add(module);
+            }
 
             return ModuleMenu;
         }

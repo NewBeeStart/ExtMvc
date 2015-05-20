@@ -13,7 +13,13 @@ using Repository.Domain;
 using Repository.Domain.Infrastructure;
 
 namespace COM.XXXX.WebApi
-{
+{ 
+    public class PagerTool
+    {
+        public string start{get;set;}
+        public   string limit{get;set;}
+    }
+
     public class ApiControllerBase<R, M> : ApiController
         where R : Repository<M>, new()
         where M : IModel, new()
@@ -86,25 +92,32 @@ namespace COM.XXXX.WebApi
             }
             return new UISuccess() { success = false, message = "数据获取失败！" };
         }
-
-        public dynamic GetGridPager(string start, string limit)
+      
+        /// <summary>
+        /// grid分页数据
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public HttpResponseMessage GetGridPager([FromBody]PagerTool p )
         {
-            int startrecord, recordcount;
-            if (int.TryParse(start, out startrecord) && int.TryParse(limit, out recordcount))
+            if (p != null)
             {
-                var result = Repository.List().Skip<M>(startrecord).Take<M>(recordcount);
-                return new { data = result, count = result.Count() };
+                int startrecord, recordcount;
+                if (int.TryParse(p.start, out startrecord) && int.TryParse(p.limit, out recordcount))
+                {
+                    var result = Repository.List().Skip<M>(startrecord).Take<M>(recordcount);
+                    return toJson(new { data = result, count = Repository.List().Count() });
+                }
             }
-
-            return new { data = "", count = 0 };
+            else 
+            {
+                return toJson(new { data = Repository.List(), count = Repository.List().Count() });
+            }
+            
+            return toJson(new { data = "[]", count = 0 });
         }
-
-        public dynamic GetGridPager()  
-        {
-            var result = Repository.List();
-            return new { data = result, count =result==null?0:result.Count() };
-        }
-
+        
         // POST api/<controller>
         public HttpResponseMessage Post([FromBody]M model)
         {
