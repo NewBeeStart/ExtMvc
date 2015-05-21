@@ -82,5 +82,21 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
             return ModuleMenu;
         }
+    
+        public dynamic GetModuleMenusComboBoxTree()
+        {
+            List<Menu> menuList = new MenuApiController().Repository.List().ToList();
+            List<Module> moduleList = Repository.List().ToList();
+            var result = new List<object>();
+            foreach (Module item in moduleList)
+            {
+                result.Add(new { VALUE = item.ID, TEXT = item.Name, PID = Guid.Empty, Type = "module" });
+            }
+            foreach (Menu item in menuList)
+            {
+                result.Add(new { VALUE = item.ID, TEXT = item.DisplayName, PID = item.PMenuID == null ? item.ModuleID : item.PMenuID, Type = "menu" });
+            }
+            return new { msg = result }; 
+        }
     }
 }

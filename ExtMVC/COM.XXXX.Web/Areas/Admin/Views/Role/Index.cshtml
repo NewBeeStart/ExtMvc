@@ -2,23 +2,138 @@
     ViewBag.Title = "Index";
 }
 
-
 <style>
-    .itemscls {
-        margin-top: 40px;
-        margin-bottom: 40px;
-    }
-
     .iconwidth {
-        width: 16px;
-        height: 16px;
-        margin: 1px;
+        width:16px;
+        height:16px;
+        margin:1px;
         display: inline-block;
     }
 </style>
-<script src="../../../../Scripts/Ext/treeCombo.js"></script>
+ <script src="../../../../Scripts/Ext/treeCombo.js"></script>
 <script type="text/javascript">
- 
+    var form1 = new Ext.FormPanel({
+        buttonAlign: 'center',
+        id: "roleform",
+        labelAlign: "right",
+        plain: true,
+        anchor: '100% 100%',
+        layout: "anchor",
+        frame: true,
+        reader: new Ext.data.JsonReader(
+        { successProperty: 'success', root: 'message' },
+        ["ID", 'Name', 'Desc']
+       ),
+        defaults: { margins: '0 5 0 0' },
+        title: "菜单信息",
+        items: [
+            {
+                xtype: 'fieldset',
+                collapsible: false,
+                anchor: '100% 100%',
+                items: [
+                    {
+                        name: 'ID',
+                        xtype: 'hidden',
+                        id: "id"
+                    }, {
+                        fieldLabel: '角色名称',
+                        name: 'Name',
+                        xtype: 'textfield',
+                        width: 300,
+                    }, new Ext.form.ComboBoxTree({
+                        mode: "local",
+                        fieldLabel: "菜单列表",
+                        id:"Menus",
+                        name: "Menus",
+                        selectNodeModel: "all",
+                        displayField: "TEXT",
+                        valueField: "VALUE",
+                        parentField: "PID",
+                        rootValue: "00000000-0000-0000-0000-000000000000",
+                        width: 220,
+                        dataRoot: "msg",
+                        resizable: true,
+                        checkedType: "menu",
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            root: "msg",
+                            url: "/Api/Module/GetModuleMenusComboBoxTree",
+                            fields: [
+                                { name: "TEXT" },
+                                { name: "VALUE" },
+                                { name: "PID" },
+                                { name: "Type" } //要过滤的节点类型
+                            ]
+                        })
+                    }), {
+                        fieldLabel: '描述信息',
+                        xtype: 'textarea',
+                        name: "Desc",
+                        height: 150,
+                        anchor: '95%'
+                    }
+                ]
+            }
+        ], buttons: [ {
+            xtype: "button",
+            text: "保存",
+            style: "float:right",
+            handler: function () {
+                var id = Ext.getCmp("id").getValue();
+                var type = id ? "Put" : "Post";
+                form1.getForm().submit({
+                    url: '/Api/Role/' + id,
+                    method: type,
+                    waitTitle: '请等待',
+                    waitMsg: '正在提交中',
+                    success: function (form, action) {
+                        Ext.getCmp("roletree").root.reload()
+                        Ext.Ajax.request({
+                            url: '@Url.Content("/Api/Privilege/PostBatch")',
+                            method: "Post",
+                            params: {
+                                Master: "Role",
+                                MasterValue: Ext.getCmp("id").getValue(),
+                                Access: "Menu",
+                                AccessValue: Ext.getCmp("Menus").getCheckedDisplay(),
+                                Operation: "enabled"
+                            },
+                            success: function (response) {
+                                data = Ext.util.JSON.decode(response.responseText);
+                            }
+                        });
+                        Ext.Msg.alert('提示', action.result.message);
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+                
+                
+            }
+        }, {
+            xtype: "button",
+            text: "返回",
+            style: "float:right",
+            handler: function () {
+            }
+        }, {
+            xtype: "button",
+            text: "删除",
+            style: "float:right",
+            handler: function () {
+               
+            }
+        }, {
+            xtype: "button",
+            text: "重置",
+            style: "float:right",
+            handler: function () {
+            }
+        }]
+   });
+
     Ext.onReady(function () {
         Ext.QuickTips.init();
         new Ext.Viewport({
@@ -30,47 +145,28 @@
             items: [
                         {
                             region: 'west',
-                            title: '',
+
+                            title: '角色信息',
                             xtype: 'treepanel',
-                            id:"orgtree",
+                            id:"roletree",
                             width: 200,
                             autoScroll: true,
                             loader: new Ext.tree.TreeLoader({
-                                url: '/Api/Organization/GetOrganizationsAndUser?id=null'
+                                url: '/Api/Role/GetRoleTree'
+
                             }),
                             root: new Ext.tree.AsyncTreeNode({
                                 expanded: true,
                             }),
                             rootVisible: false,
                             listeners: {
-                                click: function (n) {
-                                    
-                                    if (n.attributes.attributes.Type == "user") {
-                                        form2.form.load({
-                                            url: '@Url.Content("/Api/User/GetForm/")' + n.id,
-                                            method: "Get",
-                                            waitMsg: 'Loading',
-                                        });
-                                       
-                                        form2.show();
-                                        form1.hide();
-                                      
-                                    } else {
-                                        form1.form.reset()
-                                        form1.form.load({
-                                            url: '@Url.Content("/Api/Organization/GetForm/")' + n.id,
-                                            method: "Get",
-                                            waitMsg: 'Loading',
-                                            success: function (form, response) {
-                                               // Ext.getCmp("ChargeLeaderIDs").setValue(response.result.data.ChargeLeaderIDs)
-                                                //Ext.getCmp("LeaderIDs").setValue(response.result.data.LeaderIDs)
-                                            }
-                                        });
-                                        form1.show();
-                                        form2.hide();
-                                       
-                                    }
-                                    Ext.getCmp("panel1").doLayout();
+                                click: function (node) {
+                                    form1.form.load({
+                                        url: '@Url.Content("/Api/Role/GetForm/")' + node.id,
+                                        method: "Get",
+                                        waitMsg: 'Loading',
+                                    });
+
                                 }
                             }
                         },
@@ -83,21 +179,14 @@
                             xtype: "panel",
                             layout: "anchor",
                             autoScroll: true,
-                            items: [form1, form2]
-                            //items: [{
-                            //    html: '<iframe id ="contentIframe" frameborder="0" height="100%" width="100%" src="/Admin/Organization/OrganizationManage"></iframe>'
-                            //}]
-                        }
 
+                            items: [form1]
+                          
+                        }
 
             ]
         });
-        Ext.getCmp("addorgbtn").show();
-        Ext.getCmp("moveorgbtn").hide();
-        Ext.getCmp("adduserbtn").hide();
-        Ext.getCmp("saveorgbtn").show();
-        Ext.getCmp("returnorgbtn").hide();
-        Ext.getCmp("removeorgbtn").hide();
-        Ext.getCmp("resetorgbtn").show();
+        
     });
+
 </script>

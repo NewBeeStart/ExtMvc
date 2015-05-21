@@ -18,6 +18,10 @@ using System.Web.Http;
 using COM.XXXX.Models;
 using COM.XXXX.Models.Admin;
 using Repository.DAL.Repository;
+using System.Net.Http;
+using COM.XXXX.EasyUIModels;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace COM.XXXX.WebApi.Admin.Controllers
 {
@@ -26,6 +30,36 @@ namespace COM.XXXX.WebApi.Admin.Controllers
         public PrivilegeApiController()
         {
             base.SetRepository();
+        }
+        [HttpPut]
+        public HttpRequestMessage PutBatch([FromBody]dynamic model) 
+        {
+            return null;
+        }
+        [HttpPost]
+        public HttpRequestMessage PostBatch()
+        {
+            Privilege privilege = new Privilege(){
+                 Master=HttpContext.Current.Request["Master"],
+                 MasterValue=HttpContext.Current.Request["MasterValue"],
+                 Access=HttpContext.Current.Request["Access"],
+                 Operation=HttpContext.Current.Request["Operation"],
+            };
+           
+            string AccessValues=HttpContext.Current.Request["AccessValue"];
+            List<string> accessvalueLst= AccessValues.Split(',').ToList();
+            foreach (string item in accessvalueLst)
+	        {
+		        privilege.AccessValue=item;
+                
+	        }
+            
+            return null;
+        }
+        [HttpDelete]
+        public HttpRequestMessage DeleteBatch([FromBody]dynamic model) 
+        {
+            return null;
         }
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="MenuXmlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RondomHelper.cs" />
+    <Compile Include="Singleton.cs" />
     <Compile Include="StringValidate.cs" />
     <Compile Include="VolidateImage.cs" />
     <Compile Include="XmlOp.cs" />
