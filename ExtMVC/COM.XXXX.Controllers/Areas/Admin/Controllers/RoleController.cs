@@ -6,20 +6,11 @@ using System.Web.Mvc;
 
 namespace COM.XXXX.Controllers.Areas.Admin.Controllers
 {
-    public class DictionaryController:ControllerBase
+    public class RoleController : ControllerBase
     {
         public ActionResult Index()
         {
             return View();
         }
-        //public ActionResult DictionaryManage()
-        //{
-        //    return View();
-        //}
-
-        //public ActionResult DictionaryAdd()
-        //{
-        //    return View();
-        //}
     }
 }

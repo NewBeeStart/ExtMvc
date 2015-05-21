@@ -21,6 +21,8 @@ using COM.XXXX.Models.Admin;
 
 namespace Repository.Domain
 {
+  
+
     public class TestDbContext:DbContext
     {
         public TestDbContext()

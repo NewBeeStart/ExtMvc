@@ -22,5 +22,6 @@ namespace Repository.DAL.Repository
 {
     public class RoleRepository:Repository<Role>
     {
+
     }
 }

@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Repository.Domain.Infrastructure;
+using System.Data.Common;
 
 namespace Repository.Domain.Infrastructure
 {
@@ -71,7 +72,25 @@ namespace Repository.Domain.Infrastructure
             }
             dbSet.Remove(entity);
         }
+        public void DeleteRange(IEnumerable<TEntity> entities)
+        {
+            if (dbContext.Entry(entities).State == EntityState.Detached)
+            {
+                dbSet.Attach(entities);
+            }
+            dbSet.RemoveRange(entities);
+        }
 
+
+        public void BatchDelete(Expression<Func<TEntity, bool>> filter)
+        {
+            if (filter == null)
+            {
+                return ;
+            }
+            var result = this.dbContext.Set<TEntity>().Where(filter);
+            this.dbContext.Set<TEntity>().RemoveRange(result); 
+        }
       
         /// <summary>
         /// //var list = service.Query(p => p.UserId != Guid.Empty).OrderBy(p => p.UserName).Take(1).Skip(1).ToList();
@@ -87,6 +106,7 @@ namespace Repository.Domain.Infrastructure
             return this.dbContext.Set<TEntity>().Where(filter); 
         }
 
+      
 
         public IQueryable<TEntity> QueryByPage(Expression<Func<TEntity, bool>> FunWhere, Expression<Func<TEntity, string>> FunOrder,
                                                 int PageSize, int PageIndex, out int recordsCount)
@@ -99,6 +119,55 @@ namespace Repository.Domain.Infrastructure
                          .Select(t => t)
                          .Skip((PageIndex - 1)*PageSize)
                          .Take(PageSize);
+        }
+
+        /// <summary>
+        /// 执行指定的sql语句
+        /// </summary>
+        /// <param name="sqlstr"></param>
+        public int ExecuteStoreCommand(string sqlstr)
+        {
+            if (string.IsNullOrEmpty(sqlstr))
+            {
+                return 0;
+            }
+           
+           return dbContext.Database.ExecuteSqlCommand(sqlstr);
+        }
+
+        /// <summary>
+        /// 执行指定的sql语句
+        /// </summary>
+        /// <param name="sqlstr"></param>
+        public int ExecuteStoreCommandUseTransaction(string sqlstr)
+        {
+            if (string.IsNullOrEmpty(sqlstr))
+            {
+                return 0;
+            }
+            using(DbTransaction trans=dbContext.Database.Connection.BeginTransaction())
+            {
+
+                trans.Commit();
+            }
+
+           return dbContext.Database.ExecuteSqlCommand(TransactionalBehavior.EnsureTransaction,sqlstr);
+        }
+
+        /// <summary>
+        /// 查询指定的对象返回迭代器对象
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> SqlQuery(string sql,params object[] parameters)
+        {
+            if (string.IsNullOrEmpty(sql))
+            {
+                return null;
+            }
+            var result = dbContext.Database.SqlQuery<TEntity>(sql, parameters);
+            return  result.ToList<TEntity>();
         }
 
 
