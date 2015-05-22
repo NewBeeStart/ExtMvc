@@ -14,11 +14,11 @@ using Repository.Domain.Infrastructure;
 using COM.XXXX.Common;
 
 namespace COM.XXXX.WebApi
-{ 
+{
     public class PagerTool
     {
-        public string start{get;set;}
-        public   string limit{get;set;}
+        public string start { get; set; }
+        public string limit { get; set; }
     }
 
     public class ApiControllerBase<R, M> : ApiController
@@ -26,8 +26,8 @@ namespace COM.XXXX.WebApi
         where M : IModel, new()
     {
         public R Repository;
-        protected IUnitOfWork UnitOfWork { get; set; }
-        protected TestDbContext DbContext { get; set; }
+        public IUnitOfWork UnitOfWork { get; set; }
+        public TestDbContext DbContext { get; set; }
 
         /// <summary>
         /// 构建DbContext，UnitOfWork
@@ -52,7 +52,7 @@ namespace COM.XXXX.WebApi
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public HttpResponseMessage toJson(Object obj)
+        public virtual HttpResponseMessage toJson(Object obj)
         {
             String str;
             if (obj is String || obj is Char)
@@ -71,36 +71,36 @@ namespace COM.XXXX.WebApi
 
         #region WebApi 函数
         // GET api/<controller> 
-        public IEnumerable<M> Get()
+        public virtual IEnumerable<M> Get()
         {
             return Repository.List();
         }
 
         // GET api/<controller>/5
 
-        public M Get(Guid id)
+        public virtual M Get(Guid id)
         {
             return Repository.Query(M => M.ID == id).First();
         }
 
-        public UISuccess GetForm(Guid id)
+        public virtual dynamic GetForm(Guid id)
         {
             M temp = Repository.Query(M => M.ID == id).First();
-            
+
             if (temp != null)
             {
-                return new UISuccess() { success = true, message = new List<M>() { temp} };
+                return new { success = true, message = new List<M>() { temp } };
             }
-            return new UISuccess() { success = false, message = "数据获取失败！" };
+            return new { success = false, message = "数据获取失败！" };
         }
-      
+
         /// <summary>
         /// grid分页数据
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
         [HttpPost]
-        public HttpResponseMessage GetGridPager([FromBody]PagerTool p )
+        public virtual HttpResponseMessage GetGridPager([FromBody]PagerTool p)
         {
             if (p != null)
             {
@@ -111,47 +111,47 @@ namespace COM.XXXX.WebApi
                     return toJson(new { data = result, count = Repository.List().Count() });
                 }
             }
-            else 
+            else
             {
                 return toJson(new { data = Repository.List(), count = Repository.List().Count() });
             }
-            
+
             return toJson(new { data = "[]", count = 0 });
         }
-        
+
         // POST api/<controller>
-        public HttpResponseMessage Post([FromBody]M model)
+        public virtual HttpResponseMessage Post([FromBody]M model)
         {
             Repository.Insert(model);
 
             if (UnitOfWork.Save() == 1)
             {
-                return toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~添加数据成功了耶！" });
+                return toJson(new { success = true, message = "恭喜你,~O(∩_∩)O~添加数据成功了耶！" });
             }
-            return toJson(new UISuccess() { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
+            return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
         }
 
         // PUT api/<controller>/5
-        public HttpResponseMessage Put(Guid id, [FromBody]M model)
+        public virtual HttpResponseMessage Put(Guid id, [FromBody]M model)
         {
             model.ID = id;
             Repository.Update(model);
             if (UnitOfWork.Save() == 1)
             {
-                return  toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~更新数据成功了耶！" });
+                return toJson(new { success = true, message = "恭喜你,~O(∩_∩)O~更新数据成功了耶！" });
             }
-            return toJson(new UISuccess() { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
+            return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
         }
 
         // DELETE api/<controller>/5
-        public HttpResponseMessage Delete(Guid id)
+        public virtual HttpResponseMessage Delete(Guid id)
         {
             Repository.Delete(new M { ID = id });
             if (UnitOfWork.Save() == 1)
             {
-                return toJson(new UISuccess() { success = true, message = "恭喜你,~O(∩_∩)O~删除数据成功了耶！" });
+                return toJson(new { success = true, message = "恭喜你,~O(∩_∩)O~删除数据成功了耶！" });
             }
-            return toJson(new UISuccess() { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" }); ;
+            return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" }); ;
         }
 
         #endregion

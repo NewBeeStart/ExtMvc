@@ -10,7 +10,7 @@
         display: inline-block;
     }
 </style>
- <script src="../../../../Scripts/Ext/treeCombo.js"></script>
+<script src="../../../../Scripts/Ext/treeCombo.js"></script>
 <script type="text/javascript">
     var form1 = new Ext.FormPanel({
         buttonAlign: 'center',
@@ -22,7 +22,7 @@
         frame: true,
         reader: new Ext.data.JsonReader(
         { successProperty: 'success', root: 'message' },
-        ["ID", 'Name', 'Desc']
+        ["ID", 'Name', 'Desc','Menus']
        ),
         defaults: { margins: '0 5 0 0' },
         title: "菜单信息",
@@ -84,25 +84,18 @@
                 var type = id ? "Put" : "Post";
                 form1.getForm().submit({
                     url: '/Api/Role/' + id,
+                    params: {
+                        Master: "Role",
+                        MasterValue: Ext.getCmp("id").getValue(),
+                        Access: "Menu",
+                        AccessValue: Ext.getCmp("Menus").getCheckedValue(),
+                        Operation: "enabled"
+                    },
                     method: type,
                     waitTitle: '请等待',
                     waitMsg: '正在提交中',
                     success: function (form, action) {
                         Ext.getCmp("roletree").root.reload()
-                        Ext.Ajax.request({
-                            url: '@Url.Content("/Api/Privilege/PostBatch")',
-                            method: "Post",
-                            params: {
-                                Master: "Role",
-                                MasterValue: Ext.getCmp("id").getValue(),
-                                Access: "Menu",
-                                AccessValue: Ext.getCmp("Menus").getCheckedDisplay(),
-                                Operation: "enabled"
-                            },
-                            success: function (response) {
-                                data = Ext.util.JSON.decode(response.responseText);
-                            }
-                        });
                         Ext.Msg.alert('提示', action.result.message);
                     },
                     failure: function (form, action) {
@@ -165,6 +158,9 @@
                                         url: '@Url.Content("/Api/Role/GetForm/")' + node.id,
                                         method: "Get",
                                         waitMsg: 'Loading',
+                                        success: function (form,action,result) {
+                                            console.log(action);
+                                        }
                                     });
 
                                 }
@@ -179,7 +175,6 @@
                             xtype: "panel",
                             layout: "anchor",
                             autoScroll: true,
-
                             items: [form1]
                           
                         }

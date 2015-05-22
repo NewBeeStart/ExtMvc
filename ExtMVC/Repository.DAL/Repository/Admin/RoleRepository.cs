@@ -17,11 +17,11 @@ using System.Text;
 using COM.XXXX.Models;
 using COM.XXXX.Models.Admin;
 using Repository.Domain.Infrastructure;
+using System.Transactions;
 
 namespace Repository.DAL.Repository
 {
     public class RoleRepository:Repository<Role>
     {
-
     }
 }
