@@ -105,24 +105,35 @@
                 
                 
             }
-        }, {
-            xtype: "button",
-            text: "返回",
-            style: "float:right",
-            handler: function () {
-            }
-        }, {
+        },  {
             xtype: "button",
             text: "删除",
             style: "float:right",
             handler: function () {
-               
+                var id = Ext.getCmp("id").getValue();
+                form1.form.submit({
+                    url: '@Url.Content("/Api/Role/")' + id,
+                    params: {
+                        Master: "Role",
+                        MasterValue: Ext.getCmp("id").getValue(),
+                        Access: "Menu",
+                        AccessValue: Ext.getCmp("Menus").getCheckedValue(),
+                        Operation: "enabled"
+                    },
+                    method: "Delete",
+                    waitMsg: 'Loading',
+                    success: function (form, action) {
+                        Ext.getCmp("roletree").root.reload()
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
             }
         }, {
             xtype: "button",
             text: "重置",
             style: "float:right",
             handler: function () {
+                form1.form.reset();
             }
         }]
    });
@@ -159,7 +170,6 @@
                                         method: "Get",
                                         waitMsg: 'Loading',
                                         success: function (form,action,result) {
-                                            console.log(action);
                                         }
                                     });
 

@@ -2,34 +2,11 @@
     ViewBag.Title = "Index";
 }
 
+
 <script type="text/javascript">
-    var store = new Ext.data.Store({
-        paramNames :{
-            start : 'start',  // The parameter name which specifies the start row
-            limit : 'limit',  // The parameter name which specifies number of rows to return
-        },
-        proxy: new Ext.data.HttpProxy({
-            url: "@Url.Content("/Api/User/GetGridPager")",
-            method:"Post"
-        }),
-        reader: new Ext.data.JsonReader({
-            root: "data",
-            totalProperty: "count"
-        }, [
-             { name: 'ID' },
-             { name: 'RealName' },
-             { name: 'UserName' },
-             { name: 'PassWord' },
-             { name: 'OfferTime' },
-             { name: "Education" },
-             { name: 'Professional' },
-             { name: 'IsMarry' },
-             { name: 'BirthDay' },
-             { name: 'InUse' },
-             { name: 'Remark' },
-             { name: 'OrganizationID' }
-        ])
-    });
+
+
+ 
 
     Ext.onReady(function () {
         Ext.QuickTips.init();
@@ -40,10 +17,38 @@
                 bodyStyle: "background-color: #FFFFFF;",
             },
             items: [{
-               xtype: "grid",
-              layout:"fit",
+                xtype: "grid",
+                layout: "fit",
+                id:"usergrid",
                title: '用户列表',
-               store: store,
+               store: new Ext.data.Store({
+                               storeId:"gridstore",
+                               paramNames :{
+                                   start : 'start',  // The parameter name which specifies the start row
+                                   limit : 'limit',  // The parameter name which specifies number of rows to return
+                               },
+                               proxy: new Ext.data.HttpProxy({
+                                   url: "@Url.Content("/Api/User/GetGridPager")",
+                                   method:"Post"
+                    }),
+                   reader: new Ext.data.JsonReader({
+                       root: "data",
+                       totalProperty: "count"
+                   }, [
+                        { name: 'ID' },
+                        { name: 'RealName' },
+                        { name: 'UserName' },
+                        { name: 'PassWord' },
+                        { name: 'OfferTime' },
+                        { name: "Education" },
+                        { name: 'Professional' },
+                        { name: 'IsMarry' },
+                        { name: 'BirthDay' },
+                        { name: 'InUse' },
+                        { name: 'Remark' },
+                        { name: 'OrganizationID' }
+                   ])
+               }),
                stripeRows: true,
                columnLines: true,
                trackMouseOver: false,
@@ -65,7 +70,7 @@
                },
                bbar: new Ext.PagingToolbar({
                    pageSize: 10,
-                   store:store,
+                   store: Ext.StoreMgr.get("gridstore"),
                    displayInfo: true,
                    displayMsg: '当前{0}到{1}条,共{2}条',
                    emptyMsg: '没有符合条件的数据'
@@ -73,12 +78,71 @@
                tbar: [{
                    text:"设置角色",  
                    handler: function () {
-                     
+                       SetRole();
                    }
                }]
             }]
         });
-        store.load({ params: { start: 0, limit: 10 } });
-    }
-    );
+        Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+
+
+        function SetRole() {
+            var win = new Ext.Window({
+                modal: true,
+                title: '角色设置',
+                closable: false,
+                width: 600,
+                height: 100,
+                maximized: false,
+                labelAlign: "right",
+                layout: 'form',
+                plain: true,
+                items: [
+                    new DynamicCombox({
+                        id: "roleComb",
+                        fieldLabel: "选择角色",
+                        width: 200,
+                        baseUrl: '/Api/Role',
+                        valueField: 'ID',
+                        displayField: 'Name'
+                    })
+                ],
+                buttons: [{
+                    text: '设置',
+                    handler: function () {
+                        Ext.Ajax.request({
+                            url: '@Url.Content("~/Api/RoleRight/")',
+                        params: {
+                            UserID: Ext.getCmp("usergrid").getSelected().id,
+                            RoleID: Ext.getCmp("roleComb").getValue()
+                        },
+                        method: "Post",
+                        success: function (response) {
+                            data = Ext.util.JSON.decode(response.responseText);
+                            console.log(data);
+                        }
+                    });
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    win.close();
+                }
+            }]
+        });
+            if (Ext.getCmp("usergrid").getSelectionModel().selections.items.length > 0) {
+              Ext.Ajax.request({  
+                url: '@Url.Content("~/Api/RoleRight/")' + xt.getCmp("usergrid").getSelectionModel().selections.items[0].json.ID,
+                    method: "Get",
+                    success: function (response) {
+                        data = Ext.util.JSON.decode(response.responseText);
+                        Ext.getCmp("roleComb").setValue(data.RoleID);
+                    }
+                });
+            }
+            win.show();
+        }
+    });
+    
+
 </script>

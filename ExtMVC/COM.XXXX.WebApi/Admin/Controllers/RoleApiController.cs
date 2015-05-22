@@ -198,7 +198,7 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
                     }
                     PrivilegeApiController privilegecontroller = new PrivilegeApiController();
-                    privilegecontroller.Repository.DeleteByWhere(p => p.Master == "Role" && Guid.Parse(p.MasterValue) == id);
+                    privilegecontroller.Repository.DeleteByWhere(p => p.Master == "Role" && p.MasterValue == id.ToString());
                     privilegecontroller.UnitOfWork.Save();
                     Repository.Delete(new Role { ID = id });
 
