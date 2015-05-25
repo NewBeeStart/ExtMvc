@@ -5,7 +5,49 @@
 
 <script type="text/javascript">
 
-
+    var win = new Ext.Window({
+        modal: true,
+        title: '角色设置',
+        closable: false,
+        width: 600,
+        height: 100,
+        maximized: false,
+        labelAlign: "right",
+        layout: 'form',
+        plain: true,
+        items: [
+            new DynamicCombox({
+                id: "roleComb",
+                fieldLabel: "选择角色",
+                width: 200,
+                baseUrl: '/Api/Role',
+                valueField: 'ID',
+                displayField: 'Name'
+            })
+        ],
+        buttons: [{
+            text: '设置',
+            handler: function () {
+                Ext.Ajax.request({
+                    url: '@Url.Content("~/Api/RoleRight/")',
+                        params: {
+                            UserID: Ext.getCmp("usergrid").getSelectionModel().selections.items[0].json.ID,
+                            RoleID: Ext.getCmp("roleComb").getValue()
+                        },
+                        method: "Post",
+                        success: function (response) {
+                            data = Ext.util.JSON.decode(response.responseText);
+                            Ext.Msg.alert('提示', data.message);
+                        }
+                    });
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    win.hide();
+                }
+            }]
+      });
  
 
     Ext.onReady(function () {
@@ -85,62 +127,23 @@
         });
         Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
 
-
+      
         function SetRole() {
-            var win = new Ext.Window({
-                modal: true,
-                title: '角色设置',
-                closable: false,
-                width: 600,
-                height: 100,
-                maximized: false,
-                labelAlign: "right",
-                layout: 'form',
-                plain: true,
-                items: [
-                    new DynamicCombox({
-                        id: "roleComb",
-                        fieldLabel: "选择角色",
-                        width: 200,
-                        baseUrl: '/Api/Role',
-                        valueField: 'ID',
-                        displayField: 'Name'
-                    })
-                ],
-                buttons: [{
-                    text: '设置',
-                    handler: function () {
-                        Ext.Ajax.request({
-                            url: '@Url.Content("~/Api/RoleRight/")',
-                        params: {
-                            UserID: Ext.getCmp("usergrid").getSelected().id,
-                            RoleID: Ext.getCmp("roleComb").getValue()
-                        },
-                        method: "Post",
-                        success: function (response) {
-                            data = Ext.util.JSON.decode(response.responseText);
-                            console.log(data);
-                        }
-                    });
-                }
-            }, {
-                text: '关闭',
-                handler: function () {
-                    win.close();
-                }
-            }]
-        });
+            Ext.getCmp("roleComb").reset();
             if (Ext.getCmp("usergrid").getSelectionModel().selections.items.length > 0) {
               Ext.Ajax.request({  
-                url: '@Url.Content("~/Api/RoleRight/")' + xt.getCmp("usergrid").getSelectionModel().selections.items[0].json.ID,
+                  url: '/Api/RoleRight/GetRoleByUser/' + Ext.getCmp("usergrid").getSelectionModel().selections.items[0].json.ID,
                     method: "Get",
                     success: function (response) {
                         data = Ext.util.JSON.decode(response.responseText);
-                        Ext.getCmp("roleComb").setValue(data.RoleID);
+                        if(data){
+                            Ext.getCmp("roleComb").setValue(data.RoleID)
+                          
+                        }
                     }
-                });
+              });
+                win.show();
             }
-            win.show();
         }
     });
     

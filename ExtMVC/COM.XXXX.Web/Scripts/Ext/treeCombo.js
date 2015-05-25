@@ -477,8 +477,9 @@ DynamicCombox = Ext.extend(Ext.form.ComboBox, {
             // 值为false则允许用户将任意文本设置到字段（默认为false）。
             selectOnFocus: true,
             // 值为 ture时表示字段获取焦点时自动选择字段既有文本(默认为false)。
-            mode: 'remote',
+            mode: 'local',
             store: new Ext.data.JsonStore({
+                autoLoad: true,
                 proxy: new Ext.data.HttpProxy({
                     method: 'GET',
                     prettyUrls: false,

@@ -80,16 +80,25 @@ namespace COM.XXXX.WebApi
 
         public virtual M Get(Guid id)
         {
-            return Repository.Query(M => M.ID == id).First();
+            if (string.IsNullOrEmpty(id.ToString()))
+            {
+                var result = Repository.Query(M => M.ID == id);
+                return result.Count() > 0 ? result.First() : null;
+            }
+            return null;
         }
 
         public virtual dynamic GetForm(Guid id)
         {
-            M temp = Repository.Query(M => M.ID == id).First();
-
-            if (temp != null)
+            var result = Repository.Query(M => M.ID == id);
+            if (result.Count() > 0)
             {
-                return new { success = true, message = new List<M>() { temp } };
+                M temp = result.First();
+
+                if (temp != null)
+                {
+                    return new { success = true, message = new List<M>() { temp } };
+                }
             }
             return new { success = false, message = "数据获取失败！" };
         }
@@ -153,7 +162,16 @@ namespace COM.XXXX.WebApi
             }
             return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" }); ;
         }
-
+        // DELETE api/<controller>/5
+        public virtual HttpResponseMessage Delete(M model)
+        {
+            Repository.Delete(model);
+            if (UnitOfWork.Save() == 1)
+            {
+                return toJson(new { success = true, message = "恭喜你,~O(∩_∩)O~删除数据成功了耶！" });
+            }
+            return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" }); ;
+        }
         #endregion
     }
 }

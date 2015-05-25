@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-// Copyright (C) 2014 郑州华粮科技股份有限公司
+// Copyright (C) 2014 NewBee工作室
 // 版权所有。 
 //
 // 文件名：RoleRight
@@ -13,15 +13,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 
 namespace COM.XXXX.Models.Admin
 {
+    [Serializable]
+    [DataContract]
     public class RoleRight : IModel
     {
+        [DataMember]
         public Guid? RoleID { get; set; }
-
+        [DataMember]
         public Guid? UserID { get; set; }
 
         public virtual Role Role { get; set; }

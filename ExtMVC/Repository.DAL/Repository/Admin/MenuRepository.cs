@@ -2,7 +2,7 @@
 using Repository.Domain;
 using Repository.Domain.Infrastructure;
 /*----------------------------------------------------------------
-// Copyright (C) 2014 郑州华粮科技股份有限公司
+// Copyright (C) 2014 NewBee工作室
 // 版权所有。 
 //
 // 文件名：MenuRepository

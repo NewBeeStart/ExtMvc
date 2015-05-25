@@ -71,6 +71,7 @@
     <Compile Include="Admin\Controllers\ModuleApiController.cs" />
     <Compile Include="Admin\Controllers\OrganizationApiController.cs" />
     <Compile Include="Admin\Controllers\RoleApiController.cs" />
+    <Compile Include="Admin\Controllers\RoleRightApiController.cs" />
     <Compile Include="ApiControllerBase.cs" />
     <Compile Include="Admin\Controllers\MenuApiController.cs" />
     <Compile Include="Admin\Controllers\PrivilegeApiController.cs" />
