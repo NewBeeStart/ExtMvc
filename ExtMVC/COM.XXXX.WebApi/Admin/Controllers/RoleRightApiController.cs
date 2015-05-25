@@ -47,12 +47,10 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                 using (TransactionScope transaction = new TransactionScope())
                 {
                     try
-                    {
+                    {    
                         base.Delete(result.First());
                         base.Post(model);
-
                         transaction.Complete();
-
                     }
                     catch (Exception ex)
                     {
