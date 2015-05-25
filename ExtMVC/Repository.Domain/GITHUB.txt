@@ -40,3 +40,37 @@ git rm \*doc(可以删除带中文的任何doc扩展的文件)
 
 git commit -m "hehe" 
 git push origin 
+
+//创建分支
+
+创建一个叫做“feature_x”的分支，并切换过去：
+git checkout -b feature_x
+
+切换回主分支：
+git checkout master
+
+再把新建的分支删掉：
+git branch -d feature_x
+
+除非你将分支推送到远端仓库，不然该分支就是 不为他人所见的：
+git push origin <branch>
+
+
+更新与合并
+git pull
+
+//要更新你的本地仓库至最新改动，执行：
+git pull
+
+//以在你的工作目录中 获取（fetch） 并 合并（merge） 远端的改动。
+//要合并其他分支到你的当前分支（例如 master），执行：
+git merge <branch>
+
+
+//在这两种情况下，git 都会尝试去自动合并改动。遗憾的是，这可能并非每次都成功，并可能出现冲突（conflicts）。
+// 这时候就需要你修改这些文件来手动合并这些冲突（conflicts）。改完之后，你需要执行如下命令以将它们标记为合并成功：
+git add <filename>
+
+
+//在合并改动之前，你可以使用如下命令预览差异：
+git diff <source_branch> <target_branch>
