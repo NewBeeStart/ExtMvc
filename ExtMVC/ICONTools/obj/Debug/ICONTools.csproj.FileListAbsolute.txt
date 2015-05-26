@@ -63,3 +63,16 @@ F:\PrimaryFile\project\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.Properties.Re
 F:\PrimaryFile\project\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.csproj.GenerateResource.Cache
 F:\PrimaryFile\project\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.exe
 F:\PrimaryFile\project\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.pdb
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\bin\Debug\ICONTools.exe.config
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\bin\Debug\ICONTools.exe
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\bin\Debug\ICONTools.pdb
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\bin\Debug\COM.XXXX.Common.dll
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\bin\Debug\log4net.dll
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\bin\Debug\COM.XXXX.Common.pdb
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\bin\Debug\log4net.xml
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.csprojResolveAssemblyReference.cache
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.Form1.resources
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.Properties.Resources.resources
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.csproj.GenerateResource.Cache
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.exe
+D:\Projects\Teams\ExtMvc\ExtMVC\ICONTools\obj\Debug\ICONTools.pdb
