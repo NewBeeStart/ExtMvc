@@ -41,6 +41,7 @@
                         name: 'Name',
                         xtype: 'textfield',
                         width: 300,
+                        allowBlank: false,
                     }, new Ext.form.ComboBoxTree({
                         mode: "local",
                         fieldLabel: "菜单列表",
@@ -82,28 +83,28 @@
             handler: function () {
                 var id = Ext.getCmp("id").getValue();
                 var type = id ? "Put" : "Post";
-                form1.getForm().submit({
-                    url: '/Api/Role/' + id,
-                    params: {
-                        Master: "Role",
-                        MasterValue: Ext.getCmp("id").getValue(),
-                        Access: "Menu",
-                        AccessValue: Ext.getCmp("Menus").getCheckedValue(),
-                        Operation: "enabled"
-                    },
-                    method: type,
-                    waitTitle: '请等待',
-                    waitMsg: '正在提交中',
-                    success: function (form, action) {
-                        Ext.getCmp("roletree").root.reload()
-                        Ext.Msg.alert('提示', action.result.message);
-                    },
-                    failure: function (form, action) {
-                        Ext.Msg.alert('提示', action.result.message);
-                    }
-                });
-                
-                
+                if (form1.getForm().isValid()){
+                    form1.getForm().submit({
+                        url: '/Api/Role/' + id,
+                        params: {
+                            Master: "Role",
+                            MasterValue: Ext.getCmp("id").getValue(),
+                            Access: "Menu",
+                            AccessValue: Ext.getCmp("Menus").getCheckedValue(),
+                            Operation: "enabled"
+                        },
+                        method: type,
+                        waitTitle: '请等待',
+                        waitMsg: '正在提交中',
+                        success: function (form, action) {
+                            Ext.getCmp("roletree").root.reload()
+                            Ext.Msg.alert('提示', action.result.message);
+                        },
+                        failure: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        }
+                    });
+                }
             }
         },  {
             xtype: "button",
@@ -140,6 +141,7 @@
 
     Ext.onReady(function () {
         Ext.QuickTips.init();
+        Ext.form.Field.prototype.msgTarget = 'side'
         new Ext.Viewport({
             title: "Viewport",
             layout: "border",

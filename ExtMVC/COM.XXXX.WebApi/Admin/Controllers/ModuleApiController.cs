@@ -6,6 +6,8 @@ using System.Web.Http;
 using COM.XXXX.EasyUIModels;
 using COM.XXXX.Models.Admin;
 using Repository.DAL.Repository;
+using System.Web;
+using Com.XXXX.Common;
 
 namespace COM.XXXX.WebApi.Admin.Controllers
 {
@@ -43,15 +45,32 @@ namespace COM.XXXX.WebApi.Admin.Controllers
         /// <returns></returns>
         public dynamic GetModuleMenus()
         {
+            //List<RoleRight> roles = new RoleRightApiController().Repository.Query(role=>role.UserID=CurrentUser.ID).ToList();
+
+            //foreach (RoleRight role in roles)
+            //{
+            //   List<Privilege> privileges=  new PrivilegeApiController().Repository.Query(p => p.Master == "Role" && p.Access == "Menu" && p.MasterValue == role.RoleID).ToList();
+            //   foreach (Privilege privilege in privileges)
+            //   {
+            //       
+            //       Guid menuid = Guid.Parse(privilege.AccessValue);
+            //   }
+            //}
+
             List<Module> modules = base.Get().ToList();
             List<object> ModuleMenu = new List<object>();
             foreach (var item in modules)
-	        {
-               ModuleMenu.Add( new {
-                  title=item.Name, 
-                  menus = new List<object>(new MenuApiController().GetMenusByModule(item.Code, null))
+            {
+                ModuleMenu.Add(new
+                {
+                    title = item.Name,
+                    menus = new List<object>(new MenuApiController().GetMenusByModule(item.Code, null))
                 });
-	        }
+            }
+
+
+
+
 
             return ModuleMenu;
         }

@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using Repository.Domain;
 using Repository.Domain.Infrastructure;
 using COM.XXXX.Common;
+using COM.XXXX.Models.Admin;
+using Com.XXXX.Common;
 
 namespace COM.XXXX.WebApi
 {
@@ -28,7 +30,13 @@ namespace COM.XXXX.WebApi
         public R Repository;
         public IUnitOfWork UnitOfWork { get; set; }
         public TestDbContext DbContext { get; set; }
-
+        public User CurrentUser 
+        {
+            get
+            {
+                return new CookieManage().ReadFromCookie(ConstHelper.UserCookie) as User;
+            }
+        }
         /// <summary>
         /// 构建DbContext，UnitOfWork
         /// </summary>

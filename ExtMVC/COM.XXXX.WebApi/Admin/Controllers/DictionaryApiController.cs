@@ -90,14 +90,37 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
         [HttpGet]
         [HttpPost]
-        public IEnumerable<Dictionary> GetDictionaryByPCode(string pcode) 
+        public dynamic GetDictionaryByPCode(string pcode) 
        {
            var pdics = base.Repository.Query(dic => dic.Code == pcode);
            if ( pdics!= null&&pdics.Count<Dictionary>()>0) 
            {
                Dictionary pdic = base.Repository.Query(dic => dic.Code == pcode).First();
                var lst = base.Repository.Query(dic => dic.PDictionaryID == pdic.ID).ToList();
-               return lst;
+               List<object> result=new List<object>();
+               foreach (Dictionary item in lst)
+               {
+                   if (item.Value == "true" || item.Value == "false")
+                   {
+                       result.Add(new
+                       {
+                           ID = item.ID,
+                           Title = item.Title,
+                           Value = bool.Parse(item.Value)
+                       });
+                   }
+                   else
+                   {
+                       result.Add(new
+                       {
+                           ID = item.ID,
+                           Title = item.Title,
+                           Value = item.Value
+                       });
+ 
+                   }
+               }
+               return result;
            }
            return null;
         }

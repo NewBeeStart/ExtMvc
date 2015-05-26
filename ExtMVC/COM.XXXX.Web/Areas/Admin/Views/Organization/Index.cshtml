@@ -20,7 +20,7 @@
     var iconCombox = new Ext.form.ComboBox({
         fieldLabel: '图标',
         store: new Ext.data.JsonStore({
-            url: '/Api/Menu/GetMenuIcon?path=' + "@Server.UrlEncode(Server.MapPath(Com.XXXX.Class.ConstHelper.IconPath))",
+            url: '/Api/Menu/GetMenuIcon?path=' + "@Server.UrlEncode(Server.MapPath(Com.XXXX.Common.ConstHelper.IconPath))",
             storeId: 'myStore',
             autoDestroy: true,
             idProperty: 'name',
@@ -77,6 +77,7 @@
                 }, {
                     fieldLabel: '类型',
                     name: 'OrgType',
+                    hiddenName: 'OrgType',
                     xtype: 'combo',
                     //本地数据源  local/remote
                     mode: 'remote',
@@ -87,7 +88,6 @@
                     //是否可以输入，还是只能选择下拉框中的选项
                     editable: false,
                     typeAhead: true,
-                    autoLoad: true,
                     //必须选择一项
                     forceSelection: true,
                     //输入部分选项内容匹配的时候显示所有的选项
@@ -108,31 +108,32 @@
                             name: 'Id',
                             mapping: 'Value'
                         }]
-                        //fields: ['Id', 'Name'],
-                        //data: [[1, '单位'], [2, '部门'], [3, '岗位']],
                     }),
                     width: 300
                 }, {
+
                     fieldLabel: '状态',
                     name: 'InUse',
+                    hiddenName: 'InUse',
                     xtype: 'combo',
                     //本地数据源  local/remote
-                    mode: 'remote',
+                    mode: 'local',
                     //设置为选项的text的字段
-
+                    displayField: "Name",
+                    //设置为选项的value的字段 
+                    valueField: "Id",
                     //是否可以输入，还是只能选择下拉框中的选项
                     editable: false,
                     typeAhead: true,
                     //必须选择一项
+                    emptyText: '请选择...',
                     forceSelection: true,
                     //输入部分选项内容匹配的时候显示所有的选项
                     triggerAction: 'all',
-                    //selectOnFocus:true,
-                    //数据
-                    autoLoad: true,
                     displayField: "Name",
                     //设置为选项的value的字段 
                     valueField: "Id",
+                    //数据
                     store: new Ext.data.JsonStore({
                         autoLoad: true,
                         method: 'Post',
@@ -145,14 +146,11 @@
                             name: 'Id',
                             mapping: 'Value'
                         }]
-                        //fields: ['Id', 'Name'],
-                        //data: [[1, '单位'], [2, '部门'], [3, '岗位']],
+                       
                     }),
-                    //store: new Ext.data.SimpleStore({
-                    //    fields: ['Id', 'Name'],
-                    //    data: [[1, '启用'], [2, '停用']],
-                    //}),
                     width: 300
+
+                   
                 }, new Ext.form.ComboBoxTree({
                     id: 'ChargeLeaderIDs',
                     mode: "local",
@@ -228,12 +226,13 @@
         ], buttons: [{
             xtype: "button",
             text: "添加单位/部门/岗位",
-            id:"addorgbtn",
+            id: "addorgbtn",
             style: "float:right",
             handler: function () {
-               
                 form1.show();
+                form1.getForm().reset();
                 form2.hide();
+                form2.getForm().reset();
                 Ext.getCmp("panel1").doLayout();
                 var orgpid = Ext.getCmp("orgid").getValue();
                 form1.form.reset();
@@ -244,7 +243,7 @@
         }, {
             xtype: "button",
             text: "移动",
-            id:"moveorgbtn",
+            id: "moveorgbtn",
             style: "float:right",
             handler: function () {
                 Ext.getCmp("orgtree").root.reload()
@@ -252,7 +251,7 @@
         }, {
             xtype: "button",
             text: "增加人员",
-            id:"adduserbtn",
+            id: "adduserbtn",
             style: "float:right",
             handler: function () {
                 form2.show();
@@ -268,34 +267,36 @@
             xtype: "button",
             text: "保存",
             style: "float:right",
-            id:"saveorgbtn",
+            id: "saveorgbtn",
             handler: function () {
                 var orgid = Ext.getCmp("orgid").getValue();
                 var type = orgid ? "Put" : "Post";
-                form1.getForm().submit({
-                    url: '/Api/Organization/' + orgid,
-                    method: type,
-                    params: {
-                        ChargeLeaderIDs: Ext.getCmp("ChargeLeaderIDs").getCheckedValue(),
-                        ChargeLeaderNames: Ext.getCmp("ChargeLeaderIDs").getCheckedDisplay(),
-                        LeaderNames: Ext.getCmp("LeaderIDs").getCheckedDisplay(),
-                        LeaderIDs: Ext.getCmp("LeaderIDs").getCheckedValue()
-                    },
-                    waitTitle: '请等待',
-                    waitMsg: '正在提交中',
-                    success: function (form, action) {
-                        Ext.getCmp("orgtree").root.reload()
-                        Ext.Msg.alert('提示', action.result.message);
-                    },
-                    failure: function (form, action) {
-                        Ext.Msg.alert('提示', action.result.message);
-                    }
-                });
+                if (form1.getForm().isValid()) {
+                    form1.getForm().submit({
+                        url: '/Api/Organization/' + orgid,
+                        method: type,
+                        params: {
+                            ChargeLeaderIDs: Ext.getCmp("ChargeLeaderIDs").getCheckedValue(),
+                            ChargeLeaderNames: Ext.getCmp("ChargeLeaderIDs").getCheckedDisplay(),
+                            LeaderNames: Ext.getCmp("LeaderIDs").getCheckedDisplay(),
+                            LeaderIDs: Ext.getCmp("LeaderIDs").getCheckedValue()
+                        },
+                        waitTitle: '请等待',
+                        waitMsg: '正在提交中',
+                        success: function (form, action) {
+                            Ext.getCmp("orgtree").root.reload()
+                            Ext.Msg.alert('提示', action.result.message);
+                        },
+                        failure: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        }
+                    });
+                }
             }
         }, {
             xtype: "button",
             text: "返回",
-            id:"returnorgbtn",
+            id: "returnorgbtn",
             style: "float:right",
             handler: function () {
                 form1.show();
@@ -304,16 +305,16 @@
                 var id = Ext.getCmp("orgpid").getValue();
                 form1.form.load({
                     url: '@Url.Content("/Api/Organization/GetForm/")' + id,
-                     method: "Get",
-                     waitMsg: 'Loading',
-                     success: function (form, response) {
-                     }
-                 });
+                    method: "Get",
+                    waitMsg: 'Loading',
+                    success: function (form, response) {
+                    }
+                });
             }
         }, {
             xtype: "button",
             text: "删除",
-            id:"removeorgbtn",
+            id: "removeorgbtn",
             style: "float:right",
             handler: function () {
                 form1.show();
@@ -367,7 +368,7 @@
                 {
                     name: 'OrganizationID',
                     xtype: 'hidden',
-                    id:"organizationid"
+                    id: "organizationid"
                 }, {
                     name: 'ID',
                     xtype: 'hidden',
@@ -391,19 +392,63 @@
                     width: 300
                 }, {
                     fieldLabel: '入职时间',
-                    xtype: 'textfield',
+                    xtype: 'datefield',
                     name: "OfferTime",
+                    format: 'Y-m-d',
                     width: 300
                 }, {
                     fieldLabel: '学历',
-                    xtype: 'textfield',
-                    name: "Education",
+                    name: 'Education',
+                    hiddenName: 'Education',
+                    xtype: 'combo',
+                    mode: 'remote',
+                    editable: false,
+                    typeAhead: true,
+                    forceSelection: true,
+                    triggerAction: 'all',
+                    displayField: "Name",
+                    valueField: "Id",
+                    store: new Ext.data.JsonStore({
+                        autoLoad: true,
+                        method: 'Post',
+                        idProperty: 'ID',
+                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Education",
+                        fields: [{
+                            name: 'Name',
+                            mapping: 'Title'
+                        }, {
+                            name: 'Id',
+                            mapping: 'Value'
+                        }]
+                    }),
                     width: 300
 
                 }, {
                     fieldLabel: '婚否',
-                    xtype: 'textfield',
-                    name: "IsMarry",
+                    name: 'IsMarry',
+                    hiddenName: 'IsMarry',
+                    xtype: 'combo',
+                    mode: 'remote',
+                    editable: false,
+                    typeAhead: true,
+                    forceSelection: true,
+                    triggerAction: 'all',
+                    displayField: "Name",
+                    valueField: "Id",
+                    autoLoad: true,
+                    store: new Ext.data.JsonStore({
+                        autoLoad: true,
+                        method: 'Post',
+                        idProperty: 'ID',
+                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=IsNot",
+                        fields: [{
+                            name: 'Name',
+                            mapping: 'Title'
+                        }, {
+                            name: 'Id',
+                            mapping: 'Value'
+                        }]
+                    }),
                     width: 300
 
                 }, {
@@ -413,13 +458,36 @@
                     width: 300
                 }, {
                     fieldLabel: '启用',
-                    xtype: 'textfield',
-                    name: "InUse",
+                    name: 'InUse',
+                    hiddenName: 'InUse',
+                    xtype: 'combo',
+                    mode: 'remote',
+                    editable: false,
+                    typeAhead: true,
+                    forceSelection: true,
+                    blankText : '请选择',
+                    triggerAction: 'all',
+                    displayField: "Name",
+                    valueField: "Id",
+                    store: new Ext.data.JsonStore({
+                        autoLoad: true, 
+                        method: 'Post',
+                        idProperty: 'ID',
+                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                        fields: [{
+                            name: 'Name',
+                            mapping: 'Title'
+                        }, {
+                            name: 'Id',
+                            mapping: 'Value'
+                        }]
+                    }),
                     width: 300
                 }, {
                     fieldLabel: '生日',
-                    xtype: 'textfield',
+                    xtype: 'datefield',
                     name: "BirthDay",
+                    format: 'Y-m-d',
                     width: 300
 
                 }, {
@@ -437,21 +505,24 @@
             text: "保存用户",
             style: "float:right",
             handler: function () {
-                var userid= Ext.getCmp("userid").getValue();
-                var type = userid ? "Put" : "Post";;
-                form2.getForm().submit({
-                    url: '/Api/User/' + userid,
-                    method: type,
-                    waitTitle: '请等待',
-                    waitMsg: '正在提交中',
-                    success: function (form, action) {
-                        Ext.getCmp("orgtree").root.reload()
-                        Ext.Msg.alert('提示', action.result.message);
-                    },
-                    failure: function (form, action) {
-                        Ext.Msg.alert('提示', action.result.message);
-                    }
-                });
+                var userid = Ext.getCmp("userid").getValue();
+                var type = userid ? "Put" : "Post";
+                if (form2.getForm().isValid()) {
+                    form2.getForm().submit({
+                        url: '/Api/User/' + userid,
+                        method: type,
+                        waitTitle: '请等待',
+                        waitMsg: '正在提交中',
+                        success: function (form, action) {
+                            Ext.getCmp("orgtree").root.reload()
+                            Ext.Msg.alert('提示', action.result.message);
+                        },
+                        failure: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        }
+                    });
+
+                }
             }
         }, {
             xtype: "button",
@@ -470,7 +541,7 @@
 
                     }
                 });
-             }
+            }
 
         }, {
             xtype: "button",
@@ -498,6 +569,7 @@
 
     Ext.onReady(function () {
         Ext.QuickTips.init();
+        Ext.form.Field.prototype.msgTarget = 'side'
         new Ext.Viewport({
             title: "Viewport",
             layout: "border",
@@ -509,7 +581,7 @@
                             region: 'west',
                             title: '组织机构',
                             xtype: 'treepanel',
-                            id:"orgtree",
+                            id: "orgtree",
                             width: 200,
                             autoScroll: true,
                             loader: new Ext.tree.TreeLoader({
@@ -521,17 +593,17 @@
                             rootVisible: false,
                             listeners: {
                                 click: function (n) {
-                                    
+
                                     if (n.attributes.attributes.Type == "user") {
                                         form2.form.load({
                                             url: '@Url.Content("/Api/User/GetForm/")' + n.id,
                                             method: "Get",
                                             waitMsg: 'Loading',
                                         });
-                                       
+
                                         form2.show();
                                         form1.hide();
-                                      
+
                                     } else {
                                         form1.form.reset()
                                         form1.form.load({
@@ -539,7 +611,7 @@
                                             method: "Get",
                                             waitMsg: 'Loading',
                                             success: function (form, response) {
-                                               // Ext.getCmp("ChargeLeaderIDs").setValue(response.result.data.ChargeLeaderIDs)
+                                                // Ext.getCmp("ChargeLeaderIDs").setValue(response.result.data.ChargeLeaderIDs)
                                                 //Ext.getCmp("LeaderIDs").setValue(response.result.data.LeaderIDs)
                                             }
                                         });

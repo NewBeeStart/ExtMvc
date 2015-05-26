@@ -15,8 +15,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Com.XXXX.Class
-{
+namespace Com.XXXX.Common
+{ 
     public static class ConstHelper
     {
         public static string UserCookie = "user";
