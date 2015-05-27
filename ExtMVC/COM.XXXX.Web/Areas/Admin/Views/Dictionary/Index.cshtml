@@ -15,7 +15,7 @@
     var iconCombox = new Ext.form.ComboBox({
         //fieldLabel: '图标',
         store: new Ext.data.JsonStore({
-            url: '/Api/Menu/GetMenuIcon?path='+"@Server.UrlEncode( Server.MapPath(Com.XXXX.Class.ConstHelper.IconPath))",
+            url: '/Api/Menu/GetMenuIcon?path='+"@Server.UrlEncode( Server.MapPath(Com.XXXX.Common.ConstHelper.IconPath))",
             storeId: 'myStore',
             autoDestroy: true,
             idProperty: 'name',
