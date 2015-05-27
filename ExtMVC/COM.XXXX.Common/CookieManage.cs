@@ -101,7 +101,7 @@ namespace Com.XXXX.Common
                 var ms = new MemoryStream(bytes, 0, bytes.Length);  //从字节数组中得到内存流
 
                 if (bytes.Length == 0) return null;
-
+              
                 return new BinaryFormatter().Deserialize(ms);  //反序列化得到对象
             }
             return null;

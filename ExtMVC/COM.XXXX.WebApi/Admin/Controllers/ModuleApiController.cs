@@ -40,39 +40,45 @@ namespace COM.XXXX.WebApi.Admin.Controllers
         }
 
         /// <summary>
-        /// 获取模块及模块下菜单
+        /// 获取模块及模块下菜单--Home页面使用
         /// </summary>
         /// <returns></returns>
         public dynamic GetModuleMenus()
         {
-            //List<RoleRight> roles = new RoleRightApiController().Repository.Query(role=>role.UserID=CurrentUser.ID).ToList();
+            PrivilegeApiController privilegedal = new PrivilegeApiController();
+            RoleRightApiController rolerdal = new RoleRightApiController();
 
-            //foreach (RoleRight role in roles)
-            //{
-            //   List<Privilege> privileges=  new PrivilegeApiController().Repository.Query(p => p.Master == "Role" && p.Access == "Menu" && p.MasterValue == role.RoleID).ToList();
-            //   foreach (Privilege privilege in privileges)
-            //   {
-            //       
-            //       Guid menuid = Guid.Parse(privilege.AccessValue);
-            //   }
-            //}
+            List<RoleRight> roles = new RoleRightApiController().Repository.Query(role => role.UserID == CurrentUser.ID).ToList();
 
-            List<Module> modules = base.Get().ToList();
             List<object> ModuleMenu = new List<object>();
-            foreach (var item in modules)
+            foreach (RoleRight role in roles)
             {
-                ModuleMenu.Add(new
+                List<Privilege> modulePrivileges = privilegedal.Repository.Query(p => p.Master == "Role" && p.Access == "Module" && p.MasterValue == role.RoleID.ToString()).ToList();
+                List<Privilege> menuPrivileges = privilegedal.Repository.Query(p => p.Master == "Role" && p.Access == "Menu" && p.MasterValue == role.RoleID.ToString()).ToList();
+                foreach (Privilege item in modulePrivileges)
                 {
-                    title = item.Name,
-                    menus = new List<object>(new MenuApiController().GetMenusByModule(item.Code, null))
-                });
+                    var module = base.Get(Guid.Parse(item.AccessValue));
+                    ModuleMenu.Add(new
+                    {
+                        title = module.Name,
+                        menus = new List<object>(new MenuApiController().GetRoleMenusByModule(module.Code, null, menuPrivileges))
+                    });
+                }
             }
 
-
-
-
-
             return ModuleMenu;
+            //List<Module> modules = base.Get().ToList();
+            //List<object> ModuleMenu = new List<object>();
+            //foreach (var item in modules)
+            //{
+            //    ModuleMenu.Add(new
+            //    {
+            //        title = item.Name,
+            //        menus = new List<object>(new MenuApiController().GetMenusByModule(item.Code, null))
+            //    });
+            //}
+
+            //return ModuleMenu;
         }
 
 
@@ -93,7 +99,7 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                     text = item.Name,
                     iconCls = item.iconCls,
                     leaf = false,
-                    attributes = new  { type="module"}
+                    attributes = new { type = "module" }
                 };
                 module.children.AddRange(new MenuApiController().GetMenusByModule(item.Code, null));
                 ModuleMenu.Add(module);
@@ -101,7 +107,11 @@ namespace COM.XXXX.WebApi.Admin.Controllers
 
             return ModuleMenu;
         }
-    
+        /// <summary>
+        /// 获取Extjs ComboBoxTree中store的数据
+        /// 模块--菜单--tree
+        /// </summary>
+        /// <returns></returns>
         public dynamic GetModuleMenusComboBoxTree()
         {
             List<Menu> menuList = new MenuApiController().Repository.List().ToList();
@@ -115,7 +125,23 @@ namespace COM.XXXX.WebApi.Admin.Controllers
             {
                 result.Add(new { VALUE = item.ID, TEXT = item.DisplayName, PID = item.PMenuID == null ? item.ModuleID : item.PMenuID, Type = "menu" });
             }
-            return new { msg = result }; 
+            return new { msg = result };
+        }
+
+        /// <summary>
+        /// 单独获取模块的tree
+        /// Module tree
+        /// </summary>
+        /// <returns></returns>
+        public dynamic GetModuleComboBoxTree()
+        {
+            List<Module> moduleList = Repository.List().ToList();
+            var result = new List<object>();
+            foreach (Module item in moduleList)
+            {
+                result.Add(new { VALUE = item.ID, TEXT = item.Name, PID = Guid.Empty, Type = "module", leaf = true });
+            }
+            return new { msg = result };
         }
     }
 }

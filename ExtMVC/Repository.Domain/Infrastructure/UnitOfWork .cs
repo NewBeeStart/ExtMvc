@@ -47,12 +47,11 @@ namespace Repository.Domain.Infrastructure
         {
             try
             {
-                
                 return _context.SaveChanges();
-                
             }
             catch (Exception ex)
             {
+                
                 return -1;
             }
         }

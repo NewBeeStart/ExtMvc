@@ -145,13 +145,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\Organization\_ChooseBox.backup.cshtml" />
-    <Content Include="Areas\Admin\Views\Menu\_IconPicker.cshtml" />
-    <Content Include="Areas\Admin\Views\Dictionary\DictionaryManage.cshtml" />
-    <Content Include="Areas\Admin\Views\Organization\DictionaryManage.cshtml" />
-    <Content Include="Areas\Admin\Views\Dictionary\DictionaryAdd.cshtml" />
     <Content Include="Areas\Admin\Views\Menu\Index.cshtml" />
-    <None Include="Areas\Admin\Views\Organization\Index.backup.cshtml" />
     <Content Include="AspNetControl\IconPiker.ascx" />
     <Content Include="Content\Images\Header.jpg" />
     <Content Include="Content\Table.css" />
@@ -8842,7 +8836,6 @@
     <Content Include="Scripts\Ext\Ext JS 3.1-3.3 API中文文档.CHM" />
     <Content Include="Areas\Admin\Views\Web.config" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\User\_UserEdit.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Scripts\bootstrap\.editorconfig" />
@@ -9012,16 +9005,7 @@
     <Content Include="Scripts\HubSpot\src\sass\messenger.sass" />
     <Content Include="Areas\Admin\Views\SysManage\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Organization\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\User\Index.backup.cshtml" />
-    <Content Include="Areas\Admin\Views\Menu\Index.backup.cshtml" />
-    <Content Include="Areas\Admin\Views\Menu\_ModuleManage.cshtml" />
-    <Content Include="Areas\Admin\Views\Menu\_MenuManage.cshtml" />
     <Content Include="Areas\Admin\Views\Dictionary\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Organization\OrganizationManage.backup.cshtml" />
-    <Content Include="Areas\Admin\Views\Organization\UserAdd.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\UserManage.cshtml" />
-    <Content Include="Areas\Admin\Views\Organization\OrganizationAdd.backup.cshtml" />
-    <Content Include="Areas\Admin\Views\Organization\OrganizationManage.cshtml" />
     <Content Include="Areas\Admin\Views\User\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Role\Index.cshtml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />

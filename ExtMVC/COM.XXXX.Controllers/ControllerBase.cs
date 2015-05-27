@@ -64,7 +64,15 @@ namespace COM.XXXX.Controllers
         {
             get
             {
-                return new CookieManage().ReadFromCookie(ConstHelper.UserCookie) as User;
+                try
+                {
+                    return new CookieManage().ReadFromCookie(ConstHelper.UserCookie) as User;
+                }
+                catch(Exception ex)
+                {
+                    Response.Redirect("~/Account");
+                    return null;
+                }
             }
         }
     }

@@ -162,7 +162,17 @@ Ext.form.ComboBoxTree = Ext.extend( Ext.form.ComboBox, {
 		this.setRawValue(this.getCheckedDisplay());
 	},
 	
-	expand: function() {
+	expand: function () {
+	    this.tree.collapseAll();
+	    this.tree.expandAll();
+	    //for (var i = 0; i < this.tree.getRootNode().childNodes.length; i++)
+	    //{
+	    //    if (this.tree.getRootNode().childNodes[i].childNodes){
+	    //    if (this.tree.getRootNode().childNodes[i].childNodes.length == 0) {
+	    //        delete this.tree.getRootNode().childNodes[i].childNodes;
+	    //    }
+        //    }
+	    //}
 		if (this.isExpanded() || !this.hasFocus) {
 			return;
 		}

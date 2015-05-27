@@ -16,7 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Com.Cngrain.SmartDepotMonitorOnLine.WindowsServer
+namespace Com.XXXX.Common
 {
     public class Log4NetHelper
     {
@@ -33,16 +33,14 @@ namespace Com.Cngrain.SmartDepotMonitorOnLine.WindowsServer
             return log4NetHelper;
         } 
 
-      
-
         public  void SetConfig()
         {
-            log4net.Config.DOMConfigurator.Configure();
+            log4net.Config.XmlConfigurator.Configure();
         }
 
         public  void SetConfig(FileInfo configFile)
         {
-            log4net.Config.DOMConfigurator.Configure(configFile);
+            log4net.Config.XmlConfigurator.Configure(configFile);
         }
 
         public  void WriteLog(string info)
@@ -53,7 +51,7 @@ namespace Com.Cngrain.SmartDepotMonitorOnLine.WindowsServer
             }
         }
 
-        public  void WriteLog(string info, Exception se)
+        public   void WriteLog(string info, Exception se)
         {
             if (logerror.IsErrorEnabled)
             {

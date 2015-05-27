@@ -61,6 +61,60 @@ namespace COM.XXXX.WebApi.Admin.Controllers
             return menulst;
 
         }
+
+        /// <summary>
+        /// 根据角色信息和模块信息获取Menus
+        /// </summary>
+        /// <param name="modulecode"></param>
+        /// <param name="id"></param>
+        /// <param name="modules"></param>
+        /// <param name="menus"></param>
+        /// <returns></returns>
+        public IEnumerable<ExtTree> GetRoleMenusByModule(string modulecode, Guid? id, List<Privilege> menus)
+        { 
+            if (string.IsNullOrEmpty(modulecode))
+            {
+                return null;
+            }
+            var moduleMenus = Repository.Query(menu => menu.Module.Code == modulecode && menu.PMenuID == id).OrderBy(menu => menu.SortKey).ToList();
+
+            List<ExtTree> menulst = new List<ExtTree>();
+            foreach (Menu item in moduleMenus)
+            {
+                var result = from p in menus
+                             where p.AccessValue == item.ID.ToString()
+                             select p;
+                if (result!=null&&result.Count() > 0)
+                {
+                    ExtTree menu = new ExtTree()
+                    {
+                        id = item.ID.ToString(),
+                        text = item.DisplayName,
+                        iconCls = item.iconCls,
+                        leaf = true,
+                        url = string.Format("/{0}/{1}/{2}", item.Module.Code, item.Controller, item.Action),
+                        attributes = new
+                        {
+                            Width = item.Width,
+                            Height = item.Height,
+                            OpenType = item.OpenModel,
+                            type = "menu"
+                        }
+                    };
+                    if (!item.IsLeaf)
+                    {
+                        var sub = GetRoleMenusByModule(modulecode, item.ID, menus);
+                        if (sub != null && sub.Count() > 0)
+                        {
+                            menu.leaf = false;
+                            menu.children.AddRange(sub);
+                        }
+                    }
+                    menulst.Add(menu);
+                }
+            }
+            return menulst;
+        }
         //public IEnumerable<ExtTree> GetMenusByRole()
         //{
         //    List<RoleRight> roles = new RoleRightApiController().Repository.Query(role => role.UserID = CurrentUser.ID).ToList();

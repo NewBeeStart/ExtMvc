@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Web;
 using System.Transactions;
 
+
 namespace COM.XXXX.WebApi.Admin.Controllers
 {
     public class RoleApiController : ApiControllerBase<RoleRepository, Role>
@@ -50,17 +51,23 @@ namespace COM.XXXX.WebApi.Admin.Controllers
         {
             PrivilegeApiController privilegecontroller = new PrivilegeApiController();
             Role role = Repository.Query(r => r.ID == id).First();
-            List<Privilege> privilegelst = privilegecontroller.Repository.Query(p => p.Master == "Role" && p.MasterValue == id.ToString()).ToList();
-            StringBuilder menussb = new StringBuilder();
-            foreach (Privilege item in privilegelst)
+            List<Privilege> privilegeMenulst = privilegecontroller.Repository.Query(p => p.Master == "Role" && p.Access=="Menu" && p.MasterValue == id.ToString()).ToList();
+            List<Privilege> privilegeModulelst = privilegecontroller.Repository.Query(p => p.Master == "Role" && p.Access == "Module" && p.MasterValue == id.ToString()).ToList();
+            StringBuilder menussb = new StringBuilder(); 
+            foreach (Privilege item in privilegeMenulst)
             {
                 menussb.Append(item.AccessValue).Append(",");
             }
+            StringBuilder modulessb = new StringBuilder();
+            foreach (Privilege item in privilegeModulelst)
+            {
+                modulessb.Append(item.AccessValue).Append(",");
+            }
             if (role != null)
             {
-                return new  { success = true, message = new List<object>()
+                return new  { success = true, message = new List<object>() 
                 { 
-                    new  {ID=role.ID,  Name=role.Name,Desc=role.Desc,Menus=menussb.ToString().TrimEnd(',')}
+                    new  {ID=role.ID,  Name=role.Name,Desc=role.Desc,Menus=menussb.ToString().TrimEnd(','),ModuleNames=modulessb.ToString().TrimEnd(',')}
                 }};
             }
             return  new  { success = false, message = "数据获取失败！" };
@@ -103,6 +110,19 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                         });
                     }
 
+                    string modules = HttpContext.Current.Request["Modules"];
+                    List<string> modulesLst = modules.Split(',').ToList();
+                    foreach (var item in modulesLst)
+                    {
+                        privilegeLst.Add(new Privilege()
+                        {
+                            Master = HttpContext.Current.Request["Master"],
+                            MasterValue = model.ID.ToString(),
+                            Access = "Module",
+                            Operation = HttpContext.Current.Request["Operation"],
+                            AccessValue = item
+                        });
+                    }
                     PrivilegeApiController privilegecontroller = new PrivilegeApiController();
                     privilegecontroller.Repository.DeleteByWhere(p => p.Master == "Role" &&p.MasterValue == model.ID.ToString());
                     privilegecontroller.UnitOfWork.Save();
@@ -154,6 +174,19 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                         });
 
                     }
+                    string modules = HttpContext.Current.Request["Modules"];
+                    List<string> modulesLst = modules.Split(',').ToList();
+                    foreach (var item in modulesLst)
+                    {
+                        privilegeLst.Add(new Privilege()
+                        {
+                            Master = HttpContext.Current.Request["Master"],
+                            MasterValue = model.ID.ToString(),
+                            Access = "Module",
+                            Operation = HttpContext.Current.Request["Operation"],
+                            AccessValue = item
+                        });
+                    }
 
                     PrivilegeApiController privilegecontroller = new PrivilegeApiController();
                     privilegecontroller.Repository.InsertBatch(privilegeLst);
@@ -187,6 +220,7 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                     List<Privilege> privilegeLst = new List<Privilege>();
                     foreach (string item in accessvalueLst)
                     {
+                        if(item!=string.Empty)
                         privilegeLst.Add(new Privilege()
                         {
                             Master = HttpContext.Current.Request["Master"],
@@ -196,6 +230,20 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                             AccessValue = item
                         });
 
+                    }
+                    string modules = HttpContext.Current.Request["Modules"];
+                    List<string> modulesLst = modules.Split(',').ToList();
+                    foreach (var item in modulesLst)
+                    {
+                        if (item != string.Empty)
+                        privilegeLst.Add(new Privilege()
+                        {
+                            Master = HttpContext.Current.Request["Master"],
+                            MasterValue = HttpContext.Current.Request["MasterValue"],
+                            Access = "Module",
+                            Operation = HttpContext.Current.Request["Operation"],
+                            AccessValue = item
+                        });
                     }
                     PrivilegeApiController privilegecontroller = new PrivilegeApiController();
                     privilegecontroller.Repository.DeleteByWhere(p => p.Master == "Role" && p.MasterValue == id.ToString());
@@ -211,7 +259,7 @@ namespace COM.XXXX.WebApi.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
+                    return toJson(new { success = true, message = "Σ( ° △ °|||)︴~,存在用户使用该角色，无法删除，请稍后重新操作！" });
                 }
 
             }

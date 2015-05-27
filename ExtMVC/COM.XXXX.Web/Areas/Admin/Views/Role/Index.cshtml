@@ -22,7 +22,7 @@
         frame: true,
         reader: new Ext.data.JsonReader(
         { successProperty: 'success', root: 'message' },
-        ["ID", 'Name', 'Desc','Menus']
+        ["ID", 'Name', 'Desc', 'Menus', 'ModuleNames']
        ),
         defaults: { margins: '0 5 0 0' },
         title: "菜单信息",
@@ -42,7 +42,35 @@
                         xtype: 'textfield',
                         width: 300,
                         allowBlank: false,
-                    }, new Ext.form.ComboBoxTree({
+                    } ,new Ext.form.ComboBoxTree({
+                        mode: "local",
+                        fieldLabel: "模块列表",
+                        id:"Modules",
+                        name: "ModuleNames",
+                        selectNodeModel: "all",
+                        displayField: "TEXT",
+                        valueField: "VALUE",
+                        parentField: "PID",
+                        rootValue: "00000000-0000-0000-0000-000000000000",
+                        width: 220,
+                        dataRoot: "msg",
+                        resizable: true,
+                        checkedType: "module",
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            root: "msg",
+                            url: "/Api/Module/GetModuleComboBoxTree",
+                            fields: [
+                                { name: "TEXT" },
+                                { name: "VALUE" },
+                                { name: "PID" },
+                                { name: "Type" } ,
+                                { name: "leaf" } //要过滤的节点类型
+                            ]
+                        }),
+                        select: function () {
+                        }
+                    }), new Ext.form.ComboBoxTree({
                         mode: "local",
                         fieldLabel: "菜单列表",
                         id:"Menus",
@@ -89,6 +117,7 @@
                         params: {
                             Master: "Role",
                             MasterValue: Ext.getCmp("id").getValue(),
+                            Modules: Ext.getCmp("Modules").getCheckedValue(),
                             Access: "Menu",
                             AccessValue: Ext.getCmp("Menus").getCheckedValue(),
                             Operation: "enabled"
@@ -115,6 +144,7 @@
                 form1.form.submit({
                     url: '@Url.Content("/Api/Role/")' + id,
                     params: {
+                        Modules: Ext.getCmp("Modules").getCheckedValue(),
                         Master: "Role",
                         MasterValue: Ext.getCmp("id").getValue(),
                         Access: "Menu",

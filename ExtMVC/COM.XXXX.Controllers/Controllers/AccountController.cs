@@ -28,13 +28,20 @@ namespace COM.XXXX.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var user = new CookieManage().ReadFromCookie(ConstHelper.UserCookie) as User;
-
-            if (user != null)
+            try
             {
-                return RedirectToAction("Index", "Home");
+                var user = new CookieManage().ReadFromCookie(ConstHelper.UserCookie) as User;
+
+                if (user != null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                return View();
             }
-            return View();
+            catch (Exception ex)
+            {
+                return View();
+            }
         }
 
         VolidateImage image = new VolidateImage(25, 60, ColorTranslator.FromHtml("#EEEEEE"), Color.Teal, "", 12, 0, 0);
@@ -70,12 +77,13 @@ namespace COM.XXXX.Controllers
                 return Content("警告：用户名密码不能为空！");
             }
 
-            if (null != userRepository.GetUserByUserName(user.UserName, user.PassWord))
+            var current=userRepository.GetUserByUserName(user.UserName, user.PassWord);
+            if (null != current)
             {
                 if (rememberme == "remember")
-                    new CookieManage().WriteObject2Cookie(ConstHelper.UserCookie, user,365);
+                    new CookieManage().WriteObject2Cookie(ConstHelper.UserCookie, current, 365);
                 else
-                    new CookieManage().WriteObject2Cookie(ConstHelper.UserCookie, user, 1);
+                    new CookieManage().WriteObject2Cookie(ConstHelper.UserCookie, current, 1);
                 return Content("{success:true}");
             }
             return Content("错误：账号或密码不匹配！");
@@ -88,7 +96,6 @@ namespace COM.XXXX.Controllers
         [HttpPost]
         public ActionResult Logout()
         {
-          
             new CookieManage().WriteCookie(ConstHelper.UserCookie, "", 0);
             return Content("OK");
         }

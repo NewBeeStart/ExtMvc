@@ -14,6 +14,7 @@ using Repository.Domain.Infrastructure;
 using COM.XXXX.Common;
 using COM.XXXX.Models.Admin;
 using Com.XXXX.Common;
+using System.Web;
 
 namespace COM.XXXX.WebApi
 {
@@ -34,7 +35,16 @@ namespace COM.XXXX.WebApi
         {
             get
             {
-                return new CookieManage().ReadFromCookie(ConstHelper.UserCookie) as User;
+                try
+                {
+                   return new CookieManage().ReadFromCookie(ConstHelper.UserCookie) as User;
+                }
+                catch(Exception ex)
+                {
+                    HttpContext.Current.Response.Redirect("~/Account");
+                    return null;
+                }
+             
             }
         }
         /// <summary>
@@ -88,7 +98,7 @@ namespace COM.XXXX.WebApi
 
         public virtual M Get(Guid id)
         {
-            if (string.IsNullOrEmpty(id.ToString()))
+            if (!string.IsNullOrEmpty(id.ToString()))
             {
                 var result = Repository.Query(M => M.ID == id);
                 return result.Count() > 0 ? result.First() : null;

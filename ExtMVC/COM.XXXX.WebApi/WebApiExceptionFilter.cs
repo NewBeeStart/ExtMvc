@@ -1,4 +1,5 @@
-﻿/*----------------------------------------------------------------
+﻿using Com.XXXX.Common;
+/*----------------------------------------------------------------
 // Copyright (C) 2014 NewBee工作室
 // 版权所有。 
 //
@@ -17,7 +18,7 @@ using System.Net.Http;
 using System.Text;
 using System.Web;
 using System.Web.Http.Filters;
-using Com.Cngrain.SmartDepotMonitorOnLine.WindowsServer;
+
 
 namespace COM.XXXX.WebApi
 {
