@@ -1,4 +1,0 @@
-F:\PrimaryFile\project\ExtMvc\ExtMVC\WeiXinBase\bin\Debug\WeiXinBase.dll
-F:\PrimaryFile\project\ExtMvc\ExtMVC\WeiXinBase\bin\Debug\WeiXinBase.pdb
-F:\PrimaryFile\project\ExtMvc\ExtMVC\WeiXinBase\obj\Debug\WeiXinBase.dll
-F:\PrimaryFile\project\ExtMvc\ExtMVC\WeiXinBase\obj\Debug\WeiXinBase.pdb
