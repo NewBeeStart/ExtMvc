@@ -10,6 +10,7 @@ namespace COM.XXXX.Controllers
     {
         public ActionResult Index()
         {
+            this.ViewBag.User = CurrentUser;
             return View();
         }
     }

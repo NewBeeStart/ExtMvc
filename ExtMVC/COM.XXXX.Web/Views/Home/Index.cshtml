@@ -96,7 +96,7 @@
                    });
 
                    //当前用户
-                   Ext.DomHelper.append(Ext.get("currentuser"), "当前用户:@ViewBag.UserName");
+                   Ext.DomHelper.append(Ext.get("currentuser"), "当前用户:@ViewBag.User.UserName");
 
                    //安全退出
                    Ext.get("logout").on("click", function () {
