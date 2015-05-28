@@ -70,7 +70,6 @@ namespace COM.XXXX.Controllers
                 }
                 catch(Exception ex)
                 {
-                    Response.Redirect("~/Account");
                     return null;
                 }
             }

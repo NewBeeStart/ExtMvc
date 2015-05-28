@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using Com.XXXX.Common;
+using Newtonsoft.Json;
 
 
 namespace COM.XXXX.Controllers
@@ -24,9 +26,18 @@ namespace COM.XXXX.Controllers
     {
         public override void OnException(ExceptionContext filterContext)
         {
-            Log4NetHelper log = Log4NetHelper.CreateInstance();
-            log.WriteLog(filterContext.RequestContext.HttpContext.Request.Url.LocalPath,filterContext.Exception);
+            StringBuilder log = new StringBuilder();
+            log.Append("错误类型:UI操作"); 
+            log.Append(string.Format("<br />请求URL:{0}", filterContext.RequestContext.HttpContext.Request.Url));
+            log.Append(string.Format("<br />请求参数:{0}", JsonConvert.SerializeObject(filterContext.RequestContext.HttpContext.Request.QueryString)));
+            log.Append(string.Format("<br />客户端主机:{0};客户端IP:{1}", filterContext.RequestContext.HttpContext.Request.UserHostName,filterContext.RequestContext.HttpContext.Request.UserHostAddress));
+            log.Append(string.Format("<br />客户浏览器:{0}",filterContext.RequestContext.HttpContext.Request.Browser.Browser));
+            log.Append(string.Format("<br />请求方法:{0}", filterContext.RequestContext.HttpContext.Request.HttpMethod));
+
+            Log4NetHelper.CreateInstance()
+                .WriteLog(log.ToString(), filterContext.Exception);
+
             base.OnException(filterContext);
-        }
+        } 
     }
 }

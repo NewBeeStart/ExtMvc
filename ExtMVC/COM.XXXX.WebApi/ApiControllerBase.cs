@@ -41,7 +41,6 @@ namespace COM.XXXX.WebApi
                 }
                 catch(Exception ex)
                 {
-                    HttpContext.Current.Response.Redirect("~/Account");
                     return null;
                 }
              
@@ -191,5 +190,8 @@ namespace COM.XXXX.WebApi
             return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" }); ;
         }
         #endregion
+
+
+        
     }
 }
