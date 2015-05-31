@@ -64,6 +64,8 @@
     <Compile Include="Models\Admin\Role.cs" />
     <Compile Include="Models\Admin\RoleRight.cs" />
     <Compile Include="Models\Admin\User.cs" />
+    <Compile Include="Models\CMS\Cms_SiteInfo.cs" />
+    <Compile Include="Models\CMS\Cms_SiteMenu.cs" />
     <Compile Include="Models\IModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
