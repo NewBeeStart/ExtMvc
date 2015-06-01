@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICONTools", "ICONTools\ICON
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{F5F7680D-54A7-40E0-8933-E01E09692A00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSite", "WebSite\WebSite.csproj", "{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{0487D52D-72D6-46C4-8E9D-5F743D6A5550}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0487D52D-72D6-46C4-8E9D-5F743D6A5550}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0487D52D-72D6-46C4-8E9D-5F743D6A5550}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
