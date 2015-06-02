@@ -1,0 +1,34 @@
+﻿	<!-- 导航 -->
+       @*@RenderPage("~/PartialView/Navigation.cshtml",null);*@
+		<div class="container navbar-fixed-top">
+			<div class="row">
+				<div class="col-md-3">
+					<a class="navbar-brand" href="#">鑫港人力资源有限公司</a>
+				</div>
+				<div class="col-md-9">
+					<nav>
+						<ul class="nav nav-justified">
+							<li class="active"><a href="#">首页</a></li>
+							<li><a href="#">公司简介</a></li>
+							<li><a href="#">新闻动态</a></li>
+							<li><a href="#">产品中心</a></li>
+							<li><a href="#">基地展示</a></li>
+							<li><a href="#">联系我们</a></li>
+							<li><a href="#">在线订单</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+        <script>
+		    //给导航增加active属性
+		    $('nav>ul.nav>li>a').on("click", function () {
+		        $('nav>ul.nav>li').removeClass()
+		        $(this).parent('li').addClass('active')
+		    })
+
+		    $(function () {
+
+		    });
+		</script>

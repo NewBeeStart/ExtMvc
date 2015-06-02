@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Shared/_Layout.cshtml";
+}
+
+@*导航*@
+@RenderPage("~/PartialView/Navigation.cshtml", null)
+
+@*图片轮转*@
+@RenderPage("~/PartialView/ImageRotation.cshtml", null)
+
+
+<!-- 内容布局 -->
+<div class="container" style="margin-top: 10px">
+    <div class="row">
+        <div class="col-md-6">
+            @*公司简介*@
+            @RenderPage("~/PartialView/CompanyProfile.cshtml", null)
+        </div>
+        <div class="col-md-6">
+            @*新闻列表*@
+            @RenderPage("~/PartialView/NewsProfile.cshtml", null)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @*产品图片滚动*@
+            @RenderPage("~/PartialView/PicScroll.cshtml", null)
+        </div>
+    </div>
+    
+    @RenderPage("~/PartialView/Footer.cshtml", null)
+
+    @* <div class="row" style="height:50px">
+
+    </div>*@
+</div>
