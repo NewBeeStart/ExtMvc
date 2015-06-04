@@ -40,7 +40,9 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -64,8 +66,12 @@
     <Compile Include="Models\Admin\Role.cs" />
     <Compile Include="Models\Admin\RoleRight.cs" />
     <Compile Include="Models\Admin\User.cs" />
-    <Compile Include="Models\CMS\Cms_SiteInfo.cs" />
-    <Compile Include="Models\CMS\Cms_SiteMenu.cs" />
+    <Compile Include="Models\CMS\Cms_Channel.cs" />
+    <Compile Include="Models\CMS\Cms_Classify.cs" />
+    <Compile Include="Models\CMS\Cms_Module.cs" />
+    <Compile Include="Models\CMS\Cms_PageTemplate.cs" />
+    <Compile Include="Models\CMS\Cms_Privilege.cs" />
+    <Compile Include="Models\CMS\Cms_WebSite.cs" />
     <Compile Include="Models\IModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,7 +80,9 @@
     <None Include="Models\Admin\ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using COM.XXXX.Models.Admin;
+using COM.XXXX.Models.CMS;
 
 namespace Repository.Domain
 {
@@ -29,18 +30,25 @@ namespace Repository.Domain
             : base("DefaultConnection")
        {
            Database.SetInitializer<TestDbContext>(null);
-       } 
+       }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Button> Buttons { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<Privilege> Privileges { get; set; }
-        public DbSet<Role> Roles { get; set; } 
+        public DbSet<Role> Roles { get; set; }
         public DbSet<RoleRight> RoleRights { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         //public DbSet<DictionaryGroup> DictionaryGroups { get; set; }
-        public DbSet<Dictionary> Dictionarys { get; set; }  
+        public DbSet<Dictionary> Dictionarys { get; set; }
+
+        public DbSet<Cms_Channel> Cms_Channels { get; set; }
+        public DbSet<Cms_Module> Cms_Modules { get; set; }
+        public DbSet<Cms_Classify> Cms_Classifies { get; set; }
+        public DbSet<Cms_PageTemplate> Cms_PageTemplates { get; set; }
+        public DbSet<Cms_Privilege> Cms_Privileges { get; set; }
+        public DbSet<Cms_WebSite> Cms_WebSites { get; set; }   
         //public DbSet<Page> Pages { get; set; } 
             
 

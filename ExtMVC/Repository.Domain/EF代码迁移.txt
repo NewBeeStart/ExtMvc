@@ -1,4 +1,5 @@
-﻿//更新
+﻿Repository.Domain
+//更新
 Enable-Migrations -EnableAutomaticMigrations -Force
 Add-Migration InitialCreate
 Update-Database -Verbose -Force
