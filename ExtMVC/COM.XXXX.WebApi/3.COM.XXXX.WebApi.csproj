@@ -78,6 +78,7 @@
     <Compile Include="Class\NamespaceHttpControllerSelector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Cms\Controllers\WebSiteApiController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Class\StartWithConstraint.cs" />
     <Compile Include="Admin\Controllers\UserApiController.cs" />
@@ -105,6 +106,7 @@
       <Name>7.Repository.Domain</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

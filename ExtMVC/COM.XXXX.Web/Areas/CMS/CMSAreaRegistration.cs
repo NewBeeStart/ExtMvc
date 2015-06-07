@@ -1,25 +1,27 @@
-﻿using COM.XXXX.WebApi.Class;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Mvc;
+using COM.XXXX.WebApi.Class;
 
-namespace COM.XXXX.Web.Areas.CMS
+namespace COM.XXXX.Web.Areas.Cms
 {
-    public class CMSAreaRegistration : AreaRegistration
+    public class CmsAreaRegistration : AreaRegistration
     {
         public override string AreaName
         {
             get
             {
-                return "CMS";
+                return "Cms";
             }
         }
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
+            //注册区域MVC路由
             context.MapRoute(
-                "CMS_default",
-                "CMS/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                this.AreaName + "default",
+                this.AreaName + "/{controller}/{action}/{id}",
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                new string[] { "COM.XXXX.Controllers.Areas." + this.AreaName + ".Controllers" }
             );
             //注册区域WebApi路由
             GlobalConfiguration.Configuration.Routes.MapHttpRoute(

@@ -132,7 +132,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\CMS\CMSAreaRegistration.cs" />
+    <Compile Include="Areas\Cms\CmsAreaRegistration.cs" />
     <Compile Include="AspNetControl\IconPiker.ascx.cs">
       <DependentUpon>IconPiker.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9009,9 +9009,10 @@
     <Content Include="Areas\Admin\Views\Dictionary\Index.cshtml" />
     <Content Include="Areas\Admin\Views\User\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Role\Index.cshtml" />
-    <Content Include="Areas\CMS\Views\Web.config" />
-    <Content Include="Areas\CMS\_ViewStart.cshtml" />
-    <Content Include="Areas\CMS\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Cms\Views\Web.config" />
+    <Content Include="Areas\Cms\Views\WebSite\Index.cshtml" />
+    <Content Include="Areas\Cms\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Cms\Views\_ViewStart.cshtml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -9049,13 +9050,13 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>19753</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:17097/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
+          <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://localhost:8001</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
