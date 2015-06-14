@@ -20,7 +20,7 @@ namespace COM.XXXX.Web.Areas.Cms
             context.MapRoute(
                 this.AreaName + "default",
                 this.AreaName + "/{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                new { controller = "WebSite", action = "Index", id = UrlParameter.Optional },
                 new string[] { "COM.XXXX.Controllers.Areas." + this.AreaName + ".Controllers" }
             );
             //注册区域WebApi路由
