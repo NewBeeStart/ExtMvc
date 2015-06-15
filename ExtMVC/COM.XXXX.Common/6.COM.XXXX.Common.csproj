@@ -34,6 +34,10 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -59,10 +63,13 @@
     <Compile Include="Log4NetHelper.cs" />
     <Compile Include="MailHelper.cs" />
     <Compile Include="MenuXmlHelper.cs" />
+    <Compile Include="ParameterRebinder.cs" />
+    <Compile Include="PredicateExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestHelper.cs" />
     <Compile Include="RondomHelper.cs" />
     <Compile Include="Singleton.cs" />
+    <Compile Include="SmartDataTableExtensions.cs" />
     <Compile Include="StringValidate.cs" />
     <Compile Include="Thumbnail.cs" />
     <Compile Include="Utils.cs" />
