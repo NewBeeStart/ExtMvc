@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -106,144 +105,210 @@
             Ext.Ajax.request({
                 waitMsg: '正在提交...',
                 url: '@Url.Content("/Api/Cms/CmsChannel/Delete/")' + data.ID,
-            method: "delete",
-            success: function (form, action) {
-                Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
-                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
-            },
-            failure: function (form, action) {
-                Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
-            }
-        });
+                method: "delete",
+                success: function (form, action) {
+                    Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                },
+                failure: function (form, action) {
+                    Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+                }
+            });
 
-    }
+        }
 
-    function Add() {
-        var formpanel = new Ext.form.FormPanel({
-            baseCls: 'x-plain',
-            autoHeight: true,
-            autoWidth: true,
-            layout: 'form',
-            defaultType: 'textfield',
-            items: [
-                { xtype: 'textfield', readOnly: false, fieldLabel: 'ID', id: 'ID', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '频道名称', id: 'ChannelName', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '频道编号', id: 'ChannelCode', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '频道备注', id: 'ChannelRemark', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '网站ID', id: 'WebSiteID', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '模板ID', id: 'LayOutTemplateID', labelWidth: 50 }
-            ]
-        });
-        var win = new Ext.Window({
-            modal: true,
-            title: '添加',
-            closable: false,
-            width: 400,
-            height: 300,
-            maximized: false,
-            layout: 'form',
-            plain: true,
-            items: formpanel,
-            buttons: [{
-                text: '保存',
-                handler: function () {
-                    if (formpanel.getForm().isValid()) {
-                        formpanel.getForm().submit({
-                            url: '/Api/Cms/CmsChannel/Add',
-                            method: "Post",
-                            params: {
-                            },
-                            waitTitle: '请等待',
-                            waitMsg: '正在提交中',
-                            success: function (form, action) {
-                                Ext.Msg.alert('提示', action.result.message);
-                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
-                            },
-                            failure: function (form, action) {
-                                Ext.Msg.alert('提示', action.result.message);
-                            }
-                        });
+        function Add() {
+            var formpanel = new Ext.form.FormPanel({
+                baseCls: 'x-plain',
+                autoHeight: true,
+                autoWidth: true,
+                layout: 'form',
+                defaultType: 'textfield',
+                items: [
+                    { xtype: 'textfield', readOnly: false, fieldLabel: 'ID', id: 'ID', labelWidth: 50 },
+                    { xtype: 'textfield', readOnly: false, fieldLabel: '频道名称', id: 'ChannelName', labelWidth: 50 },
+                    { xtype: 'textfield', readOnly: false, fieldLabel: '频道编号', id: 'ChannelCode', labelWidth: 50 },
+                    { xtype: 'textfield', readOnly: false, fieldLabel: '频道备注', id: 'ChannelRemark', labelWidth: 50 },
+                     {
+                         fieldLabel: '归属网站',
+                         name: 'WebSiteID',
+                         hiddenName: 'WebSiteID',
+                         xtype: 'combo',
+                         //本地数据源  local/remote
+                         mode: 'remote',
+                         //设置为选项的text的字段
+                         displayField: "Name",
+                         //设置为选项的value的字段 
+                         valueField: "Id",
+                         //是否可以输入，还是只能选择下拉框中的选项
+                         editable: false,
+                         typeAhead: true,
+                         //必须选择一项
+                         forceSelection: true,
+                         //输入部分选项内容匹配的时候显示所有的选项
+                         triggerAction: 'all',
+                         //数据
+                         store: new Ext.data.JsonStore({
+                             autoLoad: true,
+                             method: 'Post',
+                             idProperty: 'ID',
+                             url: "/Api/Cms/WebSite/GetWebSiteCombox/",
+                             fields: [{
+                                 name: 'Name',
+                                 mapping: 'CompanyName'
+                             }, {
+                                 name: 'Id',
+                                 mapping: 'ID'
+                             }]
+                         }),
+
+                     },
+                    { xtype: 'textfield', readOnly: false, fieldLabel: '模板ID', id: 'LayOutTemplateID', labelWidth: 50 }
+                ]
+            });
+            var win = new Ext.Window({
+                modal: true,
+                title: '添加',
+                closable: false,
+                width: 400,
+                height: 300,
+                maximized: false,
+                layout: 'form',
+                plain: true,
+                items: formpanel,
+                buttons: [{
+                    text: '保存',
+                    handler: function () {
+                        if (formpanel.getForm().isValid()) {
+                            formpanel.getForm().submit({
+                                url: '/Api/Cms/CmsChannel/Add',
+                                method: "Post",
+                                params: {
+                                },
+                                waitTitle: '请等待',
+                                waitMsg: '正在提交中',
+                                success: function (form, action) {
+                                    Ext.Msg.alert('提示', action.result.message);
+                                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                                },
+                                failure: function (form, action) {
+                                    Ext.Msg.alert('提示', action.result.message);
+                                }
+                            });
+                        }
                     }
-                }
-            }, {
-                text: '关闭',
-                handler: function () {
-                    win.close();
-                }
-            }]
-        });
-        win.show();
-
-    }
-
-
-    function Update(data) {
-        var formpanel = new Ext.form.FormPanel({
-            baseCls: 'x-plain',
-            autoHeight: true,
-            autoWidth: true,
-            layout: 'form',
-            defaultType: 'textfield',
-            reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
-            [
-'ID', 'ChannelName', 'ChannelCode', 'ChannelRemark', 'WebSiteID', 'LayOutTemplateID'
-            ]),
-            items: [
-                { xtype: 'textfield', readOnly: false, fieldLabel: 'ID', id: 'ID', labelWidth: 50 },
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '频道名称', id: 'ChannelName', labelWidth: 50 },
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '频道编号', id: 'ChannelCode', labelWidth: 50 },
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '频道备注', id: 'ChannelRemark', labelWidth: 50 },
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '网站ID', id: 'WebSiteID', labelWidth: 50 },
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '模板ID', id: 'LayOutTemplateID', labelWidth: 50 }
-            ]
-        });
-
-        formpanel.form.load({
-            url: '@Url.Content("/Api/Cms/CmsChannel/GetForm/")' + data.ID,
-            method: "Get",
-            waitMsg: 'Loading',
-            success: function (form, response) {
-
-            }
-        });
-        var win = new Ext.Window({
-            modal: true,
-            title: '修改',
-            closable: false,
-            width: 400,
-            height: 300,
-            maximized: false,
-            layout: 'form',
-            plain: true,
-            items: formpanel,
-            buttons: [{
-                text: '保存',
-                handler: function () {
-                    if (formpanel.getForm().isValid()) {
-                        formpanel.getForm().submit({
-                            url: '/Api/Cms/CmsChannel/Put?id=' + data.ID,
-                            method: "Put",
-                            waitTitle: '请等待',
-                            waitMsg: '正在提交中',
-                            success: function (form, action) {
-                                Ext.Msg.alert('提示', action.result.message);
-                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
-                            },
-                            failure: function (form, action) {
-                                Ext.Msg.alert('提示', action.result.message);
-                            }
-                        });
+                }, {
+                    text: '关闭',
+                    handler: function () {
+                        win.close();
                     }
-                }
-            }, {
-                text: '关闭',
-                handler: function () {
-                    win.close();
-                }
-            }]
-        });
-        win.show();
+                }]
+            });
+            win.show();
 
-    }
+        }
+
+
+        function Update(data) {
+            var formpanel = new Ext.form.FormPanel({
+                baseCls: 'x-plain',
+                autoHeight: true,
+                autoWidth: true,
+                layout: 'form',
+                defaultType: 'textfield',
+                reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+                [
+    'ID', 'ChannelName', 'ChannelCode', 'ChannelRemark', 'WebSiteID', 'LayOutTemplateID'
+                ]),
+                items: [
+                    { xtype: 'textfield', readOnly: false, fieldLabel: 'ID', id: 'ID', labelWidth: 50 },
+                                { xtype: 'textfield', readOnly: false, fieldLabel: '频道名称', id: 'ChannelName', labelWidth: 50 },
+                                { xtype: 'textfield', readOnly: false, fieldLabel: '频道编号', id: 'ChannelCode', labelWidth: 50 },
+                                { xtype: 'textfield', readOnly: false, fieldLabel: '频道备注', id: 'ChannelRemark', labelWidth: 50 },
+                               {
+                                   fieldLabel: '归属网站',
+                                   name: 'WebSiteID',
+                                   hiddenName: 'WebSiteID',
+                                   xtype: 'combo',
+                                   //本地数据源  local/remote
+                                   mode: 'remote',
+                                   //设置为选项的text的字段
+                                   displayField: "Name",
+                                   //设置为选项的value的字段 
+                                   valueField: "Id",
+                                   //是否可以输入，还是只能选择下拉框中的选项
+                                   editable: false,
+                                   typeAhead: true,
+                                   //必须选择一项
+                                   forceSelection: true,
+                                   //输入部分选项内容匹配的时候显示所有的选项
+                                   triggerAction: 'all',
+                                   //数据
+                                   store: new Ext.data.JsonStore({
+                                       autoLoad: true,
+                                       method: 'Post',
+                                       idProperty: 'ID',
+                                       url: "/Api/Cms/WebSite/GetWebSiteCombox/",
+                                       fields: [{
+                                           name: 'Name',
+                                           mapping: 'CompanyName'
+                                       }, {
+                                           name: 'Id',
+                                           mapping: 'ID'
+                                       }]
+                                   }),
+
+                               },
+                                { xtype: 'textfield', readOnly: false, fieldLabel: '模板ID', id: 'LayOutTemplateID', labelWidth: 50 }
+                ]
+            });
+
+            formpanel.form.load({
+                url: '@Url.Content("/Api/Cms/CmsChannel/GetForm/")' + data.ID,
+                method: "Get",
+                waitMsg: 'Loading',
+                success: function (form, response) {
+
+                }
+            });
+            var win = new Ext.Window({
+                modal: true,
+                title: '修改',
+                closable: false,
+                width: 400,
+                height: 300,
+                maximized: false,
+                layout: 'form',
+                plain: true,
+                items: formpanel,
+                buttons: [{
+                    text: '保存',
+                    handler: function () {
+                        if (formpanel.getForm().isValid()) {
+                            formpanel.getForm().submit({
+                                url: '/Api/Cms/CmsChannel/Put?id=' + data.ID,
+                                method: "Put",
+                                waitTitle: '请等待',
+                                waitMsg: '正在提交中',
+                                success: function (form, action) {
+                                    Ext.Msg.alert('提示', action.result.message);
+                                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                                },
+                                failure: function (form, action) {
+                                    Ext.Msg.alert('提示', action.result.message);
+                                }
+                            });
+                        }
+                    }
+                }, {
+                    text: '关闭',
+                    handler: function () {
+                        win.close();
+                    }
+                }]
+            });
+            win.show();
+
+        }
 </script>
 
