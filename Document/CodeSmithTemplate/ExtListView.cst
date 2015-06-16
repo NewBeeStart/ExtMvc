@@ -1,11 +1,261 @@
-﻿<%@ CodeTemplate Language="C#" TargetLanguage="Text" %>
+﻿<%--生成Ext增删改查页面
+    Area：区域名称-------------控制ApiController的区域
+    Controller:控制器名称------控制ApiController的控制器
+    SourceTable：要选择的表
+--%>
+
+<%@ CodeTemplate Language="C#" TargetLanguage="Text" %>
 
 <%@ Assembly Name="SchemaExplorer" %>
 <%@ Import Namespace="SchemaExplorer" %>
 <%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="description" %>
-<%@ Property  Name="ApiController" Type="String" Category="Context" Description="控制器名称" %>
+<%@ Property  Name="Controller" Type="String" Category="Context" Description="控制器名称" %>
+<%@ Property  Name="Area" Type="String" Category="Context" Description="区域名称" %>
 
-<%=ApiController %>
-<% for (int i=0;i<SourceTable.Columns.Count;i++){ %>
-<%= SourceTable.Columns[i].Name %><% if(SourceTable.Columns.Count-1>i) {%>,<%} %>
-<%}%>
+<script runat="template">
+int mod=0;
+public  int GetGridWidth(int i)
+{
+    int count=SourceTable.Columns.Count;
+    if(100%count==0)
+        return 100/count;
+    else{
+         mod=100%count;
+        if(i%2==0&&mod>0)
+        {
+            mod= mod--;
+            return 100/count+1;
+        } 
+        else
+            return 100/count;
+    }
+}
+</script>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        Ext.form.Field.prototype.msgTarget = 'side';
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "fit",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [{
+                xtype: "grid",
+                layout: "fit",
+                id: "usergrid",
+                title: '网站管理',
+                store: new Ext.data.Store({
+                    storeId: "gridstore",
+                    paramNames: {
+                        start: 'start',  // The parameter name which specifies the start row
+                        limit: 'limit',  // The parameter name which specifies number of rows to return
+                    },
+                    proxy: new Ext.data.HttpProxy({
+                        url: "@Url.Content("/Api/<%=Area%>/<%=Controller%>/GetGridPager")",
+                                   method: "Post"
+                               }),
+                   reader: new Ext.data.JsonReader({
+                       root: "data",
+                       totalProperty: "count"
+                   }, [
+                   <% for (int i=0;i<SourceTable.Columns.Count;i++){ %>
+                        { name:'<%= SourceTable.Columns[i].Name %>'}<% if(SourceTable.Columns.Count-1>i) {%>,<%} %>
+                    <%}%>
+                   ])
+               }),
+                stripeRows: true,
+                columnLines: true,
+                trackMouseOver: false,
+                loadMask: true,
+                columns: [
+                    <% for (int i=0;i<SourceTable.Columns.Count;i++){ %>
+                       { header: "<%= SourceTable.Columns[i].Description %>", dataIndex: '<%= SourceTable.Columns[i].Name %>', width: <%=GetGridWidth(i)%>, hidden: false, sortable: true },
+                    <%}%>
+                
+                   {
+                       header: '操作',
+                       width: 20,
+                       dataIndex: 'ID',
+                       align: "center",
+                       renderer: function (data, cellmeta, record) {
+                           record.data.Content = Ext.util.Format.htmlEncode(record.data.Content);
+                           var returnStr = "<INPUT type='button' id='btnAdd' value='增加' onclick='Add()' /> " +
+                               " <INPUT type='button' id='btnUpdate' value='修改' onclick='Update(" + Ext.encode(record.data) + ")' /> " +
+                               "<INPUT type='button' value='删除' id='btnDelete' onclick='Delete(" + Ext.encode(record.data) + ")'/>";
+                           return returnStr;
+                       }
+                   }
+               
+                ],
+                viewConfig: {
+                    loadMask: true,
+                    forceFit: true
+                },
+                tbar: new Ext.Toolbar([{
+                    text: '添加',
+                    icon: 'icons/add.gif',
+                    handler: function () {
+                        Add();
+                    }
+                }]),
+                bbar: new Ext.PagingToolbar({
+                    pageSize: 10,
+                    store: Ext.StoreMgr.get("gridstore"),
+                    displayInfo: true,
+                    displayMsg: '当前{0}到{1}条,共{2}条',
+                    emptyMsg: '没有符合条件的数据'
+                })
+            }]
+        });
+        Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+
+
+    
+    });
+    function Delete(data) {
+        Ext.Ajax.request({
+            waitMsg: '正在提交...',
+            url: '@Url.Content("/Api/<%=Area%>/<%=Controller%>/Delete/")'+data.ID,
+                method:"delete",
+                success: function (form, action) {
+                    Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                },
+                failure: function (form, action) {
+                    Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+                }
+         });
+      
+    }
+   
+    function Add() {
+        var formpanel = new Ext.form.FormPanel({
+            baseCls: 'x-plain',
+            autoHeight: true,
+            autoWidth: true,
+            layout: 'form',
+            defaultType: 'textfield',
+            items: [
+            <% for (int i=0;i<SourceTable.Columns.Count;i++){ %>
+                {xtype: 'textfield',readOnly: false,fieldLabel: '<%= SourceTable.Columns[i].Description %>',id:'<%= SourceTable.Columns[i].Name %>',labelWidth: 50}<% if(SourceTable.Columns.Count-1>i) {%>,<%} %>
+            <%}%>
+                ]
+        });
+        var win = new Ext.Window({
+            modal: true,
+            title: '添加',
+            closable: false,
+            width: 400,
+            height: 300,
+            maximized: false,
+            layout: 'form',
+            plain: true,
+            items: formpanel,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    if (formpanel.getForm().isValid()) {
+                        formpanel.getForm().submit({
+                            url: '/Api/<%=Area%>/<%=Controller%>/Add',
+                            method: "Post",
+                            params: {
+                            },
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                            },
+                            failure: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                    }
+                }, {
+                    text: '关闭',
+                    handler: function () {
+                        win.close();
+                    }
+                }]
+            });
+            win.show();
+
+        }
+
+
+    function Update(data) {
+        var formpanel = new Ext.form.FormPanel({
+            baseCls: 'x-plain',
+            autoHeight: true,
+            autoWidth: true,
+            layout: 'form',
+            defaultType: 'textfield',
+            reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+            [
+<% for (int i=0;i<SourceTable.Columns.Count;i++){ %>'<%= SourceTable.Columns[i].Name %>'<% if(SourceTable.Columns.Count-1>i) {%>,<%} %><%}%>
+            ]),
+            items: [
+            <% for (int i=0;i<SourceTable.Columns.Count;i++){ %>
+                {xtype: 'textfield',readOnly: false,fieldLabel: '<%= SourceTable.Columns[i].Description %>',id:'<%= SourceTable.Columns[i].Name %>',labelWidth: 50}<% if(SourceTable.Columns.Count-1>i) {%>,<%} %>
+            <%}%>]
+        });
+        
+        formpanel.form.load({
+            url: '@Url.Content("/Api/<%=Area%>/<%=Controller%>/GetForm/")'+data.ID,
+               method: "Get",
+               waitMsg: 'Loading',
+               success: function (form, response) {
+
+               }
+           });
+        var win = new Ext.Window({
+            modal: true,
+            title: '修改',
+            closable: false,
+            width: 400,
+            height: 300,
+            maximized: false,
+            layout: 'form',
+            plain: true,
+            items: formpanel,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    if (formpanel.getForm().isValid()) {
+                        formpanel.getForm().submit({
+                            url: '/Api/<%=Area%>/<%=Controller%>/Put?id=' + data.ID,
+                            method: "Put",
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                            },
+                            failure: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
+
+    }
+</script>
+

@@ -9388,6 +9388,7 @@
     <Content Include="Areas\Cms\Views\Web.config" />
     <Content Include="Areas\Cms\Views\WebSite\Index.cshtml" />
     <Content Include="Areas\Cms\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Cms\Views\CmsChannel\Index.cshtml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Views\Shared\_Layout.cshtml" />

@@ -1,16 +1,13 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
-@{
-    ViewBag.Title = "Index";
-}
 
 
 <script type="text/javascript">
 
     Ext.onReady(function () {
         Ext.QuickTips.init();
-        Ext.form.Field.prototype.msgTarget = 'side'
+        Ext.form.Field.prototype.msgTarget = 'side';
         new Ext.Viewport({
             title: "Viewport",
             layout: "fit",
@@ -180,7 +177,7 @@
 
             }]
         });
-        var updatewin = new Ext.Window({
+        var win = new Ext.Window({
             modal: true,
             title: '添加网站',
             closable: false,
@@ -214,11 +211,11 @@
                 }, {
                     text: '关闭',
                     handler: function () {
-                        updatewin.close();
+                        win.close();
                     }
                 }]
             });
-            updatewin.show();
+            win.show();
 
         }
 
@@ -292,7 +289,7 @@
 
                }
            });
-        var updatewin = new Ext.Window({
+        var win = new Ext.Window({
             modal: true,
             title: '修改网站',
             closable: false,
@@ -307,10 +304,8 @@
                 handler: function () {
                     if (formpanel.getForm().isValid()) {
                         formpanel.getForm().submit({
-                            url: '/Api/Cms/WebSite/',
+                            url: '/Api/Cms/WebSite/Put?id=' + data.ID,
                             method: "Put",
-                            params: {
-                            },
                             waitTitle: '请等待',
                             waitMsg: '正在提交中',
                             success: function (form, action) {
@@ -326,11 +321,11 @@
             }, {
                 text: '关闭',
                 handler: function () {
-                    updatewin.close();
+                    win.close();
                 }
             }]
         });
-        updatewin.show();
+        win.show();
 
     }
 </script>
