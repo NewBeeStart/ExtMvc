@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        Ext.form.Field.prototype.msgTarget = 'side'
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "fit",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [{
+                xtype: "grid",
+                layout: "fit",
+                id: "usergrid",
+                title: '用户列表',
+                store: new Ext.data.Store({
+                    storeId: "gridstore",
+                    paramNames: {
+                        start: 'start',  // The parameter name which specifies the start row
+                        limit: 'limit',  // The parameter name which specifies number of rows to return
+                    },
+                    proxy: new Ext.data.HttpProxy({
+                        url: "@Url.Content("/Api/Cms/WebSite/GetGridPager")",
+                                   method: "Post"
+                               }),
+                   reader: new Ext.data.JsonReader({
+                       root: "data",
+                       totalProperty: "count"
+                   }, [
+                        { name: 'ID' },
+                        { name: 'CompanyName' },
+                        { name: 'CompanyAddress' },
+                        { name: 'CompanyType' },
+                        { name: 'Telephone' },
+                        { name: "Email" },
+                        { name: 'HostAddress' },
+                        { name: 'SiteTitle' },
+                        { name: 'IndexPage' },
+                        { name: 'LayOutTemplateID' }
+                   ])
+               }),
+                stripeRows: true,
+                columnLines: true,
+                trackMouseOver: false,
+                loadMask: true,
+                columns: [
+                { id: 'ID', header: "ID", dataIndex: 'ID', width: 10, sortable: true },
+                { header: "公司名称", dataIndex: 'CompanyName', width: 20, hidden: false, sortable: true },
+                { header: "公司地址", dataIndex: 'CompanyAddress', width: 20, hidden: false, sortable: true },
+                { header: "公司类型", dataIndex: 'CompanyType', width: 10, sortable: true },
+                { header: "联系电话", dataIndex: 'Telephone', width: 10, sortable: true },
+                { header: "网站Email", dataIndex: 'Email', width: 10, sortable: true },
+                { header: "域名", dataIndex: 'HostAddress', width: 10, sortable: true },
+                { header: "网站标题", dataIndex: 'SiteTitle', width: 10, sortable: true },
+                { header: "主页名称", dataIndex: 'IndexPage', width: 10, sortable: true }
+                ],
+                viewConfig: {
+                    loadMask: true,
+                    forceFit: true
+                },
+                bbar: new Ext.PagingToolbar({
+                    pageSize: 10,
+                    store: Ext.StoreMgr.get("gridstore"),
+                    displayInfo: true,
+                    displayMsg: '当前{0}到{1}条,共{2}条',
+                    emptyMsg: '没有符合条件的数据'
+                }),
+                tbar: [{
+                    text: "设置角色",
+                    handler: function () {
+                       
+                    }
+                }]
+            }]
+        });
+        Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+
+
+    
+    });
+
+
+</script>
+
