@@ -11,6 +11,7 @@ namespace COM.XXXX.Web
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            routes.RouteExistingFiles = true;
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             //默认的无区域路由
