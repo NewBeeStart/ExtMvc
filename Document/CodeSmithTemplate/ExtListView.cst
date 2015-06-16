@@ -1,0 +1,11 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="Text" %>
+
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="description" %>
+<%@ Property  Name="ApiController" Type="String" Category="Context" Description="控制器名称" %>
+
+<%=ApiController %>
+<% for (int i=0;i<SourceTable.Columns.Count;i++){ %>
+<%= SourceTable.Columns[i].Name %><% if(SourceTable.Columns.Count-1>i) {%>,<%} %>
+<%}%>
