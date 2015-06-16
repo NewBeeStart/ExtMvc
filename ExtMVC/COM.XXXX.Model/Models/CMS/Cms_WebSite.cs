@@ -13,38 +13,47 @@ namespace COM.XXXX.Models.CMS
         /// <summary>
         /// 网站所属公司名称
         /// </summary>
+        [DataMember]
         public string CompanyName { get; set; }
         /// <summary>
         /// 网站所属公司地址
         /// </summary>
+        [DataMember]
         public string CompanyAddress { get; set; }
         /// <summary>
         /// 网站所属公司类型
         /// </summary>
+        [DataMember]
         public string CompanyType { get; set; }
         /// <summary>
         /// 公司联系电话
         /// </summary>
+        [DataMember]
         public string Telephone { get; set; }
         /// <summary>
         /// 网站管理Email
         /// </summary>
+        [DataMember]
         public string Email { get; set; }
         /// <summary>
         /// 主机地址（域名）
         /// </summary>
+        [DataMember]
         public string HostAddress { get; set; }
         /// <summary>
         /// 网站标题
         /// </summary>
+        [DataMember]
         public string SiteTitle { get; set; }
         /// <summary>
         /// 网站主页名称
         /// </summary>
+        [DataMember]
         public string IndexPage { get; set; }
         /// <summary>
         /// 网站模板ID
         /// </summary>
+        [DataMember]
         public Guid? LayOutTemplateID { get; set; }
 
         public virtual Cms_PageTemplate LayOutTemplate { get; set; }

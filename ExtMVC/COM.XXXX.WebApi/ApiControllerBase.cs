@@ -133,8 +133,12 @@ namespace COM.XXXX.WebApi
                 int startrecord, recordcount;
                 if (int.TryParse(p.start, out startrecord) && int.TryParse(p.limit, out recordcount))
                 {
-                    var result = Repository.List().Skip<M>(startrecord).Take<M>(recordcount);
-                    return toJson(new { data = result, count = Repository.List().Count() });
+                    var temp = Repository.List();
+                    if (temp!=null)
+                    {
+                        var result = Repository.List().Skip<M>(startrecord).Take<M>(recordcount);
+                        return toJson(new { data = result, count = Repository.List().Count() });
+                    }
                 }
             }
             else

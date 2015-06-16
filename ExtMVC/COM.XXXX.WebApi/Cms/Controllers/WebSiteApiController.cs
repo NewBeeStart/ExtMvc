@@ -9,6 +9,10 @@ namespace COM.XXXX.WebApi.Cms.Controllers
 {
     public class WebSiteApiController : ApiControllerBase<WebSiteRepository, Cms_WebSite>
     {
+        public WebSiteApiController()
+        {
+            base.SetRepository();
+        }
 
     }
 }
