@@ -1,6 +1,4 @@
-﻿@{
-    ViewBag.Title = "Index";
-}
+﻿@using Com.XXXX.Common
 @{
     ViewBag.Title = "Index";
 }
@@ -10,7 +8,7 @@
 
     Ext.onReady(function () {
         Ext.QuickTips.init();
-        Ext.form.Field.prototype.msgTarget = 'side'
+        Ext.form.Field.prototype.msgTarget = 'side';
         new Ext.Viewport({
             title: "Viewport",
             layout: "fit",
@@ -21,7 +19,7 @@
                 xtype: "grid",
                 layout: "fit",
                 id: "usergrid",
-                title: '用户列表',
+                title: '网站管理',
                 store: new Ext.data.Store({
                     storeId: "gridstore",
                     paramNames: {
@@ -61,25 +59,48 @@
                 { header: "网站Email", dataIndex: 'Email', width: 10, sortable: true },
                 { header: "域名", dataIndex: 'HostAddress', width: 10, sortable: true },
                 { header: "网站标题", dataIndex: 'SiteTitle', width: 10, sortable: true },
-                { header: "主页名称", dataIndex: 'IndexPage', width: 10, sortable: true }
+                { header: "主页名称", dataIndex: 'IndexPage', width: 10, sortable: true },
+                   {
+                       header: '操作',
+                       width: 20,
+                       dataIndex: 'ID',
+                       align: "center",
+                       renderer: function (data, cellmeta, record) {
+                           record.data.Content = Ext.util.Format.htmlEncode(record.data.Content);
+                           var returnStr = "<INPUT type='button' id='btnAdd' value='增加' onclick='Add()' /> " +
+                               " <INPUT type='button' id='btnUpdate' value='修改' onclick='Update(" + Ext.encode(record.data) + ")' /> " +
+                               "<INPUT type='button' value='删除' id='btnDelete' onclick='Delete(" + Ext.encode(record.data) + ")'/>";
+                           return returnStr;
+                       }
+                   }
+               
                 ],
                 viewConfig: {
                     loadMask: true,
                     forceFit: true
                 },
+                tbar: new Ext.Toolbar([{
+                    text: '添加网站',
+                    icon: '@ConstHelper.ExtIconPath/add.gif',
+                    handler: function () {
+                        Add();
+                    }
+                }]),
                 bbar: new Ext.PagingToolbar({
                     pageSize: 10,
                     store: Ext.StoreMgr.get("gridstore"),
                     displayInfo: true,
                     displayMsg: '当前{0}到{1}条,共{2}条',
                     emptyMsg: '没有符合条件的数据'
-                }),
-                tbar: [{
-                    text: "设置角色",
-                    handler: function () {
+                })
+                
+                //,
+                //tbar: [{
+                //    text: "设置角色",
+                //    handler: function () {
                        
-                    }
-                }]
+                //    }
+                //}]
             }]
         });
         Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
@@ -87,7 +108,226 @@
 
     
     });
+    function Delete(data) {
+        Ext.Ajax.request({
+            waitMsg: '正在提交...',
+            url: '@Url.Content("/Api/Cms/WebSite/Delete/")'+data.ID,
+                method:"delete",
+                success: function (form, action) {
+                    Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                },
+                failure: function (form, action) {
+                    Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+                }
+         });
+      
+    }
+   
+    function Add() {
+        var formpanel = new Ext.form.FormPanel({
+            baseCls: 'x-plain',
+            autoHeight: true,
+            autoWidth: true,
+            layout: 'form',
+            defaultType: 'textfield',
+            items: [
+                 {
+                     xtype: 'textfield',
+                     readOnly: false,
+                     fieldLabel: '网站标题',
+                     id: 'SiteTitle',
+                     labelWidth: 50,
+                 },
+            {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: '网站名称',
+                id: 'CompanyName',
+                labelWidth: 50,
+            }, {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: '网站地址',
+                id: 'CompanyAddress',
+                labelWidth: 50,
+            }, {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: '电话号码',
+                id: 'Telephone',
+                labelWidth: 50,
+            }, {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: 'Email',
+                id: 'Email',
+                labelWidth: 50,
+            }, {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: '网站域名',
+                id: 'HostAddress',
+                labelWidth: 50,
+            },
+            {
+                xtype: 'textfield',
+                id: 'IndexPage',
+                fieldLabel: '网站主页',
+                labelWidth: 50,
+
+            }]
+        });
+        var win = new Ext.Window({
+            modal: true,
+            title: '添加网站',
+            closable: false,
+            width: 400,
+            height: 300,
+            maximized: false,
+            layout: 'form',
+            plain: true,
+            items: formpanel,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    if (formpanel.getForm().isValid()) {
+                        formpanel.getForm().submit({
+                            url: '/Api/Cms/WebSite/Add',
+                            method: "Post",
+                            params: {
+                            },
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                            },
+                            failure: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                    }
+                }, {
+                    text: '关闭',
+                    handler: function () {
+                        win.close();
+                    }
+                }]
+            });
+            win.show();
+
+        }
 
 
+    function Update(data) {
+        console.log(data);
+        var formpanel = new Ext.form.FormPanel({
+            baseCls: 'x-plain',
+            autoHeight: true,
+            autoWidth: true,
+            layout: 'form',
+            defaultType: 'textfield',
+            reader: new Ext.data.JsonReader(
+         { successProperty: 'success', root: 'message' },
+         ['ID', 'SiteTitle', 'CompanyName', 'CompanyAddress', 'CompanyAddress', 'Telephone', 'Email',
+             'HostAddress', 'IndexPage']
+        ),
+            items: [
+                 {
+                     xtype: 'textfield',
+                     readOnly: false,
+                     fieldLabel: '网站标题',
+                     id: 'SiteTitle',
+                     labelWidth: 50,
+                 },
+            {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: '网站名称',
+                id: 'CompanyName',
+                labelWidth: 50,
+            }, {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: '网站地址',
+                id: 'CompanyAddress',
+                labelWidth: 50,
+            }, {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: '电话号码',
+                id: 'Telephone',
+                labelWidth: 50,
+            }, {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: 'Email',
+                id: 'Email',
+                labelWidth: 50,
+            }, {
+                xtype: 'textfield',
+                readOnly: false,
+                fieldLabel: '网站域名',
+                id: 'HostAddress',
+                labelWidth: 50,
+            },
+            {
+                xtype: 'textfield',
+                id: 'IndexPage',
+                fieldLabel: '网站主页',
+                labelWidth: 50,
+
+            }]
+        });
+        
+        formpanel.form.load({
+            url: '@Url.Content("/Api/Cms/WebSite/GetForm/")'+data.ID,
+               method: "Get",
+               waitMsg: 'Loading',
+               success: function (form, response) {
+
+               }
+           });
+        var win = new Ext.Window({
+            modal: true,
+            title: '修改网站',
+            closable: false,
+            width: 400,
+            height: 300,
+            maximized: false,
+            layout: 'form',
+            plain: true,
+            items: formpanel,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    if (formpanel.getForm().isValid()) {
+                        formpanel.getForm().submit({
+                            url: '/Api/Cms/WebSite/Put?id=' + data.ID,
+                            method: "Put",
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                            },
+                            failure: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
+
+    }
 </script>
 
