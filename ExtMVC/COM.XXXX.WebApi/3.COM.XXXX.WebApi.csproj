@@ -78,7 +78,9 @@
     <Compile Include="Class\NamespaceHttpControllerSelector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Cms\Controllers\CmsClassifyApiController.cs" />
     <Compile Include="Cms\Controllers\CmsChannel.cs" />
+    <Compile Include="Cms\Controllers\PageTemplateController.cs" />
     <Compile Include="Cms\Controllers\WebSiteApiController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Class\StartWithConstraint.cs" />

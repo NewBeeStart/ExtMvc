@@ -17,10 +17,12 @@ namespace COM.XXXX.Models.CMS
         /// <summary>
         /// 模板路径：生成模板的路径
         /// </summary>
+        [DataMember]
         public string Path { get; set; }
         /// <summary>
         /// 模板内容：html标签及JS，Razor的内容
         /// </summary>
+        [DataMember]
         public string PageContent { get; set; }
     }
 }

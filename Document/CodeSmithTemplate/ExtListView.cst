@@ -31,7 +31,7 @@ public  int GetGridWidth(int i)
     }
 }
 </script>
-
+@using Com.XXXX.Common
 @{
     ViewBag.Title = "Index";
 }
@@ -102,7 +102,7 @@ public  int GetGridWidth(int i)
                 },
                 tbar: new Ext.Toolbar([{
                     text: '添加',
-                    icon: 'icons/add.gif',
+                    icon: '@ConstHelper.ExtIconPath/add.gif',
                     handler: function () {
                         Add();
                     }

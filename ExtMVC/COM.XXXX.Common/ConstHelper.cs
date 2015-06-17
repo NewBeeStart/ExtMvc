@@ -26,5 +26,10 @@ namespace Com.XXXX.Common
         public static string MenuXmlPath = "~/Menu.xml";
 
         public static string IconPath = "~/Scripts/icons/";
+
+        /// <summary>
+        /// 只能在Area页面中使用
+        /// </summary>
+        public static string ExtIconPath = "../../Scripts/Ext/Icons/fam/";
     }
 }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Com.XXXX.Common
+@{
     ViewBag.Title = "Index";
 }
 
@@ -73,8 +74,8 @@
                     forceFit: true
                 },
                 tbar: new Ext.Toolbar([{
-                    text: '添加',
-                    icon: 'icons/add.gif',
+                    text: '添加频道信息',
+                    icon: '@ConstHelper.ExtIconPath/add.gif',
                     handler: function () {
                         Add();
                     }
@@ -162,8 +163,39 @@
                              }]
                          }),
 
-                     },
-                    { xtype: 'textfield', readOnly: false, fieldLabel: '模板ID', id: 'LayOutTemplateID', labelWidth: 50 }
+                     }, {
+                         fieldLabel: '模板页面',
+                         name: 'LayOutTemplateID',
+                         hiddenName: 'LayOutTemplateID',
+                         xtype: 'combo',
+                         //本地数据源  local/remote
+                         mode: 'remote',
+                         //设置为选项的text的字段
+                         displayField: "Name",
+                         //设置为选项的value的字段 
+                         valueField: "Id",
+                         //是否可以输入，还是只能选择下拉框中的选项
+                         editable: false,
+                         typeAhead: true,
+                         //必须选择一项
+                         forceSelection: true,
+                         //输入部分选项内容匹配的时候显示所有的选项
+                         triggerAction: 'all',
+                         //数据
+                         store: new Ext.data.JsonStore({
+                             autoLoad: true,
+                             method: 'Post',
+                             idProperty: 'ID',
+                             url: "/Api/Cms/WebSite/GetWebSiteCombox/",
+                             fields: [{
+                                 name: 'Name',
+                                 mapping: 'CompanyName'
+                             }, {
+                                 name: 'Id',
+                                 mapping: 'ID'
+                             }]
+                         }),
+                     }
                 ]
             });
             var win = new Ext.Window({

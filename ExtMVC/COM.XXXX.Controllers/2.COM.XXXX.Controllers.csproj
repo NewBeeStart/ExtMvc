@@ -86,7 +86,9 @@
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysManageController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
+    <Compile Include="Areas\Cms\Controllers\CmsClassifyController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsChannelController.cs" />
+    <Compile Include="Areas\Cms\Controllers\PageTemplateController.cs" />
     <Compile Include="Areas\Cms\Controllers\WebSiteController.cs" />
     <Compile Include="Class\CustomJsonResult.cs" />
     <Compile Include="Class\HomeControllerBase.cs" />

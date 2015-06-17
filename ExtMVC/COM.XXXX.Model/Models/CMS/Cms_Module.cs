@@ -14,14 +14,17 @@ namespace COM.XXXX.Models.CMS
         /// <summary>
         /// 标签名称
         /// </summary>
+        [DataMember]
         public string TagName { get; set; }
         /// <summary>
         /// 标签编号
         /// </summary>
+        [DataMember]
         public string TagCode { get; set; }
         /// <summary>
         /// 标签备注
         /// </summary>
+        [DataMember]
         public string TagRemark { get; set; }
     }
 }
