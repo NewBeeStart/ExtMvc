@@ -11,6 +11,7 @@
 // 修改描述：
 //----------------------------------------------------------------*/
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -180,7 +181,7 @@ namespace Repository.Domain.Infrastructure
                          .Where(FunWhere)
                          .OrderByDescending(FunOrder)
                          .Select(t => t)
-                         .Skip((PageIndex - 1) * PageSize)
+                         .Skip((PageIndex) * PageSize) //- 1
                          .Take(PageSize);
         }
 
@@ -214,6 +215,8 @@ namespace Repository.Domain.Infrastructure
 
             return dbContext.Database.ExecuteSqlCommand(sqlstr);
         }
+
+       
 
         /// <summary>
         /// 批量事务执行多条sql

@@ -9,6 +9,7 @@ using System.Web.Http;
 using COM.XXXX.EasyUIModels;
 using COM.XXXX.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Repository.Domain;
 using Repository.Domain.Infrastructure;
 using COM.XXXX.Common;
@@ -126,12 +127,12 @@ namespace COM.XXXX.WebApi
         /// <param name="p"></param>
         /// <returns></returns>
         [HttpPost]
-        public virtual HttpResponseMessage GetGridPager([FromBody]PagerTool p)
+        public virtual HttpResponseMessage GetGridPager(JObject p)
         {
             if (p != null)
             {
                 int startrecord, recordcount;
-                if (int.TryParse(p.start, out startrecord) && int.TryParse(p.limit, out recordcount))
+                if (int.TryParse(p["start"].ToString(), out startrecord) && int.TryParse(p["limit"].ToString(), out recordcount))
                 {
                     var temp = Repository.List();
                     if (temp!=null)
@@ -148,6 +149,8 @@ namespace COM.XXXX.WebApi
 
             return toJson(new { data = "[]", count = 0 });
         }
+
+
 
         // POST api/<controller>
         public virtual HttpResponseMessage Post([FromBody]M model)

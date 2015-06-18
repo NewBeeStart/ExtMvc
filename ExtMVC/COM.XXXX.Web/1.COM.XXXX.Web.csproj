@@ -455,6 +455,7 @@
     <Content Include="Scripts\Ext\adapter\yui\ext-yui-adapter-debug.js" />
     <Content Include="Scripts\Ext\adapter\yui\ext-yui-adapter.js" />
     <Content Include="Scripts\Ext\ComboBoxTree.js" />
+    <Content Include="Scripts\Ext\Common.js" />
     <Content Include="Scripts\Ext\docs\index.html" />
     <Content Include="Scripts\Ext\docs\output\Array.html" />
     <Content Include="Scripts\Ext\docs\output\Date.html" />

@@ -4,8 +4,10 @@
 }
 
 
+@* ReSharper disable WrongExpressionStatement *@
 <script type="text/javascript">
-
+    id = "@Request["id"]";
+    url = id ? "@Url.Content("/Api/Cms/CmsChannel/GetGridPagerByID")" + "?id=" + id : "@Url.Content("/Api/Cms/CmsChannel/GetGridPager")";
     Ext.onReady(function () {
         Ext.QuickTips.init();
         Ext.form.Field.prototype.msgTarget = 'side';
@@ -27,7 +29,7 @@
                         limit: 'limit',  // The parameter name which specifies number of rows to return
                     },
                     proxy: new Ext.data.HttpProxy({
-                        url: "@Url.Content("/Api/Cms/CmsChannel/GetGridPager")",
+                        url: url,
                         method: "Post"
                     }),
                     reader: new Ext.data.JsonReader({
@@ -87,7 +89,6 @@
                     displayMsg: '当前{0}到{1}条,共{2}条',
                     emptyMsg: '没有符合条件的数据'
                 })
-
                 //,
                 //tbar: [{
                 //    text: "设置角色",
@@ -102,10 +103,10 @@
 
 
     });
-        function Delete(data) {
-            Ext.Ajax.request({
-                waitMsg: '正在提交...',
-                url: '@Url.Content("/Api/Cms/CmsChannel/Delete/")' + data.ID,
+    function Delete(data) {
+        Ext.Ajax.request({
+            waitMsg: '正在提交...',
+            url: '@Url.Content("/Api/Cms/CmsChannel/Delete/")' + data.ID,
                 method: "delete",
                 success: function (form, action) {
                     Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
@@ -343,4 +344,5 @@
 
         }
 </script>
+@* ReSharper restore WrongExpressionStatement *@
 
