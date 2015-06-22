@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -199,6 +201,40 @@ namespace COM.XXXX.WebApi
         #endregion
 
 
-        
+        public virtual JObject QueryByFilter(string sql,params SqlParameter[] sqlParameters )
+        {
+           DataSet ds=  Repository.ExecuteDataSet(sql, sqlParameters);
+           JObject jb = new JObject();
+            if (ds!=null&&ds.Tables[0]!=null&&ds.Tables[0].Rows.Count>0)
+            {
+                jb.Add("data", ds.Tables[0].ToJsonList());
+                jb.Add("count", ds.Tables[0].Rows.Count);
+                return jb;
+            }
+            jb.Add("data", new JArray());
+            jb.Add("count",0);
+            return jb;
+        }
+
+//        public JObject GetEntitiesPaging(int pageSize, int currPage)
+//        {
+//            string query = string.Format(@"
+//                                             select * from (
+//	                                              select a.*,b.RealName,ROW_NUMBER() over (order by a.CreateTime) as rownum
+//	                                               from  tb_Work_WorkSchedule a left join tb_sys_User b  on a.CreatorId=b.UserId 
+//                                             ) temp
+//                                            where rownum between {0} and {1}
+//                               ", pageSize * (currPage - 1), pageSize * currPage);
+
+//            DataSet ds = Repository.ExecuteDataSet(query);
+//            if (ds == null) return null;
+//            var rows = ds.Tables[0].ToJsonList();
+//            JObject jb = new JObject();
+//            jb.Add("data", rows);
+//            jb.Add("count", ds.Tables[0].Rows.Count);
+//            return jb;
+//        }
+
+
     }
 }

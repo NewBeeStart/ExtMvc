@@ -7,9 +7,9 @@ using Repository.DAL.Repository;
 
 namespace COM.XXXX.WebApi.Cms.Controllers
 {
-    public class PageTemplateController : ApiControllerBase<PageTemplateRepository, Cms_PageTemplate>
+    public class PageTemplateApiController : ApiControllerBase<PageTemplateRepository, Cms_PageTemplate>
     {
-        public PageTemplateController()
+        public PageTemplateApiController()
         {
             base.SetRepository();
         }

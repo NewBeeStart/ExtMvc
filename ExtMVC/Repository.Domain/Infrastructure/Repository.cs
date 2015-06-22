@@ -13,7 +13,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -172,7 +174,7 @@ namespace Repository.Domain.Infrastructure
         /// <param name="PageIndex"></param>
         /// <param name="recordsCount"></param>
         /// <returns></returns>
-        public IQueryable<TEntity> QueryByPage(Expression<Func<TEntity, bool>> FunWhere, Expression<Func<TEntity, string>> FunOrder,
+        public IQueryable<TEntity> QueryByPage<T>(Expression<Func<TEntity, bool>> FunWhere, Expression<Func<TEntity, T>> FunOrder,
                                                 int PageSize, int PageIndex, out int recordsCount)
         {
             recordsCount = dbContext.Set<TEntity>().Where(FunWhere).OrderByDescending(FunOrder).Count();
@@ -239,6 +241,30 @@ namespace Repository.Domain.Infrastructure
                     }
                     transaction.Complete();
                 }
+            }
+        }
+
+        public DataSet ExecuteDataSet(string query, params SqlParameter[] commandParameters)
+        { 
+            SqlConnection conn = new SqlConnection(dbContext.Database.Connection.ConnectionString);
+            SqlCommand cmd = new SqlCommand(query,conn);
+            if (commandParameters!=null&&commandParameters.Count() > 0)
+            {
+                cmd.Parameters.AddRange(commandParameters);
+            }
+            try
+            {
+
+                SqlDataAdapter da = new SqlDataAdapter();
+                DataSet ds = new DataSet();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                return ds;
+            }
+            catch
+            {
+                conn.Close();
+                throw;
             }
         }
         #endregion

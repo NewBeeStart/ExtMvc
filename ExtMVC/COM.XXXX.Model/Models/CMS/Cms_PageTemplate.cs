@@ -24,6 +24,9 @@ namespace COM.XXXX.Models.CMS
         /// </summary>
         [DataMember]
         public string PageContent { get; set; }
+
+        [DataMember] 
+        public string Remark { get; set; }
     }
 }
 

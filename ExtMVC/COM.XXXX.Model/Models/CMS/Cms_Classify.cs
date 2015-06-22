@@ -34,6 +34,9 @@ namespace COM.XXXX.Models.CMS
         /// </summary>
         [DataMember]
         public Guid? ChannelID { get; set; }
+
+        [DataMember]
+        public int? SortIndex { get; set; }
         /// <summary>
         /// 布局模板ID
         /// </summary>

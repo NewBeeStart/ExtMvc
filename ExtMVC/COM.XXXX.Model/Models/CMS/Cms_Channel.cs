@@ -38,6 +38,11 @@ namespace COM.XXXX.Models.CMS
         /// </summary>
         [DataMember]
         public Guid? LayOutTemplateID { get; set; }
+        /// <summary>
+        /// 排序
+        /// </summary>
+        [DataMember]
+        public int SortIndex { get; set; }
 
         public virtual Cms_WebSite WebSite { get; set; }
 

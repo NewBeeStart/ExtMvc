@@ -69,7 +69,7 @@
     <Compile Include="RequestHelper.cs" />
     <Compile Include="RondomHelper.cs" />
     <Compile Include="Singleton.cs" />
-    <Compile Include="SmartDataTableExtensions.cs" />
+    <Compile Include="TableExtensions.cs" />
     <Compile Include="StringValidate.cs" />
     <Compile Include="Thumbnail.cs" />
     <Compile Include="Utils.cs" />

@@ -14,8 +14,8 @@ namespace Repository.Domain.Infrastructure
         void Delete(TEntity entity);
         IList<TEntity> List();
 
-        IQueryable<TEntity> QueryByPage(Expression<Func<TEntity, bool>> FunWhere,
-                                               Expression<Func<TEntity, string>> FunOrder,
+        IQueryable<TEntity> QueryByPage<T>(Expression<Func<TEntity, bool>> FunWhere,
+                                               Expression<Func<TEntity, T>> FunOrder,
                                     int PageSize, int PageIndex, out int recordsCount);
         IQueryable<TEntity> Query(Expression<Func<TEntity, bool>> filter);
        

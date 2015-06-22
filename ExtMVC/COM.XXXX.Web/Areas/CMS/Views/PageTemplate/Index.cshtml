@@ -1,5 +1,232 @@
-﻿@{
+﻿@using Com.XXXX.Common
+@{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<script src="../../../../Scripts/Ext/StarHtmlEditor.js"></script>
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        Ext.form.Field.prototype.msgTarget = 'side';
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "fit",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [{
+                xtype: "grid",
+                layout: "fit",
+                id: "usergrid",
+                title: '网站模板',
+                store: new Ext.data.Store({
+                    storeId: "gridstore",
+                    paramNames: {
+                        start: 'start',  // The parameter name which specifies the start row
+                        limit: 'limit',  // The parameter name which specifies number of rows to return
+                    },
+                    proxy: new Ext.data.HttpProxy({
+                        url: "@Url.Content("/Api/Cms/PageTemplate/GetGridPager")",
+                        method: "Post"
+                    }),
+                    reader: new Ext.data.JsonReader({
+                        root: "data",
+                        totalProperty: "count"
+                    }, [
+                         { name: 'ID' },
+                         { name: 'Path' },
+                         { name: 'PageContent' },
+                         { name: 'Remark' }
+                    ])
+                }),
+                stripeRows: true,
+                columnLines: true,
+                trackMouseOver: false,
+                loadMask: true,
+                columns: [
+                       { header: "标识列", dataIndex: 'ID', width: 25, hidden: false, sortable: true },
+                       { header: "路径", dataIndex: 'Path', width: 25, hidden: false, sortable: true },
+                       { header: "页面内容", dataIndex: 'PageContent', width: 25, hidden: false, sortable: true },
+                       { header: "备注信息", dataIndex: 'Remark', width: 25, hidden: false, sortable: true },
+
+                   {
+                       header: '操作',
+                       width: 20,
+                       dataIndex: 'ID',
+                       align: "center",
+                       renderer: function (data, cellmeta, record) {
+                           record.data.Content = Ext.util.Format.htmlEncode(record.data.Content);
+                           var returnStr = "<INPUT type='button' id='btnAdd' value='增加' onclick='Add()' /> " +
+                               " <INPUT type='button' id='btnUpdate' value='修改' onclick='Update(" + Ext.encode(record.data) + ")' /> " +
+                               "<INPUT type='button' value='删除' id='btnDelete' onclick='Delete(" + Ext.encode(record.data) + ")'/>";
+                           return returnStr;
+                       }
+                   }
+
+                ],
+                viewConfig: {
+                    loadMask: true,
+                    forceFit: true
+                },
+                tbar: new Ext.Toolbar([{
+                    text: '添加',
+                    icon: '@ConstHelper.ExtIconPath/add.gif',
+                    handler: function () {
+                        Add();
+                    }
+                }]),
+                bbar: new Ext.PagingToolbar({
+                    pageSize: 10,
+                    store: Ext.StoreMgr.get("gridstore"),
+                    displayInfo: true,
+                    displayMsg: '当前{0}到{1}条,共{2}条',
+                    emptyMsg: '没有符合条件的数据'
+                })
+            }]
+        });
+        Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+
+
+
+    });
+    function Delete(data) {
+        Ext.Ajax.request({
+            waitMsg: '正在提交...',
+            url: '@Url.Content("/Api/Cms/PageTemplate/Delete/")' + data.ID,
+            method: "delete",
+            success: function (form, action) {
+                Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+            },
+            failure: function (form, action) {
+                Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+            }
+        });
+
+    }
+
+    function Add() {
+        var formpanel = new Ext.form.FormPanel({
+            baseCls: 'x-plain',
+            autoHeight: true,
+            autoWidth: true,
+            layout: 'form',
+            defaultType: 'textfield',
+            items: [
+                { xtype: 'textfield', readOnly: false, fieldLabel: '标识列', id: 'ID', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '路径', id: 'Path', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '页面内容', id: 'PageContent', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', id: 'Remark', labelWidth: 50 }
+            ]
+        });
+        var win = new Ext.Window({
+            modal: true,
+            title: '添加',
+            closable: false,
+            width: 800,
+            height: 550,
+            maximized: false,
+            layout: 'form',
+            plain: true,
+            items: formpanel,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    if (formpanel.getForm().isValid()) {
+                        formpanel.getForm().submit({
+                            url: '/Api/Cms/PageTemplate/',
+                            method: "Post",
+                            params: {
+                            },
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                            },
+                            failure: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
+
+    }
+
+
+    function Update(data) {
+        var formpanel = new Ext.form.FormPanel({
+            baseCls: 'x-plain',
+            autoHeight: true,
+            autoWidth: true,
+            layout: 'form',
+            defaultType: 'textfield',
+            reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+            [
+                    'ID', 'Path', 'PageContent', 'Remark'
+            ]),
+            items: [
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '标识列', id: 'ID', labelWidth: 50 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '路径', id: 'Path', labelWidth: 50 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', id: 'Remark', labelWidth: 50 },
+                            { xtype: 'Starthtmleditor', hideLabel: true, id: 'PageContent', labelWidth: 50, anchor: "100%" }
+            ]
+        });
+
+        formpanel.form.load({
+            url: '@Url.Content("/Api/Cms/PageTemplate/GetForm/")' + data.ID,
+            method: "Get",
+            waitMsg: 'Loading',
+            success: function (form, response) {
+            }
+        });
+        var win = new Ext.Window({
+            modal: true,
+            title: '修改',
+            closable: false,
+            width: 800,
+            height: 550,
+            maximized: false,
+            layout: 'form',
+            plain: true,
+            items: formpanel,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    if (formpanel.getForm().isValid()) {
+                        formpanel.getForm().submit({
+                            url: '/Api/Cms/PageTemplate/Put?id=' + data.ID,
+                            method: "Put",
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                            },
+                            failure: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
+
+    }
+</script>
+

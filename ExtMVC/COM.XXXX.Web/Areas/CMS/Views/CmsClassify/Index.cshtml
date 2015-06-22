@@ -28,20 +28,20 @@
                     },
                     proxy: new Ext.data.HttpProxy({
                         url: "@Url.Content("/Api/Cms/CmsClassify/GetGridPager")",
-                                   method: "Post"
-                               }),
-                   reader: new Ext.data.JsonReader({
-                       root: "data",
-                       totalProperty: "count"
-                   }, [
-                        { name:'ID'},
-                        { name:'Name'},
-                        { name:'Code'},
-                        { name:'Remark'},
-                        { name:'ChannelID'},
-                        { name:'LayOutTemplateID'}
-                   ])
-               }),
+                        method: "Post"
+                    }),
+                    reader: new Ext.data.JsonReader({
+                        root: "data",
+                        totalProperty: "count"
+                    }, [
+                         { name: 'ID' },
+                         { name: 'Name' },
+                         { name: 'Code' },
+                         { name: 'Remark' },
+                         { name: 'ChannelID' },
+                         { name: 'LayOutTemplateID' }
+                    ])
+                }),
                 stripeRows: true,
                 columnLines: true,
                 trackMouseOver: false,
@@ -53,7 +53,7 @@
                        { header: "备注", dataIndex: 'Remark', width: 16, hidden: false, sortable: true },
                        { header: "频道ID", dataIndex: 'ChannelID', width: 17, hidden: false, sortable: true },
                        { header: "模板ID", dataIndex: 'LayOutTemplateID', width: 16, hidden: false, sortable: true },
-                
+
                    {
                        header: '操作',
                        width: 20,
@@ -63,11 +63,12 @@
                            record.data.Content = Ext.util.Format.htmlEncode(record.data.Content);
                            var returnStr = "<INPUT type='button' id='btnAdd' value='增加' onclick='Add()' /> " +
                                " <INPUT type='button' id='btnUpdate' value='修改' onclick='Update(" + Ext.encode(record.data) + ")' /> " +
-                               "<INPUT type='button' value='删除' id='btnDelete' onclick='Delete(" + Ext.encode(record.data) + ")'/>";
+                               "<INPUT type='button' value='删除' id='btnDelete' onclick='Delete(" + Ext.encode(record.data) + ")'/>"
+                           ;
                            return returnStr;
                        }
                    }
-               
+
                 ],
                 viewConfig: {
                     loadMask: true,
@@ -92,24 +93,24 @@
         Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
 
 
-    
+
     });
     function Delete(data) {
         Ext.Ajax.request({
             waitMsg: '正在提交...',
-            url: '@Url.Content("/Api/Cms/CmsClassify/Delete/")'+data.ID,
-                method:"delete",
-                success: function (form, action) {
-                    Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
-                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
-                },
-                failure: function (form, action) {
-                    Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
-                }
-         });
-      
+            url: '@Url.Content("/Api/Cms/CmsClassify/Delete/")' + data.ID,
+            method: "delete",
+            success: function (form, action) {
+                Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+            },
+            failure: function (form, action) {
+                Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+            }
+        });
+
     }
-   
+
     function Add() {
         var formpanel = new Ext.form.FormPanel({
             baseCls: 'x-plain',
@@ -118,13 +119,13 @@
             layout: 'form',
             defaultType: 'textfield',
             items: [
-                {xtype: 'textfield',readOnly: false,fieldLabel: 'ID',id:'ID',labelWidth: 50},
-                {xtype: 'textfield',readOnly: false,fieldLabel: '分类名称',id:'Name',labelWidth: 50},
-                {xtype: 'textfield',readOnly: false,fieldLabel: '分类编号',id:'Code',labelWidth: 50},
-                {xtype: 'textfield',readOnly: false,fieldLabel: '备注',id:'Remark',labelWidth: 50},
-                {xtype: 'textfield',readOnly: false,fieldLabel: '频道ID',id:'ChannelID',labelWidth: 50},
-                {xtype: 'textfield',readOnly: false,fieldLabel: '模板ID',id:'LayOutTemplateID',labelWidth: 50}
-                ]
+                { xtype: 'textfield', readOnly: false, fieldLabel: 'ID', id: 'ID', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '分类名称', id: 'Name', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '分类编号', id: 'Code', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '备注', id: 'Remark', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '频道ID', id: 'ChannelID', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '模板ID', id: 'LayOutTemplateID', labelWidth: 50 }
+            ]
         });
         var win = new Ext.Window({
             modal: true,
@@ -156,17 +157,17 @@
                             }
                         });
                     }
-                    }
-                }, {
-                    text: '关闭',
-                    handler: function () {
-                        win.close();
-                    }
-                }]
-            });
-            win.show();
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
 
-        }
+    }
 
 
     function Update(data) {
@@ -176,28 +177,27 @@
             autoWidth: true,
             layout: 'form',
             defaultType: 'textfield',
-            reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
-            [
-'ID','Name','Code','Remark','ChannelID','LayOutTemplateID'
+            reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },[
+                'ID', 'Name', 'Code', 'Remark', 'ChannelID', 'LayOutTemplateID'
             ]),
             items: [
-                {xtype: 'textfield',readOnly: false,fieldLabel: 'ID',id:'ID',labelWidth: 50},
-                            {xtype: 'textfield',readOnly: false,fieldLabel: '分类名称',id:'Name',labelWidth: 50},
-                            {xtype: 'textfield',readOnly: false,fieldLabel: '分类编号',id:'Code',labelWidth: 50},
-                            {xtype: 'textfield',readOnly: false,fieldLabel: '备注',id:'Remark',labelWidth: 50},
-                            {xtype: 'textfield',readOnly: false,fieldLabel: '频道ID',id:'ChannelID',labelWidth: 50},
-                            {xtype: 'textfield',readOnly: false,fieldLabel: '模板ID',id:'LayOutTemplateID',labelWidth: 50}
+                { xtype: 'textfield', readOnly: false, fieldLabel: 'ID', id: 'ID', labelWidth: 50 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '分类名称', id: 'Name', labelWidth: 50 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '分类编号', id: 'Code', labelWidth: 50 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '备注', id: 'Remark', labelWidth: 50 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '频道ID', id: 'ChannelID', labelWidth: 50 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '模板ID', id: 'LayOutTemplateID', labelWidth: 50 }
             ]
         });
-        
-        formpanel.form.load({
-            url: '@Url.Content("/Api/Cms/CmsClassify/GetForm/")'+data.ID,
-               method: "Get",
-               waitMsg: 'Loading',
-               success: function (form, response) {
 
-               }
-           });
+        formpanel.form.load({
+            url: '@Url.Content("/Api/Cms/CmsClassify/GetForm/")' + data.ID,
+            method: "Get",
+            waitMsg: 'Loading',
+            success: function (form, response) {
+
+            }
+        });
         var win = new Ext.Window({
             modal: true,
             title: '修改',

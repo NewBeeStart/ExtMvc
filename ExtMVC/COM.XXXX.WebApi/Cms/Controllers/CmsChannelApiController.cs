@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http;
 using System.Text;
-using System.Web.Http;
 using COM.XXXX.Common;
 using COM.XXXX.Models.CMS;
 using Newtonsoft.Json.Linq;
 using Repository.DAL.Repository;
+using System.Web.Http;
 
 namespace COM.XXXX.WebApi.Cms.Controllers
 {
-    public class CmsClassifyApiController : ApiControllerBase<CmsClassifyRepository, Cms_Classify>
+    public class CmsChannelApiController : ApiControllerBase<CmsChannelRepository, Cms_Channel>
     {
-        public CmsClassifyApiController()
+        public CmsChannelApiController()
         {
             base.SetRepository();
         }
@@ -31,14 +32,21 @@ namespace COM.XXXX.WebApi.Cms.Controllers
 
                     if (!string.IsNullOrEmpty(id.ToString()))
                     {
-                        string querystr = string.Format(@"select a.*,b.ChannelName from Cms_Classify a
-                                             left join Cms_Channel b on a.ChannelID=b.ID
-                                             where a.ChannelID='{0}'",id.ToString());
+                        ////List<Cms_Channel> result1 = base.Repository.Query(u => u.WebSiteID == id).ToList();
+                        //var result =  base.Repository.QueryByPage<int>(u => u.WebSiteID.ToString() == id.ToString(),
+                        //                                         u => u.SortIndex, recordcount, startrecord,
+                        //                                         out totalCount).ToList();
+
+                        string querystr = string.Format(@"select * from(
+                                            select a.*,b.SiteTitle,ROW_NUMBER() over (order by a.sortIndex) as rownum 
+                                            from cms_channel a left join cms_website b on a.websiteid=b.id
+                                            where a.WebSiteID='{0}') temp",
+                                                        id.ToString());
                         DataSet dataSet = base.Repository.ExecuteDataSet(querystr);
                         var result = dataSet.Tables[0].Select()
                                                       .Skip(startrecord)
                                                       .Take(recordcount).CopyToDataTable();
-
+                                       
                         return toJson(new { data = result.ToJsonList(), count = dataSet.Tables[0].Rows.Count });
                     }
                 }
@@ -49,6 +57,14 @@ namespace COM.XXXX.WebApi.Cms.Controllers
             }
 
             return toJson(new { data = "[]", count = 0 });
+        }
+
+        [HttpPost]
+        [HttpGet]
+        public HttpResponseMessage GetChannelCombox()
+        {
+            var result = this.Get();
+            return toJson(result);
         }
 
     }

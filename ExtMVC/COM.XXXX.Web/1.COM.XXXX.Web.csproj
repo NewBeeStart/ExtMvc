@@ -4961,6 +4961,7 @@
     <Content Include="Scripts\Ext\src\widgets\Viewport.js" />
     <Content Include="Scripts\Ext\src\widgets\Window.js" />
     <Content Include="Scripts\Ext\src\widgets\WindowManager.js" />
+    <Content Include="Scripts\Ext\StarHtmlEditor.js" />
     <Content Include="Scripts\Ext\TabPage.js" />
     <Content Include="Scripts\Ext\test\performance\window.js" />
     <Content Include="Scripts\Ext\test\unit\Array.js" />
@@ -9080,6 +9081,7 @@
     <Folder Include="Scripts\Ext\src\ext-core\test\yui_2.6.0\yui\build\logger\assets\skins\sam\" />
     <Folder Include="Scripts\Ext\src\ext-core\test\yui_2.6.0\yui\build\yuitest\assets\skins\sam\" />
     <Folder Include="Scripts\Ext\src\util\core\" />
+    <Folder Include="UploadFile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
