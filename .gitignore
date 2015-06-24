@@ -1,6 +1,6 @@
 bin/
-Log/
 obj/
 *.suo
 *.user
 UploadFile/
+Log/
