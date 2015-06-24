@@ -1,5 +1,5 @@
 bin/
-log/
+Log/
 obj/
 *.suo
 *.user
