@@ -57,7 +57,7 @@ namespace COM.XXXX.Controllers
         {
             if (null == CurrentUser)
             {
-                filterContext.Result = Redirect("~/Account/Index");
+                filterContext.Result = Redirect(Server.MapPath("~/Account/Index"));
             }
         }
 

@@ -51,6 +51,28 @@ namespace Repository.Domain.Infrastructure
             this.dbSet = dbContext.Set<TEntity>();
         }
 
+        #region 新增
+        /// <summary>
+        /// 得到所有记录数
+        /// </summary>
+        /// <returns>总条数</returns>
+        public int GetAllCount()
+        {
+            return dbContext.Set<TEntity>().Count();
+        }
+
+        /// <summary>
+        /// 获取记录数
+        /// </summary>
+        ///<param name="exp">linq表达式</param>
+        /// <returns>总条数</returns>
+        public int GetCount(Expression<Func<TEntity, bool>> exp)
+        {
+            return dbContext.Set<TEntity>().Where(exp).Count();
+        }
+
+        #endregion
+
         /// <summary>
         /// 获取数据列表
         /// </summary>
