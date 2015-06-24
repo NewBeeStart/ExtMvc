@@ -67,5 +67,13 @@ namespace COM.XXXX.WebApi.Cms.Controllers
             return toJson(result);
         }
 
+
+        #region 前台调用方法
+        [HttpPost]
+        public HttpResponseMessage GetWebMenusByWebID(Guid? webid)
+        {
+           return toJson(base.Repository.Query(u => u.WebSiteID == webid));
+        }
+        #endregion
     }
 }
