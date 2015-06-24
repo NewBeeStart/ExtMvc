@@ -51,12 +51,12 @@ namespace COM.XXXX.Models.CMS
         [DataMember]
         public string IndexPage { get; set; }
         /// <summary>
-        /// 网站模板ID
+        /// 网站页面内容
         /// </summary>
         [DataMember]
-        public Guid? LayOutTemplateID { get; set; }
+        public string  PageContent { get; set; }
 
-        public virtual Cms_PageTemplate LayOutTemplate { get; set; }
+        //public virtual Cms_PageTemplate LayOutTemplate { get; set; }
 
     }
 }

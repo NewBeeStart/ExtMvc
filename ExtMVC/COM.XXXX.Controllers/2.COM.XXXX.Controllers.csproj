@@ -86,6 +86,7 @@
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysManageController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
+    <Compile Include="Areas\Cms\Controllers\CmsModuleController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsClassifyController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsChannelController.cs" />
     <Compile Include="Areas\Cms\Controllers\PageTemplateController.cs" />

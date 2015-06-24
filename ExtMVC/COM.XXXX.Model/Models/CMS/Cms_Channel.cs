@@ -37,7 +37,7 @@ namespace COM.XXXX.Models.CMS
         /// 模板ID
         /// </summary>
         [DataMember]
-        public Guid? LayOutTemplateID { get; set; }
+        public string PageContent { get; set; }
         /// <summary>
         /// 排序
         /// </summary>
@@ -46,7 +46,6 @@ namespace COM.XXXX.Models.CMS
 
         public virtual Cms_WebSite WebSite { get; set; }
 
-        public virtual Cms_PageTemplate LayOutTemplate{ get; set; }
     }
 }
 

@@ -21,5 +21,6 @@ namespace Repository.DAL.Repository
 { 
     public class CmsChannelRepository : Repository<Cms_Channel>
     {
+
     }
 }

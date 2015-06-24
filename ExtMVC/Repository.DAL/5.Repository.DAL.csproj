@@ -60,6 +60,7 @@
     <Compile Include="Repository\Admin\RoleRepository.cs" />
     <Compile Include="Repository\Admin\RoleRightRepository.cs" />
     <Compile Include="Repository\Admin\UserRepository.cs" />
+    <Compile Include="Repository\Cms\CmsModuleRepository.cs" />
     <Compile Include="Repository\Cms\CmsClassifyRepository.cs" />
     <Compile Include="Repository\Cms\CmsChannelRepository.cs" />
     <Compile Include="Repository\Cms\PageTemplateRepository.cs" />

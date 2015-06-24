@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Index";
 }
+
+
 <script type="text/javascript">
 
     Ext.onReady(function () {
@@ -17,7 +19,7 @@
                 xtype: "grid",
                 layout: "fit",
                 id: "usergrid",
-                title: '网站模板',
+                title: '网站模块',
                 store: new Ext.data.Store({
                     storeId: "gridstore",
                     paramNames: {
@@ -25,29 +27,29 @@
                         limit: 'limit',  // The parameter name which specifies number of rows to return
                     },
                     proxy: new Ext.data.HttpProxy({
-                        url: "@Url.Content("/Api/Cms/PageTemplate/GetGridPager")",
-                        method: "Post"
-                    }),
-                    reader: new Ext.data.JsonReader({
-                        root: "data",
-                        totalProperty: "count"
-                    }, [
-                         { name: 'ID' },
-                         { name: 'Path' },
-                         { name: 'PageContent' },
-                         { name: 'Remark' }
-                    ])
-                }),
+                        url: "@Url.Content("/Api/Cms/CmsModule/GetGridPager")",
+                                   method: "Post"
+                               }),
+                   reader: new Ext.data.JsonReader({
+                       root: "data",
+                       totalProperty: "count"
+                   }, [
+                        { name:'ID'},
+                        { name:'TagName'},
+                        { name:'TagCode'},
+                        { name:'TagRemark'}
+                   ])
+               }),
                 stripeRows: true,
                 columnLines: true,
                 trackMouseOver: false,
                 loadMask: true,
                 columns: [
                        { header: "标识列", dataIndex: 'ID', width: 25, hidden: false, sortable: true },
-                       { header: "路径", dataIndex: 'Path', width: 25, hidden: false, sortable: true },
-                       { header: "页面内容", dataIndex: 'PageContent', width: 25, hidden: false, sortable: true },
-                       { header: "备注信息", dataIndex: 'Remark', width: 25, hidden: false, sortable: true },
-
+                       { header: "标签名称", dataIndex: 'TagName', width: 25, hidden: false, sortable: true },
+                       { header: "标签代码", dataIndex: 'TagCode', width: 25, hidden: false, sortable: true },
+                       { header: "标签备注", dataIndex: 'TagRemark', width: 25, hidden: false, sortable: true },
+                
                    {
                        header: '操作',
                        width: 20,
@@ -61,7 +63,7 @@
                            return returnStr;
                        }
                    }
-
+               
                 ],
                 viewConfig: {
                     loadMask: true,
@@ -86,24 +88,24 @@
         Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
 
 
-
+    
     });
     function Delete(data) {
         Ext.Ajax.request({
             waitMsg: '正在提交...',
-            url: '@Url.Content("/Api/Cms/PageTemplate/Delete/")' + data.ID,
-            method: "delete",
-            success: function (form, action) {
-                Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
-                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
-            },
-            failure: function (form, action) {
-                Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
-            }
-        });
-
+            url: '@Url.Content("/Api/Cms/CmsModule/Delete/")'+data.ID,
+                method:"delete",
+                success: function (form, action) {
+                    Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                },
+                failure: function (form, action) {
+                    Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+                }
+         });
+      
     }
-
+   
     function Add() {
         var formpanel = new Ext.form.FormPanel({
             baseCls: 'x-plain',
@@ -112,19 +114,19 @@
             layout: 'form',
             defaultType: 'textfield',
             items: [
-                { xtype: 'textfield', readOnly: false, fieldLabel: '标识列', id: 'ID', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '路径', id: 'Path', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '页面内容', id: 'PageContent', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', id: 'Remark', labelWidth: 50 }
-            ]
+                {xtype: 'textfield',readOnly: false,fieldLabel: '标识列',id:'ID',labelWidth: 50},
+                {xtype: 'textfield',readOnly: false,fieldLabel: '标签名称',id:'TagName',labelWidth: 50},
+                {xtype: 'textfield',readOnly: false,fieldLabel: '标签代码',id:'TagCode',labelWidth: 50},
+                {xtype: 'textfield',readOnly: false,fieldLabel: '标签备注',id:'TagRemark',labelWidth: 50}
+                ]
         });
         var win = new Ext.Window({
             modal: true,
             title: '添加',
-            closable: false,
-            width: 800,
-            height: 550,
-            maximized: false,
+            closable: true,
+            width: 400,
+            height: 300,
+            maximizable: true,
             layout: 'form',
             plain: true,
             items: formpanel,
@@ -133,7 +135,7 @@
                 handler: function () {
                     if (formpanel.getForm().isValid()) {
                         formpanel.getForm().submit({
-                            url: '/Api/Cms/PageTemplate/',
+                            url: '/Api/Cms/CmsModule/Add',
                             method: "Post",
                             params: {
                             },
@@ -148,17 +150,17 @@
                             }
                         });
                     }
-                }
-            }, {
-                text: '关闭',
-                handler: function () {
-                    win.close();
-                }
-            }]
-        });
-        win.show();
+                    }
+                }, {
+                    text: '关闭',
+                    handler: function () {
+                        win.close();
+                    }
+                }]
+            });
+            win.show();
 
-    }
+        }
 
 
     function Update(data) {
@@ -170,29 +172,30 @@
             defaultType: 'textfield',
             reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
             [
-                    'ID', 'Path', 'PageContent', 'Remark'
+'ID','TagName','TagCode','TagRemark'
             ]),
             items: [
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '标识列', id: 'ID', labelWidth: 50 },
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '路径', id: 'Path', labelWidth: 50 },
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', id: 'Remark', labelWidth: 50 },
-                            { xtype: 'Starthtmleditor', hideLabel: true, id: 'PageContent', labelWidth: 50, anchor: "100%" }
+                {xtype: 'textfield',readOnly: false,fieldLabel: '标识列',id:'ID',labelWidth: 50},
+                            {xtype: 'textfield',readOnly: false,fieldLabel: '标签名称',id:'TagName',labelWidth: 50},
+                            {xtype: 'textfield',readOnly: false,fieldLabel: '标签代码',id:'TagCode',labelWidth: 50},
+                            {xtype: 'textfield',readOnly: false,fieldLabel: '标签备注',id:'TagRemark',labelWidth: 50}
             ]
         });
-
+        
         formpanel.form.load({
-            url: '@Url.Content("/Api/Cms/PageTemplate/GetForm/")' + data.ID,
-            method: "Get",
-            waitMsg: 'Loading',
-            success: function (form, response) {
-            }
-        });
+            url: '@Url.Content("/Api/Cms/CmsModule/GetForm/")'+data.ID,
+               method: "Get",
+               waitMsg: 'Loading',
+               success: function (form, response) {
+
+               }
+           });
         var win = new Ext.Window({
             modal: true,
             title: '修改',
             closable: false,
-            width: 800,
-            height: 550,
+            width: 400,
+            height: 300,
             maximized: false,
             layout: 'form',
             plain: true,
@@ -202,7 +205,7 @@
                 handler: function () {
                     if (formpanel.getForm().isValid()) {
                         formpanel.getForm().submit({
-                            url: '/Api/Cms/PageTemplate/Put?id=' + data.ID,
+                            url: '/Api/Cms/CmsModule/Put?id=' + data.ID,
                             method: "Put",
                             waitTitle: '请等待',
                             waitMsg: '正在提交中',

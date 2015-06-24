@@ -40,11 +40,10 @@ namespace COM.XXXX.Models.CMS
         /// <summary>
         /// 布局模板ID
         /// </summary>
-        [DataMember]
-        public Guid? LayOutTemplateID { get; set; }
-
+        [DataMember] 
+        public string PageContent { get; set; }
+        
         public virtual Cms_Channel Channel { get; set; }
-        public virtual Cms_PageTemplate LayOutTemplate { get; set; }
     }
 }
 

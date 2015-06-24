@@ -28,24 +28,24 @@
                     },
                     proxy: new Ext.data.HttpProxy({
                         url: "@Url.Content("/Api/Cms/WebSite/GetGridPager")",
-                                   method: "Post"
-                               }),
-                   reader: new Ext.data.JsonReader({
-                       root: "data",
-                       totalProperty: "count"
-                   }, [
-                        { name: 'ID' },
-                        { name: 'CompanyName' },
-                        { name: 'CompanyAddress' },
-                        { name: 'CompanyType' },
-                        { name: 'Telephone' },
-                        { name: "Email" },
-                        { name: 'HostAddress' },
-                        { name: 'SiteTitle' },
-                        { name: 'IndexPage' },
-                        { name: 'LayOutTemplateID' }
-                   ])
-               }),
+                        method: "Post"
+                    }),
+                    reader: new Ext.data.JsonReader({
+                        root: "data",
+                        totalProperty: "count"
+                    }, [
+                         { name: 'ID' },
+                         { name: 'CompanyName' },
+                         { name: 'CompanyAddress' },
+                         { name: 'CompanyType' },
+                         { name: 'Telephone' },
+                         { name: "Email" },
+                         { name: 'HostAddress' },
+                         { name: 'SiteTitle' },
+                         { name: 'IndexPage' },
+                         { name: 'LayOutTemplateID' }
+                    ])
+                }),
                 stripeRows: true,
                 columnLines: true,
                 trackMouseOver: false,
@@ -70,7 +70,7 @@
                            var returnStr = "<INPUT type='button' id='btnAdd' value='增加' onclick='Add()' /> " +
                                " <INPUT type='button' id='btnUpdate' value='修改' onclick='Update(" + Ext.encode(record.data) + ")' /> " +
                                "<INPUT type='button' value='删除' id='btnDelete' onclick='Delete(" + Ext.encode(record.data) + ")'/>" +
-                               "<INPUT type='button' value='网站频道' id='btnChannel' onclick='window.parent.ExtWindow.Open(\"网站频道管理\",800,550,\"Cms/CmsChannel/Index\"," + Ext.encode(record.data) + " )' />";;
+                               "<INPUT type='button' value='网站频道' id='btnChannel' onclick='window.parent.ExtWindow.Open(\"网站频道管理\",1200,600,\"Cms/CmsChannel/Index\"," + Ext.encode(record.data) + " )' />";;
                            return returnStr;
                        }
                    }
@@ -93,12 +93,12 @@
                     displayMsg: '当前{0}到{1}条,共{2}条',
                     emptyMsg: '没有符合条件的数据'
                 })
-                
+
                 //,
                 //tbar: [{
                 //    text: "设置角色",
                 //    handler: function () {
-                       
+
                 //    }
                 //}]
             }]
@@ -106,16 +106,16 @@
         Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
 
 
-    
+
     });
-    
+
     //function OpenUrl(title, width, height, url, data) {
     //    url = url + "?id="+ data.ID;
     //    var win = new Ext.Window({
     //        title: title,
     //        layout: 'fit',    //设置布局模式为fit，能让frame自适应窗体大小
     //        modal: true,    //打开遮罩层
-            
+
     //        height: height,    //初始高度
     //        width: width,  //初始宽度
     //        frame: true,    //去除窗体的panel框架
@@ -128,85 +128,96 @@
     function Delete(data) {
         Ext.Ajax.request({
             waitMsg: '正在提交...',
-            url: '@Url.Content("/Api/Cms/WebSite/Delete/")'+data.ID,
-                method:"delete",
-                success: function (form, action) {
-                    Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
-                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
-                },
-                failure: function (form, action) {
-                    Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
-                }
-         });
-      
+            url: '@Url.Content("/Api/Cms/WebSite/Delete/")' + data.ID,
+            method: "delete",
+            success: function (form, action) {
+                Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+            },
+            failure: function (form, action) {
+                Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+            }
+        });
+
     }
-   
+
     function Add() {
         var formpanel = new Ext.form.FormPanel({
-            baseCls: 'x-plain',
-            autoHeight: true,
-            autoWidth: true,
+            frame: true,
             layout: 'form',
-            defaultType: 'textfield',
             items: [
-                 {
-                     xtype: 'textfield',
-                     readOnly: false,
-                     fieldLabel: '网站标题',
-                     id: 'SiteTitle',
-                     labelWidth: 50,
-                 }, {
-                     xtype: 'textfield',
-                     readOnly: false,
-                     fieldLabel: '网站分类',
-                     id: 'CompanyType',
-                     labelWidth: 50,
-                 },
             {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: '网站名称',
-                id: 'CompanyName',
-                labelWidth: 50,
-            }, {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: '网站地址',
-                id: 'CompanyAddress',
-                labelWidth: 50,
-            }, {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: '电话号码',
-                id: 'Telephone',
-                labelWidth: 50,
-            }, {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: 'Email',
-                id: 'Email',
-                labelWidth: 50,
-            }, {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: '网站域名',
-                id: 'HostAddress',
-                labelWidth: 50,
+                layout: 'column',
+                items: [{
+                    columnWidth: .5,
+                    layout: 'form',
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            readOnly: false,
+                            fieldLabel: '网站标题',
+                            id: 'SiteTitle',
+                            labelWidth: 50,
+                        }, {
+                            xtype: 'textfield',
+                            readOnly: false,
+                            fieldLabel: '网站名称',
+                            id: 'CompanyName',
+                            labelWidth: 50,
+                        }, {
+                            xtype: 'textfield',
+                            readOnly: false,
+                            fieldLabel: '网站地址',
+                            id: 'CompanyAddress',
+                            labelWidth: 50,
+                        }, {
+                            xtype: 'textfield',
+                            readOnly: false,
+                            fieldLabel: '电话号码',
+                            id: 'Telephone',
+                            labelWidth: 50,
+                        }
+                    ]
+                }, {
+                    columnWidth: .5,
+                    layout: 'form',
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            readOnly: false,
+                            fieldLabel: '网站分类',
+                            id: 'CompanyType',
+                            labelWidth: 50,
+                        }, {
+                            xtype: 'textfield',
+                            readOnly: false,
+                            fieldLabel: 'Email',
+                            id: 'Email',
+                            labelWidth: 50,
+                        }, {
+                            xtype: 'textfield',
+                            readOnly: false,
+                            fieldLabel: '网站域名',
+                            id: 'HostAddress',
+                            labelWidth: 50,
+                        }, {
+                            xtype: 'textfield',
+                            id: 'IndexPage',
+                            fieldLabel: '网站主页',
+                            labelWidth: 50,
+                        }
+                    ]
+                }
+                ]
             },
-            {
-                xtype: 'textfield',
-                id: 'IndexPage',
-                fieldLabel: '网站主页',
-                labelWidth: 50,
-
-            }]
+             { xtype: 'Starthtmleditor', hideLabel: true, id: 'PageContent', labelWidth: 50, anchor: "100%" }]
         });
         var win = new Ext.Window({
             modal: true,
             title: '添加网站',
             closable: false,
-            width: 400,
-            height: 300,
+            width: 900,
+            height: 550,
             maximized: false,
             layout: 'form',
             plain: true,
@@ -231,101 +242,109 @@
                             }
                         });
                     }
-                    }
-                }, {
-                    text: '关闭',
-                    handler: function () {
-                        win.close();
-                    }
-                }]
-            });
-            win.show();
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
 
-        }
+    }
 
 
     function Update(data) {
-        console.log(data);
         var formpanel = new Ext.form.FormPanel({
-            baseCls: 'x-plain',
-            autoHeight: true,
-            autoWidth: true,
+            frame: true,
             layout: 'form',
-            defaultType: 'textfield',
             reader: new Ext.data.JsonReader(
          { successProperty: 'success', root: 'message' },
-         ['ID', 'SiteTitle', 'CompanyName', 'CompanyAddress', 'CompanyType','CompanyAddress', 'Telephone', 'Email',
-             'HostAddress', 'IndexPage']
+         ['ID', 'SiteTitle', 'CompanyName', 'CompanyAddress', 'CompanyType', 'CompanyAddress', 'Telephone', 'Email',
+             'HostAddress', 'IndexPage', 'PageContent']
         ),
             items: [
-                 {
-                     xtype: 'textfield',
-                     readOnly: false,
-                     fieldLabel: '网站标题',
-                     id: 'SiteTitle',
-                     labelWidth: 50,
-                 },
-                 {
-                     xtype: 'textfield',
-                     readOnly: false,
-                     fieldLabel: '网站分类',
-                     id: 'CompanyType',
-                     labelWidth: 50,
-                 },
-            {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: '网站名称',
-                id: 'CompanyName',
-                labelWidth: 50,
-            }, {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: '网站地址',
-                id: 'CompanyAddress',
-                labelWidth: 50,
-            }, {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: '电话号码',
-                id: 'Telephone',
-                labelWidth: 50,
-            }, {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: 'Email',
-                id: 'Email',
-                labelWidth: 50,
-            }, {
-                xtype: 'textfield',
-                readOnly: false,
-                fieldLabel: '网站域名',
-                id: 'HostAddress',
-                labelWidth: 50,
-            },
-            {
-                xtype: 'textfield',
-                id: 'IndexPage',
-                fieldLabel: '网站主页',
-                labelWidth: 50,
-
-            }]
+              {
+                  layout: 'column',
+                  items: [{
+                      columnWidth: .5,
+                      layout: 'form',
+                      items: [
+                          {
+                              xtype: 'textfield',
+                              readOnly: false,
+                              fieldLabel: '网站标题',
+                              id: 'SiteTitle',
+                              labelWidth: 50,
+                          }, {
+                              xtype: 'textfield',
+                              readOnly: false,
+                              fieldLabel: '网站名称',
+                              id: 'CompanyName',
+                              labelWidth: 50,
+                          }, {
+                              xtype: 'textfield',
+                              readOnly: false,
+                              fieldLabel: '网站地址',
+                              id: 'CompanyAddress',
+                              labelWidth: 50,
+                          }, {
+                              xtype: 'textfield',
+                              readOnly: false,
+                              fieldLabel: '电话号码',
+                              id: 'Telephone',
+                              labelWidth: 50,
+                          }
+                      ]
+                  }, {
+                      columnWidth: .5,
+                      layout: 'form',
+                      items: [
+                          {
+                              xtype: 'textfield',
+                              readOnly: false,
+                              fieldLabel: '网站分类',
+                              id: 'CompanyType',
+                              labelWidth: 50,
+                          }, {
+                              xtype: 'textfield',
+                              readOnly: false,
+                              fieldLabel: 'Email',
+                              id: 'Email',
+                              labelWidth: 50,
+                          }, {
+                              xtype: 'textfield',
+                              readOnly: false,
+                              fieldLabel: '网站域名',
+                              id: 'HostAddress',
+                              labelWidth: 50,
+                          }, {
+                              xtype: 'textfield',
+                              id: 'IndexPage',
+                              fieldLabel: '网站主页',
+                              labelWidth: 50,
+                          }
+                      ]
+                  }
+                  ]
+              }, { xtype: 'Starthtmleditor', hideLabel: true, id: 'PageContent', labelWidth: 50, anchor: "100%" }]
         });
-        
-        formpanel.form.load({
-            url: '@Url.Content("/Api/Cms/WebSite/GetForm/")'+data.ID,
-               method: "Get",
-               waitMsg: 'Loading',
-               success: function (form, response) {
 
-               }
-           });
+        formpanel.form.load({
+            url: '@Url.Content("/Api/Cms/WebSite/GetForm/")' + data.ID,
+            method: "Get",
+            waitMsg: 'Loading',
+            success: function (form, response) {
+
+            }
+        });
         var win = new Ext.Window({
             modal: true,
             title: '修改网站',
             closable: false,
-            width: 400,
-            height: 300,
+            width: 900,
+            height: 550,
             maximized: false,
             layout: 'form',
             plain: true,
@@ -357,7 +376,6 @@
             }]
         });
         win.show();
-
     }
 </script>
 
