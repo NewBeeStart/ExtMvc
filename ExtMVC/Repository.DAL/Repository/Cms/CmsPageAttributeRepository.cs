@@ -5,9 +5,10 @@ using System.Text;
 using COM.XXXX.Models.CMS;
 using Repository.Domain.Infrastructure;
 
-namespace Repository.DAL.Repository.Cms
+namespace Repository.DAL.Repository
 {
-    public class CmsModuleRepository : Repository<Cms_Module>
+    public class CmsPageAttributeRepository : Repository<Cms_PageAttribute>
     {
+         
     }
 }

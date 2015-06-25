@@ -1,0 +1,214 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .iconwidth {
+        width:16px;
+        height:16px;
+        margin:1px;
+        display: inline-block;
+    }
+</style>
+ 
+<script type="text/javascript">
+    var pid;
+
+    
+    var addform = new Ext.FormPanel({
+        buttonAlign: 'center',
+        id: "addform",
+        labelAlign: "right",
+        plain: true,
+        anchor: '100% 100%',
+        layout: "anchor",
+        frame: true,
+        reader: new Ext.data.JsonReader(
+            { successProperty: 'success', root: 'message' },
+            ['ID', 'PDictionaryID', 'Code', 'Title', 'Value', 'Sort', 'iconCls', 'Desc']
+         ),
+        defaults: { margins: '0 5 0 0' },
+        title: "字典信息",
+        items: [
+            {
+                xtype: 'fieldset',
+                collapsible: false,
+                anchor: '100% 100%',
+                items: [{
+                    xtype: "hidden",
+                    name: "PDictionaryID",
+                    id: "pid"
+                },
+                {
+                    xtype: "hidden",
+                    name: "ID",
+                    id:'id'
+                }, {
+                    xtype: "textfield",
+                    name: "Code",
+                    fieldLabel: '字典代码',
+                },
+                    {
+                        fieldLabel: '字典键',
+                        name: 'Title',
+                        xtype: 'textfield',
+                        width: 300
+                    }, {
+                        fieldLabel: '字典值',
+                        name: 'Value',
+                        xtype: 'textfield',
+                        width: 300
+                    }, {
+                        fieldLabel: '字典排序',
+                        name: 'Sort',
+                        xtype: 'textfield',
+                        width: 300
+                    },
+                    {
+                        fieldLabel: '备注',
+                        xtype: 'textarea',
+                        name: "Desc",
+                        height: 150,
+                        anchor: '95%'
+                    }
+                ]
+            }
+        ], buttons: [{
+            xtype: "button",
+            text: "新增子项",
+            id: 'subadd',
+            style: "float:right",
+            handler: function () {
+                addform.form.reset();
+                Ext.getCmp("update").show();
+                Ext.getCmp("subadd").hide();
+                Ext.getCmp("return").show()
+                Ext.getCmp("reset").hide()
+            }
+        }, {
+            xtype: "button",
+            text: "保存",
+            id:"update",
+            style: "float:right",
+            handler: function () {
+                var pid = Ext.getCmp("id").getValue();
+                var type = pid ? "Put" : "Post";
+                addform.getForm().submit({
+                    url: '/Api/Dictionary/' + pid,
+                    method: type,
+                    waitTitle: '请等待',
+                    waitMsg: '正在提交中',
+                    success: function (form, action) {
+                        Ext.getCmp("dictree").root.reload()
+                        Ext.Msg.alert('提示', action.result.message);
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('提示', action.result.message);
+                    }
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "返回",
+            id: "return",
+            hidden: true,
+            style: "float:right",
+            handler: function () {
+                addform.form.reset()
+                Ext.getCmp("update").show();
+                Ext.getCmp("subadd").show();
+                Ext.getCmp("return").hide();
+                Ext.getCmp("reset").hide();
+                addform.form.load({
+                    url: '@Url.Content("/Api//Dictionary/GetForm/")' + pid,
+                    method: "Get",
+                    waitMsg: 'Loading',
+                    success: function (form, action) {
+                      //  ;
+                    }
+                });
+            }
+        }, {
+            xtype: "button",
+            text: "删除",
+            id: "delete",
+            style: "float:right",
+            handler: function () {
+                addform.form.submit({
+                    url: '@Url.Content("/Api/Dictionary/")' + Ext.getCmp("id").getValue(),
+                     method: "Delete",
+                     waitMsg: 'Loading',
+                     success: function (form, action) {
+                         Ext.getCmp("dictree").root.reload()
+                         addform.form.reset();
+                         Ext.Msg.alert('提示', action.result.message);
+                     }
+                });
+                
+            }
+        }, {
+            xtype: "button",
+            text: "重置",
+            id: "reset",
+            hidden: true,
+            style: "float:right",
+            handler: function () {
+                addform.form.reset();
+                Ext.getCmp("pid").setValue(pid);
+            }
+        }]
+    });
+
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "border",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [
+                        {
+                            region: 'west',
+                            title: '网站信息',
+                            xtype: 'treepanel',
+                            id:"dictree",
+                            width: 200,
+                            autoScroll: true,
+                            loader: new Ext.tree.TreeLoader({
+                                url: '/Api/Cms/CmsPageType/GetWebSiteTree'
+                            }),
+                            root: new Ext.tree.AsyncTreeNode({
+                                expanded: true,
+                            }),
+                            rootVisible: false,
+                            listeners: {
+                                click: function (node) {
+                                    addform.form.load({
+                                        url: '@Url.Content("/Api//Dictionary/GetForm/")' + node.id,
+                                        method:"Get",
+                                        waitMsg: 'Loading'
+                                    });
+                                  
+                                }
+                            }
+                        },
+                        {
+                            region: "center",
+                            id: "panel1",
+                            split: true,
+                            border: false,
+                            collapsible: false,
+                            xtype: "panel",
+                            layout: "anchor",
+                            autoScroll: true,
+                            items: [addform]
+                           
+                        }
+
+            ]
+        });
+        
+    });
+ 
+</script>

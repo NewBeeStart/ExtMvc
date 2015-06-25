@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
-using System.Web.Http;
 using COM.XXXX.Models.CMS;
+using COM.XXXX.WebApi;
 using Repository.DAL.Repository;
 using Repository.DAL.Repository.Cms;
 
 namespace COM.XXXX.WebApi.Cms.Controllers
 {
-    public class CmsModuleApiController : ApiControllerBase<CmsModuleRepository, Cms_Module>
+
+    public class CmsPageContentApiController : ApiControllerBase<CmsPageContentRepository, Cms_PageContent>
     {
-        public CmsModuleApiController()
+        public CmsPageContentApiController()
         {
             base.SetRepository();
         }

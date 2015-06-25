@@ -44,9 +44,11 @@ namespace Repository.Domain
         public DbSet<Dictionary> Dictionarys { get; set; }
 
         public DbSet<Cms_Channel> Cms_Channels { get; set; }
-        public DbSet<Cms_Module> Cms_Modules { get; set; }
+        public DbSet<Cms_PageType> Cms_PageTypes { get; set; }
         public DbSet<Cms_Classify> Cms_Classifies { get; set; }
-        public DbSet<Cms_PageTemplate> Cms_PageTemplates { get; set; }
+        public DbSet<Cms_PageAttribute> Cms_PageAttributes { get; set; }
+        public DbSet<Cms_PageTitle> Cms_PageTitles { get; set; }
+        public DbSet<Cms_PageContent> Cms_PageContents { get; set; }
         public DbSet<Cms_Privilege> Cms_Privileges { get; set; }
         public DbSet<Cms_WebSite> Cms_WebSites { get; set; }   
         //public DbSet<Page> Pages { get; set; } 

@@ -5,10 +5,9 @@ using System.Text;
 using COM.XXXX.Models.CMS;
 using Repository.Domain.Infrastructure;
 
-namespace Repository.DAL.Repository
+namespace Repository.DAL.Repository.Cms
 {
-    public class CmsClassifyRepository : Repository<Cms_Classify>
-    {
-
+    public class CmsPageTypeRepository : Repository<Cms_PageType>
+    { 
     }
 }

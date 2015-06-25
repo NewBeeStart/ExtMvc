@@ -5,10 +5,10 @@ using System.Text;
 using COM.XXXX.Models.CMS;
 using Repository.Domain.Infrastructure;
 
-namespace Repository.DAL.Repository
+namespace Repository.DAL.Repository.Cms
 {
-    public class PageTemplateRepository : Repository<Cms_PageTemplate>
+    public class CmsPageTitleRepository : Repository<Cms_PageTitle>
     {
-
+         
     }
 }

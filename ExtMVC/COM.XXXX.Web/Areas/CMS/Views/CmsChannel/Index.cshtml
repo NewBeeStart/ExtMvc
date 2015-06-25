@@ -10,6 +10,96 @@
     url = id ? "@Url.Content("/Api/Cms/CmsChannel/GetGridPagerByID")" + "?id=" + id : "@Url.Content("/Api/Cms/CmsChannel/GetGridPager")";
 
 
+  @* var expanderPageTye = new new Ext.ux.grid.RowExpander({
+        tpl: '<div class="ux-row-expander-box"></div>',
+        actAsTree: true,
+        treeLeafProperty: 'is_leaf',
+        listeners: {
+            expand: function (expander, record, body, rowIndex) {
+                var element = Ext.get(Ext.getCmp("gridsub").getView().getRow(rowIndex)).child('.ux-row-expander-box');
+                var gird = new Ext.grid.GridPanel({
+                    xtype: "grid",
+                    layout: "fit",
+                    title: '网站管理',
+                    store: new Ext.data.Store({
+                        storeId: "gridpagetype",
+                        paramNames: {
+                            start: 'start',  // The parameter name which specifies the start row
+                            limit: 'limit',  // The parameter name which specifies number of rows to return
+                        },
+                        proxy: new Ext.data.HttpProxy({
+                            url: "@Url.Content("/Api/Cms/CmsPageType/GetGridPager")",
+                        method: "Post"
+                    }),
+                    reader: new Ext.data.JsonReader({
+                        root: "data",
+                        totalProperty: "count"
+                    }, [
+                         { name: 'ID' },
+                         { name: 'ClassifyID' },
+                         { name: 'Remark' },
+                         { name: 'hasTitle' },
+                         { name: 'hasArticle' },
+                         { name: 'hasPictrue' },
+                         { name: 'hasForm' }
+                    ])
+                }),
+                    stripeRows: true,
+                    columnLines: true,
+                    trackMouseOver: false,
+                    loadMask: true,
+                    columns: [
+                           { header: "标识列", dataIndex: 'ID', width: 15, hidden: false, sortable: true },
+                           { header: "", dataIndex: 'ClassifyID', width: 14, hidden: false, sortable: true },
+                           { header: "备注信息", dataIndex: 'Remark', width: 15, hidden: false, sortable: true },
+                           { header: "是否有标题", dataIndex: 'hasTitle', width: 14, hidden: false, sortable: true },
+                           { header: "是否有文章", dataIndex: 'hasArticle', width: 15, hidden: false, sortable: true },
+                           { header: "是否有图片", dataIndex: 'hasPictrue', width: 14, hidden: false, sortable: true },
+                           { header: "是否有表单", dataIndex: 'hasForm', width: 15, hidden: false, sortable: true },
+
+                       {
+                           header: '操作',
+                           width: 20,
+                           dataIndex: 'ID',
+                           align: "center",
+                           renderer: function (data, cellmeta, record) {
+                               record.data.Content = Ext.util.Format.htmlEncode(record.data.Content);
+                               var returnStr = "<INPUT type='button' id='btnAdd' value='增加' onclick='Add()' /> " +
+                                   " <INPUT type='button' id='btnUpdate' value='修改' onclick='Update(" + Ext.encode(record.data) + ")' /> " +
+                                   "<INPUT type='button' value='删除' id='btnDelete' onclick='Delete(" + Ext.encode(record.data) + ")'/>";
+                               return returnStr;
+                           }
+                       }
+
+                    ],
+                    viewConfig: {
+                        loadMask: true,
+                        forceFit: true
+                    },
+                    tbar: new Ext.Toolbar([{
+                        text: '添加',
+                        icon: '@ConstHelper.ExtIconPath/add.gif',
+                    handler: function () {
+                        Add();
+                    }
+                }]),
+                    bbar: new Ext.PagingToolbar({
+                        pageSize: 10,
+                        store: Ext.StoreMgr.get("gridpagetype"),
+                        displayInfo: true,
+                        displayMsg: '当前{0}到{1}条,共{2}条',
+                        emptyMsg: '没有符合条件的数据'
+                    })
+                });
+
+                element && gird.render(element);
+                Ext.StoreMgr.get("gridpagetype").load({ params: { start: 0, limit: 10 } });
+            }
+        }
+    });*@
+
+
+
     var expander = new Ext.ux.grid.RowExpander({
         tpl: '<div class="ux-row-expander-box"></div>',
         actAsTree: true,

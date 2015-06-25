@@ -66,10 +66,12 @@
     <Compile Include="Models\Admin\Role.cs" />
     <Compile Include="Models\Admin\RoleRight.cs" />
     <Compile Include="Models\Admin\User.cs" />
+    <Compile Include="Models\CMS\Cms_PageContent.cs" />
+    <Compile Include="Models\CMS\Cms_PageAttribute.cs" />
+    <Compile Include="Models\CMS\Cms_PageTitle.cs" />
+    <Compile Include="Models\CMS\Cms_PageType.cs" />
     <Compile Include="Models\CMS\Cms_Channel.cs" />
     <Compile Include="Models\CMS\Cms_Classify.cs" />
-    <Compile Include="Models\CMS\Cms_Module.cs" />
-    <Compile Include="Models\CMS\Cms_PageTemplate.cs" />
     <Compile Include="Models\CMS\Cms_Privilege.cs" />
     <Compile Include="Models\CMS\Cms_WebSite.cs" />
     <Compile Include="Models\IModel.cs" />

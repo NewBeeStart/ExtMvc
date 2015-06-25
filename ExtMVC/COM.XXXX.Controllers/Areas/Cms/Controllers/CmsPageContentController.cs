@@ -6,11 +6,11 @@ using System.Web.Mvc;
 
 namespace COM.XXXX.Controllers.Areas.Cms.Controllers
 {
-    public class CmsModuleController : ControllerBase
-    {
+    public class CmsPageContentController : ControllerBase
+    { 
         public ActionResult Index()
         {
             return View();
-        } 
+        }
     }
 }
