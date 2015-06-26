@@ -4,20 +4,347 @@
 
 <style>
     .iconwidth {
-        width:16px;
-        height:16px;
-        margin:1px;
+        width: 16px;
+        height: 16px;
+        margin: 1px;
         display: inline-block;
     }
 </style>
- 
+
 <script type="text/javascript">
-    var pid;
+
+    var webSiteform = new Ext.form.FormPanel({
+        frame: true,
+        hidden:true,
+        layout: 'form',
+        anchor: "100% 100%",
+        reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+        [
+            'ID', 'SiteTitle', 'CompanyName', 'CompanyAddress', 'CompanyType', 'CompanyAddress', 'Telephone', 'Email', 'HostAddress', 'IndexPage', 'PageContent'
+        ]),
+        items: [
+          {
+              layout: 'column',
+              items: [{
+                  columnWidth: .5,
+                  layout: 'form',
+                  items: [
+                      {
+                          xtype: 'textfield',
+                          readOnly: false,
+                          fieldLabel: '网站标题',
+                          id: 'SiteTitle',
+                          labelWidth: 50,
+                      }, {
+                          xtype: 'textfield',
+                          readOnly: false,
+                          fieldLabel: '网站名称',
+                          id: 'CompanyName',
+                          labelWidth: 50,
+                      }, {
+                          xtype: 'textfield',
+                          readOnly: false,
+                          fieldLabel: '网站地址',
+                          id: 'CompanyAddress',
+                          labelWidth: 50,
+                      }, {
+                          xtype: 'textfield',
+                          readOnly: false,
+                          fieldLabel: '电话号码',
+                          id: 'Telephone',
+                          labelWidth: 50,
+                      }
+                  ]
+              }, {
+                  columnWidth: .5,
+                  layout: 'form',
+                  items: [
+                      {
+                          xtype: 'textfield',
+                          readOnly: false,
+                          fieldLabel: '网站分类',
+                          id: 'CompanyType',
+                          labelWidth: 50,
+                      }, {
+                          xtype: 'textfield',
+                          readOnly: false,
+                          fieldLabel: 'Email',
+                          id: 'Email',
+                          labelWidth: 50,
+                      }, {
+                          xtype: 'textfield',
+                          readOnly: false,
+                          fieldLabel: '网站域名',
+                          id: 'HostAddress',
+                          labelWidth: 50,
+                      }, {
+                          xtype: 'textfield',
+                          id: 'IndexPage',
+                          fieldLabel: '网站主页',
+                          labelWidth: 50,
+                      }
+                  ]
+              }
+              ]
+          },
+          { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%" }
+        ]});
+
+    var channelForm=  new Ext.form.FormPanel({
+        frame: true,
+        hidden: true,
+        layout: 'form',
+        anchor: "100% 100%",
+        reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+        [
+            'ID', 'ChannelName', 'ChannelCode', 'ChannelRemark', 'WebSiteID', 'PageContent', "SortIndex"
+        ]),
+        items: [
+           {
+               layout: 'column',
+               items: [{
+                   columnWidth: .33,
+                   layout: 'form',
+                   items: [
+                       { xtype: 'textfield', readOnly: false, fieldLabel: '频道名称', id: 'ChannelName', labelWidth: 50 },
+                       { xtype: 'textfield', readOnly: false, fieldLabel: '频道编号', id: 'ChannelCode', labelWidth: 50 },
+
+                   ]
+               },
+               {
+                   columnWidth: .33,
+                   layout: 'form',
+                   items: [
+                       { xtype: 'textfield', readOnly: false, fieldLabel: '频道备注', id: 'ChannelRemark', labelWidth: 50 },
+                       {
+                           fieldLabel: '归属网站', name: 'WebSiteID', hiddenName: 'WebSiteID', xtype: 'combo', mode: 'remote',
+                           displayField: "Name", valueField: "Id", editable: false, typeAhead: true, forceSelection: true, triggerAction: 'all',
+                           store: new Ext.data.JsonStore({
+                               autoLoad: true,
+                               method: 'Post',
+                               idProperty: 'ID',
+                               url: "/Api/Cms/WebSite/GetWebSiteCombox/",
+                               fields: [{
+                                   name: 'Name',
+                                   mapping: 'CompanyName'
+                               }, {
+                                   name: 'Id',
+                                   mapping: 'ID'
+                               }]
+                           }),
+                       }]
+               }, {
+                   columnWidth: .33,
+                   layout: 'form',
+                   items: [
+                     { xtype: 'textfield', readOnly: false, fieldLabel: '排序', id: 'SortIndex', labelWidth: 50 }
+                   ]
+               }]
+           }
+
+           , { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%" }
+        ]
+    });
+
+    var classifyForm= new Ext.form.FormPanel({
+        frame: true,
+        hidden: true,
+        layout: 'form',
+        anchor: "100% 100%",
+        reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' }, [
+            'ID', 'Name', 'Code', 'Remark', 'ChannelID', 'PageContent', "SortIndex"
+        ]),
+        items: [
+            {
+                layout: 'column',
+                items: [{
+                    columnWidth: .33,
+                    layout: 'form',
+                    items: [
+                        { xtype: 'textfield', readOnly: false, fieldLabel: '分类名称', id: 'Name', labelWidth: 50 },
+                        { xtype: 'textfield', readOnly: false, fieldLabel: '分类编号', id: 'Code', labelWidth: 50 }
+                    ]
+                }, {
+                    columnWidth: .33,
+                    layout: 'form',
+                    items: [
+                        { xtype: 'textfield', readOnly: false, fieldLabel: '备注', id: 'Remark', labelWidth: 50 },
+                        {
+                            fieldLabel: '归属频道',
+                            name: 'ChannelID',
+                            hiddenName: 'ChannelID',
+                            xtype: 'combo',
+                            //本地数据源  local/remote
+                            mode: 'remote',
+                            //设置为选项的text的字段
+                            displayField: "Name",
+                            //设置为选项的value的字段 
+                            valueField: "Id",
+                            //是否可以输入，还是只能选择下拉框中的选项
+                            editable: false,
+                            typeAhead: true,
+                            //必须选择一项
+                            forceSelection: true,
+                            //输入部分选项内容匹配的时候显示所有的选项
+                            triggerAction: 'all',
+                            //数据
+                            store: new Ext.data.JsonStore({
+                                autoLoad: true,
+                                method: 'Post',
+                                idProperty: 'ID',
+                                url: "/Api/Cms/CmsChannel/GetChannelCombox/",
+                                fields: [{
+                                    name: 'Name',
+                                    mapping: 'ChannelName'
+                                }, {
+                                    name: 'Id',
+                                    mapping: 'ID'
+                                }]
+                            })
+                        }
+
+                    ]
+                }, {
+                    columnWidth: .33,
+                    layout: 'form',
+                    items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '排序', id: 'SortIndex', labelWidth: 50 }]
+                }]
+            },
+            { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%" }
+        ]});
+
+    var pageTypefrom= new Ext.form.FormPanel({
+        baseCls: 'x-plain',
+        hidden: true,
+        autoHeight: true,
+        autoWidth: true,
+        anchor:"100% 100%",
+        layout: 'form',
+        defaultType: 'textfield',
+        reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+        [
+            'ID','ClassifyID','Remark','hasTitle','hasArticle','hasPictrue','hasForm'
+        ]),
+        items: [
+            {xtype: 'textfield',readOnly: false,fieldLabel: '标识列',id:'ID',labelWidth: 50},
+                        {xtype: 'textfield',readOnly: false,fieldLabel: '',id:'ClassifyID',labelWidth: 50},
+                        {xtype: 'textfield',readOnly: false,fieldLabel: '备注信息',id:'Remark',labelWidth: 50},
+                        {xtype: 'textfield',readOnly: false,fieldLabel: '是否有标题',id:'hasTitle',labelWidth: 50},
+                        {xtype: 'textfield',readOnly: false,fieldLabel: '是否有文章',id:'hasArticle',labelWidth: 50},
+                        {xtype: 'textfield',readOnly: false,fieldLabel: '是否有图片',id:'hasPictrue',labelWidth: 50},
+                        {xtype: 'textfield',readOnly: false,fieldLabel: '是否有表单',id:'hasForm',labelWidth: 50}
+        ]});
+
+
+    function RefreshPanel(formpanel,panel)
+    {
+        webSiteform.hide();
+        channelForm.hide();
+        classifyForm.hide();
+        pageTypefrom.hide();
+
+        formpanel.show();
+        panel.doLayout();
+    }
+
+
+    Ext.onReady(function () {
+        Ext.QuickTips.init();
+        new Ext.Viewport({
+            title: "Viewport",
+            layout: "border",
+            defaults: {
+                bodyStyle: "background-color: #FFFFFF;",
+            },
+            items: [
+                        {
+                            region: 'west',
+                            title: '网站信息',
+                            xtype: 'treepanel',
+                            id: "dictree",
+                            width: 200,
+                            autoScroll: true,
+                            loader: new Ext.tree.TreeLoader({
+                                url: '/Api/Cms/CmsPageType/GetWebSiteTree'
+                            }),
+                            root: new Ext.tree.AsyncTreeNode({
+                                expanded: true,
+                            }),
+                            rootVisible: false,
+                            listeners: {
+                                click: function (node) {
+                                    var pannel = Ext.getCmp("panel1");
+
+                                    switch (node.attributes.attributes.type) {
+                                        case "WebSite":
+                                            webSiteform.form.load({
+                                                url: '@Url.Content("/Api/Cms/WebSite/GetForm/")' + node.id,
+                                                 method: "Get",
+                                                 waitMsg: 'Loading',
+                                                 success: function (form, response) {
+                                                     RefreshPanel(webSiteform,pannel)
+                                                 }
+                                             });
+                                            break;
+                                        case "CmsChannel":
+                                            channelForm.form.load({
+                                                url: '@Url.Content("/Api/Cms/CmsChannel/GetForm/")' + node.id,
+                                                method: "Get",
+                                                waitMsg: 'Loading',
+                                                success: function (form, response) {
+                                                    RefreshPanel(channelForm, pannel)
+                                                }
+                                            });
+                                            break;
+                                        case "CmsClassify":
+                                            classifyForm.form.load({
+                                                url: '@Url.Content("/Api/Cms/CmsClassify/GetForm/")' + node.id,
+                                                  method: "Get",
+                                                  waitMsg: 'Loading',
+                                                  success: function (form, response) {
+                                                      RefreshPanel(classifyForm, pannel)
+                                                  }
+                                              });
+                                            break;
+                                        case "CmsPageType":
+                                            pageTypefrom.form.load({
+                                                url: '@Url.Content("/Api/Cms/CmsPageType/GetForm/")' + data.ID,
+                                                 method: "Get",
+                                                 waitMsg: 'Loading',
+                                                 success: function (form, response) {
+                                                     RefreshPanel(pageTypefrom, pannel)
+                                                 }
+                                             });
+                                            break;
+                                    }
+
+                                }
+                            }
+                        },
+                        {
+                            region: "center",
+                            id: "panel1",
+                            split: true,
+                            border: false,
+                            collapsible: false,
+                            xtype: "panel",
+                            layout: "anchor",
+                            autoScroll: true,
+                            items: [  channelForm,webSiteform]
+
+                        }
+
+            ]
+        });
+
+    });
+
+</script>
+@* var pid;
 
     
     var addform = new Ext.FormPanel({
         buttonAlign: 'center',
-        id: "addform",
         labelAlign: "right",
         plain: true,
         anchor: '100% 100%',
@@ -80,10 +407,6 @@
             style: "float:right",
             handler: function () {
                 addform.form.reset();
-                Ext.getCmp("update").show();
-                Ext.getCmp("subadd").hide();
-                Ext.getCmp("return").show()
-                Ext.getCmp("reset").hide()
             }
         }, {
             xtype: "button",
@@ -144,7 +467,6 @@
                          Ext.Msg.alert('提示', action.result.message);
                      }
                 });
-                
             }
         }, {
             xtype: "button",
@@ -157,58 +479,4 @@
                 Ext.getCmp("pid").setValue(pid);
             }
         }]
-    });
-
-    Ext.onReady(function () {
-        Ext.QuickTips.init();
-        new Ext.Viewport({
-            title: "Viewport",
-            layout: "border",
-            defaults: {
-                bodyStyle: "background-color: #FFFFFF;",
-            },
-            items: [
-                        {
-                            region: 'west',
-                            title: '网站信息',
-                            xtype: 'treepanel',
-                            id:"dictree",
-                            width: 200,
-                            autoScroll: true,
-                            loader: new Ext.tree.TreeLoader({
-                                url: '/Api/Cms/CmsPageType/GetWebSiteTree'
-                            }),
-                            root: new Ext.tree.AsyncTreeNode({
-                                expanded: true,
-                            }),
-                            rootVisible: false,
-                            listeners: {
-                                click: function (node) {
-                                    addform.form.load({
-                                        url: '@Url.Content("/Api//Dictionary/GetForm/")' + node.id,
-                                        method:"Get",
-                                        waitMsg: 'Loading'
-                                    });
-                                  
-                                }
-                            }
-                        },
-                        {
-                            region: "center",
-                            id: "panel1",
-                            split: true,
-                            border: false,
-                            collapsible: false,
-                            xtype: "panel",
-                            layout: "anchor",
-                            autoScroll: true,
-                            items: [addform]
-                           
-                        }
-
-            ]
-        });
-        
-    });
- 
-</script>
+    });*@

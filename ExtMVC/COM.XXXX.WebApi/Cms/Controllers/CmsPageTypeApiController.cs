@@ -40,6 +40,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                 {
                     id = cmsWebSite.ID.ToString(),
                     text = cmsWebSite.SiteTitle,
+                    iconCls="icon-1753",
                     attributes = new { type = "WebSite" }
                 };
                 var channels = cmschannel.Repository.Query(item => item.WebSiteID == cmsWebSite.ID);
@@ -50,6 +51,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                     {
                         id = cmsChannel.ID.ToString(),
                         text = cmsChannel.ChannelName,
+                        iconCls = "icon-1007",
                         attributes = new{type="CmsChannel"}
                     };
                     var classifies = cmsclassify.Repository.Query(item => item.ChannelID == cmsChannel.ID);
@@ -60,6 +62,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                             {
                                 id = cmsClassify.ID.ToString(),
                                 text = cmsClassify.Name,
+                                iconCls = "icon-1056",
                                 attributes = new { type = "CmsClassify" }
                             };
                         var pagetypes = cmspagetype.Repository.Query(item => item.ClassifyID == cmsClassify.ID);
@@ -70,6 +73,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                             {
                                 id = cmsPageType.ID.ToString(),
                                 text = cmsPageType.Remark,
+                                iconCls = "icon-1186",
                                 attributes = new { type = "CmsPageType" }
                             });
                         }
