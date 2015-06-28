@@ -57,6 +57,7 @@
     <Compile Include="CacheManage.cs" />
     <Compile Include="ConstHelper.cs" />
     <Compile Include="CookieManage.cs" />
+    <Compile Include="CurrentLogInfo.cs" />
     <Compile Include="DESEncrypt.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="HtmlHelperEx.cs" />
@@ -80,6 +81,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\COM.XXXX.Model\4.COM.XXXX.Models.csproj">
+      <Project>{3f16bc31-eb1b-4340-a28b-393ba6e7541c}</Project>
+      <Name>4.COM.XXXX.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

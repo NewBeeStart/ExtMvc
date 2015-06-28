@@ -1,4 +1,5 @@
-﻿@{
+﻿@using COM.XXXX.Common
+@{
     ViewBag.Title = "Index";
 }
 
@@ -12,11 +13,11 @@
 </style>
 
 <script type="text/javascript">
-
+    //#region  网站信息
     var webSiteform = new Ext.form.FormPanel({
         frame: true,
         hidden: true,
-        autoScroll:true,
+        autoScroll: true,
         layout: 'form',
         anchor: "100% 100%",
         reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
@@ -95,6 +96,14 @@
           },
           { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%", }
         ], buttons: [{
+            text: '新增子频道',
+            handler: function () {
+                RefreshPanel(channelForm, Ext.getCmp("panel1"));
+                var websitid = Ext.getCmp("websiteId").getValue();
+                channelForm.getForm().reset();
+                Ext.getCmp("channelpid").setValue(websitid);
+            }
+        }, {
             text: '保存',
             handler: function () {
                 var websiteId = Ext.getCmp("websiteId").value;
@@ -102,89 +111,6 @@
                 if (webSiteform.getForm().isValid()) {
                     webSiteform.getForm().submit({
                         url: '/Api/Cms/WebSite/' + websiteId,
-                        method: type,
-                        params: {
-                        },
-                        waitTitle: '请等待',
-                        waitMsg: '正在提交中',
-                        success: function (form, action) {
-                            Ext.Msg.alert('提示', action.result.message);
-                           // Ext.getCmp("webSiteTree").root.reload()
-                        },
-                        failure: function (form, action) {
-                            Ext.Msg.alert('提示', action.result.message);
-                        }
-                    });
-                }
-            }
-        }]
-    });
-
-    var channelForm=  new Ext.form.FormPanel({
-        frame: true,
-        autoScroll: true,
-        hidden: true,
-        layout: 'form',
-        anchor: "100% 100%",
-        reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
-        [
-            'ID', 'ChannelName', 'ChannelCode', 'ChannelRemark', 'WebSiteID', 'PageContent', "SortIndex"
-        ]),
-        items: [
-           {
-               layout: 'column',
-               items: [{
-                   columnWidth: .33,
-                   layout: 'form',
-                   items: [
-                       { xtype: "hidden", name: "ID", id: 'channelId' },
-                       { xtype: 'textfield', readOnly: false, fieldLabel: '频道名称', name: 'ChannelName', labelWidth: 50 },
-                       { xtype: 'textfield', readOnly: false, fieldLabel: '频道编号', name: 'ChannelCode', labelWidth: 50 },
-
-                   ]
-               },
-               {
-                   columnWidth: .33,
-                   layout: 'form',
-                   items: [
-                       { xtype: 'textfield', readOnly: false, fieldLabel: '频道备注', name: 'ChannelRemark', labelWidth: 50 },
-                       {
-                           fieldLabel: '归属网站', name: 'WebSiteID', hiddenName: 'WebSiteID', xtype: 'combo', mode: 'remote',
-                           width: "200",
-                           displayField: "Name", valueField: "Id", editable: false, typeAhead: true, forceSelection: true, triggerAction: 'all',
-                           store: new Ext.data.JsonStore({
-                               autoLoad: true,
-                               method: 'Post',
-                               idProperty: 'ID',
-                               url: "/Api/Cms/WebSite/GetWebSiteCombox/",
-                               fields: [{
-                                   name: 'Name',
-                                   mapping: 'CompanyName'
-                               }, {
-                                   name: 'Id',
-                                   mapping: 'ID'
-                               }]
-                           }),
-                       }]
-               }, {
-                   columnWidth: .33,
-                   layout: 'form',
-                   items: [
-                     { xtype: 'textfield', readOnly: false, fieldLabel: '排序', name: 'SortIndex', labelWidth: 50 }
-                   ]
-               }]
-           }
-
-           , { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%" }
-        ], buttons: [{
-            text: '保存',
-            handler: function () {
-                //{ xtype: "hidden", name: "ID", id: 'channelId' },
-                var channelId = Ext.getCmp("channelId").value;
-                var type = channelId ? "Put" : "Post";
-                if (channelForm.getForm().isValid()) {
-                    channelForm.getForm().submit({
-                        url: '/Api/Cms/CmsChannel/' + channelId,
                         method: type,
                         params: {
                         },
@@ -202,119 +128,279 @@
             }
         }]
     });
+    //#endregion
 
-    var classifyForm = new Ext.form.FormPanel({
+    //#region 频道信息
+    //#endregion
+    var channelForm = new Ext.form.FormPanel({
         frame: true,
         autoScroll: true,
         hidden: true,
         layout: 'form',
         anchor: "100% 100%",
         reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' }, [
-            'ID', 'Name', 'Code', 'Remark', 'ChannelID', 'PageContent', "SortIndex"
+            'ID', 'ChannelName', 'ChannelCode', 'ChannelRemark', 'WebSiteID', 'PageContent', "SortIndex"
         ]),
-        items: [
+        items: [{
+            layout: 'column',
+            items: [{
+                columnWidth: .33,
+                layout: 'form',
+                items: [
+                    { xtype: "hidden", name: "ID", id: 'channelId' },
+                    { xtype: 'textfield', readOnly: false, fieldLabel: '频道名称', name: 'ChannelName', labelWidth: 50 },
+                    { xtype: 'textfield', readOnly: false, fieldLabel: '频道编号', name: 'ChannelCode', labelWidth: 50 },
+                ]
+            },
             {
-                layout: 'column',
-                items: [{
-                    columnWidth: .33,
-                    layout: 'form',
-                    items: [
-                        { xtype: "hidden", name: "ID", id: 'classifyId' },
-                        { xtype: 'textfield', readOnly: false, fieldLabel: '分类名称', name: 'Name', labelWidth: 50 },
-                        { xtype: 'textfield', readOnly: false, fieldLabel: '分类编号', name: 'Code', labelWidth: 50 }
-                    ]
-                }, {
-                    columnWidth: .33,
-                    layout: 'form',
-                    items: [
-                        { xtype: 'textfield', readOnly: false, fieldLabel: '备注', name: 'Remark', labelWidth: 50 },
-                        {
-                            fieldLabel: '归属频道',
-                            name: 'ChannelID',
-                            hiddenName: 'ChannelID',
-                            xtype: 'combo',
-                            //本地数据源  local/remote
-                            mode: 'remote',
-                            //设置为选项的text的字段
-                            displayField: "Name",
-                            //设置为选项的value的字段 
-                            valueField: "Id",
-                            //是否可以输入，还是只能选择下拉框中的选项
-                            editable: false,
-                            typeAhead: true,
-                            //必须选择一项
-                            forceSelection: true,
-                            //输入部分选项内容匹配的时候显示所有的选项
-                            triggerAction: 'all',
-                            width:"200",
-                            //数据
-                            store: new Ext.data.JsonStore({
-                                autoLoad: true,
-                                method: 'Post',
-                                idProperty: 'ID',
-                                url: "/Api/Cms/CmsChannel/GetChannelCombox/",
-                                fields: [{
-                                    name: 'Name',
-                                    mapping: 'ChannelName'
-                                }, {
-                                    name: 'Id',
-                                    mapping: 'ID'
-                                }]
-                            })
-                        }
-
-                    ]
-                }, {
-                    columnWidth: .33,
-                    layout: 'form',
-                    items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '排序', name: 'SortIndex', labelWidth: 50 }]
-                }]
-            }
-             , { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%" }
-        ], buttons: [{
-            text: '保存',
-            handler: function () {
-                //{ xtype: "hidden", name: "ID", id: 'classifyId' },
-                var classifyId = Ext.getCmp("classifyId").value;
-                var type = classifyId ? "Put" : "Post";
-                if (classifyForm.getForm().isValid()) {
-                    classifyForm.getForm().submit({
-                        url: '/Api/Cms/CmsClassify/' + classifyId,
-                        method: type,
-                        params: {
-                        },
-                        waitTitle: '请等待',
-                        waitMsg: '正在提交中',
-                        success: function (form, action) {
-                            Ext.Msg.alert('提示', action.result.message);
-                        },
-                        failure: function (form, action) {
-                            Ext.Msg.alert('提示', action.result.message);
+                columnWidth: .33,
+                layout: 'form',
+                items: [
+                    { xtype: 'textfield', readOnly: false, fieldLabel: '频道备注', name: 'ChannelRemark', labelWidth: 50 },
+                    {
+                        fieldLabel: '归属网站', id: "channelpid", name: 'WebSiteID', hiddenName: 'WebSiteID', xtype: 'combo', mode: 'remote',
+                        width: "200",
+                        displayField: "Name", valueField: "Id", editable: false, typeAhead: true, forceSelection: true, triggerAction: 'all',
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            method: 'Post',
+                            idProperty: 'ID',
+                            url: "/Api/Cms/WebSite/GetWebSiteCombox/",
+                            fields: [{
+                                name: 'Name',
+                                mapping: 'CompanyName'
+                            }, {
+                                name: 'Id',
+                                mapping: 'ID'
+                            }]
+                        }),
+                    }]
+            }, {
+                columnWidth: .33,
+                layout: 'form',
+                items: [
+                  { xtype: 'textfield', readOnly: false, fieldLabel: '排序', name: 'SortIndex', labelWidth: 50 }
+                ]
+            }]
+        },
+            { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%" }
+        ],
+        buttons: [
+            {
+                text: '新增子分类',
+                handler: function () {
+                    RefreshPanel(classifyForm, Ext.getCmp("panel1"));
+                    var channelId = Ext.getCmp("channelId").getValue();
+                    classifyForm.getForm().reset();
+                    Ext.getCmp("classifypid").setValue(channelId);
+                }
+            },
+            {
+                text: '保存',
+                handler: function () {
+                    //{ xtype: "hidden", name: "ID", id: 'channelId' },
+                    var channelId = Ext.getCmp("channelId").value;
+                    var type = channelId ? "Put" : "Post";
+                    if (channelForm.getForm().isValid()) {
+                        channelForm.getForm().submit({
+                            url: '/Api/Cms/CmsChannel/' + channelId,
+                            method: type,
+                            params: {
+                            },
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                                // Ext.getCmp("webSiteTree").root.reload()
+                            },
+                            failure: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                }
+            },
+            {
+                text: '返回',
+                handler: function () {
+                    var websiteid = Ext.getCmp("channelpid").value;
+                    webSiteform.form.load({
+                        url: '@Url.Content("/Api/Cms/WebSite/GetForm/")' + websiteid,
+                        method: "Get",
+                        waitMsg: 'Loading',
+                        success: function (form, response) {
+                            RefreshPanel(webSiteform, Ext.getCmp("panel1"));
                         }
                     });
                 }
             }
+        ]
+    }
+        );
+
+
+        //分类信息
+        var classifyForm = new Ext.form.FormPanel({
+            frame: true,
+            autoScroll: true,
+            hidden: true,
+            layout: 'form',
+            anchor: "100% 100%",
+            reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' }, [
+                'ID', 'Name', 'Code', 'Remark', 'ChannelID', 'PageContent', "SortIndex"
+            ]),
+            items: [
+                {
+                    layout: 'column',
+                    items: [{
+                        columnWidth: .33,
+                        layout: 'form',
+                        items: [
+                            { xtype: "hidden", name: "ID", id: 'classifyId' },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '分类名称', name: 'Name', labelWidth: 50 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '分类编号', name: 'Code', labelWidth: 50 }
+                        ]
+                    }, {
+                        columnWidth: .33,
+                        layout: 'form',
+                        items: [
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '备注', name: 'Remark', labelWidth: 50 },
+                            {
+                                fieldLabel: '归属频道',
+                                name: 'ChannelID',
+                                hiddenName: 'ChannelID',
+                                id: "classifypid",
+                                xtype: 'combo',
+                                //本地数据源  local/remote
+                                mode: 'remote',
+                                //设置为选项的text的字段
+                                displayField: "Name",
+                                //设置为选项的value的字段 
+                                valueField: "Id",
+                                //是否可以输入，还是只能选择下拉框中的选项
+                                editable: false,
+                                typeAhead: true,
+                                //必须选择一项
+                                forceSelection: true,
+                                //输入部分选项内容匹配的时候显示所有的选项
+                                triggerAction: 'all',
+                                width: "200",
+                                //数据
+                                store: new Ext.data.JsonStore({
+                                    autoLoad: true,
+                                    method: 'Post',
+                                    idProperty: 'ID',
+                                    url: "/Api/Cms/CmsChannel/GetChannelCombox/",
+                                    fields: [{
+                                        name: 'Name',
+                                        mapping: 'ChannelName'
+                                    }, {
+                                        name: 'Id',
+                                        mapping: 'ID'
+                                    }]
+                                })
+                            }
+
+                        ]
+                    }, {
+                        columnWidth: .33,
+                        layout: 'form',
+                        items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '排序', name: 'SortIndex', labelWidth: 50 }]
+                    }]
+                }
+                 , { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%" }
+            ], buttons: [{
+                text: '增加子页面',
+                handler: function () {
+                    webSiteform.hide();
+                    channelForm.hide();
+                    classifyForm.hide();
+                    pageTypefrom.show();
+                    pageTypePanel.show();
+                    channelForm.doLayout();
+                    pageTypePanel.doLayout();
+                    
+                    var classifypid = Ext.getCmp("classifyId").getValue();
+                    pageTypefrom.getForm().reset();
+                    Ext.getCmp("pageTypepid").setValue(classifypid);
+                }
+            }, {
+                text: '保存',
+                handler: function () {
+                    //{ xtype: "hidden", name: "ID", id: 'classifyId' },
+                    var classifyId = Ext.getCmp("classifyId").value;
+                    var type = classifyId ? "Put" : "Post";
+                    if (classifyForm.getForm().isValid()) {
+                        classifyForm.getForm().submit({
+                            url: '/Api/Cms/CmsClassify/' + classifyId,
+                            method: type,
+                            params: {
+                            },
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            },
+                            failure: function (form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                }
+            }, {
+                text: '返回',
+                handler: function () {
+                    var classifypid = Ext.getCmp("classifypid").value;
+                    channelForm.form.load({
+                        url: '@Url.Content("/Api/Cms/CmsChannel/GetForm/")' + classifypid,
+                    method: "Get",
+                    waitMsg: 'Loading',
+                    success: function (form, response) {
+                        RefreshPanel(channelForm, Ext.getCmp("panel1"))
+
+                    }
+                });
+
+            }
         }]
     });
 
-    var pageTypefrom= new Ext.form.FormPanel({
+    //#region页面类型
+    var pageTypefrom = new Ext.form.FormPanel({
+        title:"页面定制",
         frame: true,
         hidden: true,
         autoScroll: true,
         layout: 'form',
-        anchor: "100% 100%",
+        anchor: "100%",
+        autoHeight:true,
         reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
-        [
-            'ID','ClassifyID','Remark','hasTitle','hasArticle','hasPictrue','hasForm'
-        ]),
+            [
+                'ID', 'ClassifyID', 'Remark', 'hasTitle', 'hasArticle', 'hasPictrue', 'hasForm'
+            ]),
         items: [
-                        { xtype: "hidden", name: "ID", id: 'pageTypeId' },
-                        { xtype: 'hidden', readOnly: false, fieldLabel: 'ClassifyID', name: 'ClassifyID', labelWidth: 50 },
-                        { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', name: 'Remark', labelWidth: 50 },
+        {
+            layout: 'column',
+            items: [
+                {
+                    columnWidth: .25,
+                    layout: 'form',
+                    items: [
                         {
-                            fieldLabel: '是否有标题', name: 'hasTitle', hiddenName: 'hasTitle', xtype: 'combo', mode: 'local', displayField: "Name",
-                            valueField: "Id", editable: false, typeAhead: true, emptyText: '请选择...', forceSelection: true,
-                            triggerAction: 'all',displayField: "Name",valueField: "Id",
+                            fieldLabel: '标题',
+                            name: 'hasTitle',
+                            hiddenName: 'hasTitle',
+                            xtype: 'combo',
+                            mode: 'local',
+                            displayField: "Name",
+                            valueField: "Id",
+                            editable: false,
+                            typeAhead: true,
+                            emptyText: '请选择...',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            width: 100,
+                            labelWidth: 50,
                             store: new Ext.data.JsonStore({
                                 autoLoad: true,
                                 method: 'Post',
@@ -327,100 +413,428 @@
                                     name: 'Id',
                                     mapping: 'Value'
                                 }]
-                            }),
-                            width: 300
-                        }, {
-                            fieldLabel: '是否有文章', name: 'hasArticle', hiddenName: 'hasArticle', xtype: 'combo', mode: 'local', displayField: "Name",
-                            valueField: "Id", editable: false, typeAhead: true, emptyText: '请选择...', forceSelection: true,
-                            triggerAction: 'all', displayField: "Name", valueField: "Id",
-                            store: new Ext.data.JsonStore({
-                                autoLoad: true,
-                                method: 'Post',
-                                idProperty: 'ID',
-                                url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
-                                fields: [{
-                                    name: 'Name',
-                                    mapping: 'Title'
-                                }, {
-                                    name: 'Id',
-                                    mapping: 'Value'
-                                }]
-
-                            }),
-                            width: 300
-                        },
-                        {
-                            fieldLabel: '是否有图片', name: 'hasPictrue', hiddenName: 'hasPictrue', xtype: 'combo', mode: 'local', displayField: "Name",
-                            valueField: "Id", editable: false, typeAhead: true, emptyText: '请选择...', forceSelection: true,
-                            triggerAction: 'all', displayField: "Name", valueField: "Id",
-                            store: new Ext.data.JsonStore({
-                                autoLoad: true,
-                                method: 'Post',
-                                idProperty: 'ID',
-                                url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
-                                fields: [{
-                                    name: 'Name',
-                                    mapping: 'Title'
-                                }, {
-                                    name: 'Id',
-                                    mapping: 'Value'
-                                }]
-                            }),
-                            width: 300
-                        }, {
-                            fieldLabel: '是否有表单', name: 'hasForm', hiddenName: 'hasForm', xtype: 'combo', mode: 'local', displayField: "Name",
-                            valueField: "Id", editable: false, typeAhead: true, emptyText: '请选择...', forceSelection: true,
-                            triggerAction: 'all', displayField: "Name", valueField: "Id",
-                            store: new Ext.data.JsonStore({
-                                autoLoad: true,
-                                method: 'Post',
-                                idProperty: 'ID',
-                                url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
-                                fields: [{
-                                    name: 'Name',
-                                    mapping: 'Title'
-                                }, {
-                                    name: 'Id',
-                                    mapping: 'Value'
-                                }]
-                            }),
-                            width: 300
-                        },
-        ], buttons: [{
-            text: '保存',
-            handler: function () {
-                //{ xtype: "hidden", name: "ID", id: 'classifyId' },
-                var pageTypeId = Ext.getCmp("pageTypeId").value;
-                var type = pageTypeId ? "Put" : "Post";
-                if (pageTypefrom.getForm().isValid()) {
-                    pageTypefrom.getForm().submit({
-                        url: '/Api/Cms/CmsPageType/' + pageTypeId,
-                        method: type,
-                        params: {
-                        },
-                        waitTitle: '请等待',
-                        waitMsg: '正在提交中',
-                        success: function (form, action) {
-                            Ext.Msg.alert('提示', action.result.message);
-                        },
-                        failure: function (form, action) {
-                            Ext.Msg.alert('提示', action.result.message);
+                            })
                         }
-                    });
+                    ]
+                }, {
+                    columnWidth: .25,
+                    layout: 'form',
+                    items: [{
+                        fieldLabel: '文章',
+                        name: 'hasArticle',
+                        hiddenName: 'hasArticle',
+                        xtype: 'combo',
+                        mode: 'local',
+                        editable: false,
+                        typeAhead: true,
+                        emptyText: '请选择...',
+                        forceSelection: true,
+                        triggerAction: 'all',
+                        displayField: "Name",
+                        valueField: "Id",
+                        width: 100,
+                        labelWidth: 50,
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            method: 'Post',
+                            idProperty: 'ID',
+                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                            fields: [{
+                                name: 'Name',
+                                mapping: 'Title'
+                            }, {
+                                name: 'Id',
+                                mapping: 'Value'
+                            }]
+                        })
+                    }]
+                }, {
+                    columnWidth: .25,
+                    layout: 'form',
+                    items: [{
+                        fieldLabel: '图片',
+                        name: 'hasPictrue',
+                        hiddenName: 'hasPictrue',
+                        xtype: 'combo',
+                        mode: 'local',
+                        displayField: "Name",
+                        valueField: "Id",
+                        editable: false,
+                        typeAhead: true,
+                        emptyText: '请选择...',
+                        forceSelection: true,
+                        width: 100,
+                        triggerAction: 'all',
+                        labelWidth: 50,
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            method: 'Post',
+                            idProperty: 'ID',
+                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                            fields: [{
+                                name: 'Name',
+                                mapping: 'Title'
+                            }, {
+                                name: 'Id',
+                                mapping: 'Value'
+                            }]
+                        })
+                    }]
+                }, {
+                    columnWidth: .25,
+                    layout: 'form',
+                    items: [{
+                        fieldLabel: '表单',
+                        name: 'hasForm',
+                        hiddenName: 'hasForm',
+                        xtype: 'combo',
+                        mode: 'local',
+                        displayField: "Name",
+                        valueField: "Id",
+                        editable: false,
+                        typeAhead: true,
+                        emptyText: '请选择...',
+                        forceSelection: true,
+                        triggerAction: 'all',
+                        width: 100,
+                        labelWidth: 50,
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            method: 'Post',
+                            idProperty: 'ID',
+                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                            fields: [{
+                                name: 'Name',
+                                mapping: 'Title'
+                            }, {
+                                name: 'Id',
+                                mapping: 'Value'
+                            }]
+                        })
+                    }]
                 }
-            }
-        }]
+            ]
+        }, {
+            layout: 'column',
+            items: [
+            {
+                columnWidth: .8,
+                layout: 'form',
+                items: [
+                    { xtype: "hidden", name: "ID", id: 'pageTypeId' },
+                    { xtype: 'hidden', id: "pageTypepid", readOnly: false, fieldLabel: 'ClassifyID', name: 'ClassifyID', labelWidth: 50 },
+                    { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', name: 'Remark', labelWidth: 50, anchor: "95%" }]
+            }, {
+
+                columnWidth: .2,
+                layout: 'form',
+                items: [{
+                    xtype: 'button',
+                    text: '保存',
+                    handler: function () {
+                        //{ xtype: "hidden", name: "ID", id: 'classifyId' },
+                        var pageTypeId = Ext.getCmp("pageTypeId").value;
+                        var type = pageTypeId ? "Put" : "Post";
+                        if (pageTypefrom.getForm().isValid()) {
+                            pageTypefrom.getForm().submit({
+                                url: '/Api/Cms/CmsPageType/' + pageTypeId,
+                                method: type,
+                                params: {
+                                },
+                                waitTitle: '请等待',
+                                waitMsg: '正在提交中',
+                                success: function (form, action) {
+                                    Ext.Msg.alert('提示', action.result.message);
+                                },
+                                failure: function (form, action) {
+                                    Ext.Msg.alert('提示', action.result.message);
+                                }
+                            });
+                        }
+                    }
+                }]
+            }]
+        }
+        ]
+    });
+    //#endregion
+
+    //#region  页面模块
+        //页面属性FieldSet
+        var PageAttributeForm= new Ext.form.FieldSet({
+            xtype: 'fieldset',
+            checkboxToggle: true,
+            title: '属性',
+            autoHeight: true,
+            collapsed: true,
+            buttons: [{
+                text: "保存",
+                handler: function () {
+                    var formpanel = Ext.getCmp("pageAttributeForm");
+                    if (formpanel.getForm().isValid()) {
+                        formpanel.getForm().submit({
+                            url: '/Api/Cms/CmsPageAttribute/Add',
+                            method: "Post",
+                            waitTitle: '请等待',
+                            waitMsg: '正在提交中',
+                            success: function(form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert('提示', action.result.message);
+                            }
+                        });
+                    }
+                }
+            }],
+            items: [
+                new Ext.form.FormPanel({
+                    frame: true,
+                    id:'pageAttributeForm',
+                    autoScroll: true,
+                    layout: 'form',
+                    anchor: "100% 100%",
+                    reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+                        [
+                            'ID', 'isTop', 'isPic', 'isHot', 'isRecommend', 'isComment', 'SortIndex', 'ReadCount', 'CreateUserID', 'UpdateTime', 'UpdateUserID', 'PageTypeID'
+                        ]),
+                    items: [
+                        {
+                            layout: 'column',
+                            items: [
+                                {
+                                    columnWidth: .2,
+                                    layout: 'form',
+                                    items: [
+                                        { xtype: 'hidden', name: 'ID' },
+                                        {
+                                            xtype: 'combo',
+                                            fieldLabel: '是否顶置',
+                                            name: 'isTop',
+                                            hiddenName: 'isTop',
+                                            mode: 'local',
+                                            displayField: "Name",
+                                            valueField: "Id",
+                                            editable: false,
+                                            typeAhead: true,
+                                            emptyText: '请选择...',
+                                            forceSelection: true,
+                                            triggerAction: 'all',
+                                            width: 100,
+                                            labelWidth: 50,
+                                            store: new Ext.data.JsonStore({
+                                                autoLoad: true,
+                                                method: 'Post',
+                                                idProperty: 'ID',
+                                                url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                                fields: [{
+                                                        name: 'Name',
+                                                        mapping: 'Title'
+                                                    }, {
+                                                        name: 'Id',
+                                                        mapping: 'Value'
+                                                    }]
+                                            })
+                                        }
+                                    ]
+                                },
+                                {
+                                    columnWidth: .2,
+                                    layout: 'form',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: '是否幻灯片',
+                                        name: 'isPic',
+                                        hiddenName: 'isPic',
+                                        mode: 'local',
+                                        displayField: "Name",
+                                        valueField: "Id",
+                                        editable: false,
+                                        typeAhead: true,
+                                        emptyText: '请选择...',
+                                        forceSelection: true,
+                                        triggerAction: 'all',
+                                        width: 100,
+                                        labelWidth: 50,
+                                        store: new Ext.data.JsonStore({
+                                            autoLoad: true,
+                                            method: 'Post',
+                                            idProperty: 'ID',
+                                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                            fields: [{
+                                                    name: 'Name',
+                                                    mapping: 'Title'
+                                                }, {
+                                                    name: 'Id',
+                                                    mapping: 'Value'
+                                                }]
+                                        })
+                                    }]
+                                },
+                                {
+                                    columnWidth: .2,
+                                    layout: 'form',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: '是否热门',
+                                        name: 'isHot',
+                                        hiddenName: 'isHot',
+                                        mode: 'local',
+                                        displayField: "Name",
+                                        valueField: "Id",
+                                        editable: false,
+                                        typeAhead: true,
+                                        emptyText: '请选择...',
+                                        forceSelection: true,
+                                        triggerAction: 'all',
+                                        width: 100,
+                                        labelWidth: 50,
+                                        store: new Ext.data.JsonStore({
+                                            autoLoad: true,
+                                            method: 'Post',
+                                            idProperty: 'ID',
+                                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                            fields: [{
+                                                    name: 'Name',
+                                                    mapping: 'Title'
+                                                }, {
+                                                    name: 'Id',
+                                                    mapping: 'Value'
+                                                }]
+                                        })
+                                    }]
+                                },
+                                {
+                                    columnWidth: .2,
+                                    layout: 'form',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: '是否推荐',
+                                        name: 'isRecommend',
+                                        hiddenName: 'isRecommend',
+                                        mode: 'local',
+                                        displayField: "Name",
+                                        valueField: "Id",
+                                        editable: false,
+                                        typeAhead: true,
+                                        emptyText: '请选择...',
+                                        forceSelection: true,
+                                        triggerAction: 'all',
+                                        width: 100,
+                                        labelWidth: 50,
+                                        store: new Ext.data.JsonStore({
+                                            autoLoad: true,
+                                            method: 'Post',
+                                            idProperty: 'ID',
+                                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                            fields: [{
+                                                    name: 'Name',
+                                                    mapping: 'Title'
+                                                }, {
+                                                    name: 'Id',
+                                                    mapping: 'Value'
+                                                }]
+                                        })
+                                    }]
+                                },
+                                {
+                                    columnWidth: .2,
+                                    layout: 'form',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: '是否评论',
+                                        name: 'isComment',
+                                        hiddenName: 'isComment',
+                                        mode: 'local',
+                                        displayField: "Name",
+                                        valueField: "Id",
+                                        editable: false,
+                                        typeAhead: true,
+                                        emptyText: '请选择...',
+                                        forceSelection: true,
+                                        triggerAction: 'all',
+                                        width: 100,
+                                        labelWidth: 50,
+                                        store: new Ext.data.JsonStore({
+                                            autoLoad: true,
+                                            method: 'Post',
+                                            idProperty: 'ID',
+                                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                            fields: [{
+                                                    name: 'Name',
+                                                    mapping: 'Title'
+                                                }, {
+                                                    name: 'Id',
+                                                    mapping: 'Value'
+                                                }]
+                                        })
+                                    }]
+                                }
+                            ]
+                        }, {
+                            layout: 'column',
+                            items: [
+                                {
+                                    columnWidth: .33,
+                                    layout: 'form',
+                                    items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '排序', value: 0, name: 'SortIndex', labelWidth: 50, width: 100 }]
+                                }, {
+                                    columnWidth: .33,
+                                    layout: 'form',
+                                    items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '浏览次数', value: 0, name: 'ReadCount', labelWidth: 50, width: 100 }]
+                                }]
+                        },
+                        { xtype: 'hidden', name: 'CreateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
+                        { xtype: 'hidden', name: 'UpdateTime', value: "@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" },
+                        { xtype: 'hidden', name: 'UpdateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
+                        { xtype: 'hidden', id: 'pageattributepid', name: 'PageTypeID' }
+                    ]
+                })]
+        });
+    
+    function CreateTitleForm() {
+        return  new Ext.form.FieldSet({
+            xtype: 'fieldset',
+            checkboxToggle: true,
+            title: '标题',
+            autoHeight: true,
+            defaults: { width: 210 },
+            collapsed: true,
+            items: [{
+                
+            }]
+        });
+    }
+    //#endregion
+
+    var contentPanel = new Ext.Panel({
+        title: '新增模板内容',
+        frame: true,
+        autoScroll: true,
+        id:"contentpanel",
+        items: [PageAttributeForm]
     });
 
 
-    function RefreshPanel(formpanel,panel)
-    {
+
+    var pageTypePanel = new Ext.Panel({
+        title: '页面制作',
+        frame: true,
+        autoScroll: true,
+        anchor:"100% 100%",
+        hidden: true,
+        items: [pageTypefrom,contentPanel]
+    });
+
+    //控制pannel及form的显示
+    function RefreshPanel(formpanel, panel) {
         webSiteform.hide();
         channelForm.hide();
         classifyForm.hide();
         pageTypefrom.hide();
         formpanel.show();
         panel.doLayout();
+        pageTypePanel.hide();
     }
 
 
@@ -455,12 +869,12 @@
                                         case "WebSite":
                                             webSiteform.form.load({
                                                 url: '@Url.Content("/Api/Cms/WebSite/GetForm/")' + node.id,
-                                                 method: "Get",
-                                                 waitMsg: 'Loading',
-                                                 success: function (form, response) {
-                                                     RefreshPanel(webSiteform, pannel)
-                                                 }
-                                             });
+                                                method: "Get",
+                                                waitMsg: 'Loading',
+                                                success: function (form, response) {
+                                                    RefreshPanel(webSiteform, pannel)
+                                                }
+                                            });
                                             break;
                                         case "CmsChannel":
                                             channelForm.form.load({
@@ -475,22 +889,29 @@
                                         case "CmsClassify":
                                             classifyForm.form.load({
                                                 url: '@Url.Content("/Api/Cms/CmsClassify/GetForm/")' + node.id,
-                                                  method: "Get",
-                                                  waitMsg: 'Loading',
-                                                  success: function (form, response) {
-                                                      RefreshPanel(classifyForm, pannel)
-                                                  }
-                                              });
+                                                method: "Get",
+                                                waitMsg: 'Loading',
+                                                success: function (form, response) {
+                                                    RefreshPanel(classifyForm, pannel)
+                                                }
+                                            });
                                             break;
                                         case "CmsPageType":
                                             pageTypefrom.form.load({
                                                 url: '@Url.Content("/Api/Cms/CmsPageType/GetForm/")' + node.id,
-                                                 method: "Get",
-                                                 waitMsg: 'Loading',
-                                                 success: function (form, response) {
-                                                     RefreshPanel(pageTypefrom, pannel)
-                                                 }
-                                             });
+                                                method: "Get",
+                                                waitMsg: 'Loading',
+                                                success: function (form, response) {
+                                                    webSiteform.hide();
+                                                    channelForm.hide();
+                                                    classifyForm.hide();
+                                                    pageTypefrom.show();
+                                                    pageTypePanel.show();
+                                                    channelForm.doLayout();
+                                                    pageTypePanel.doLayout();
+                                                    Ext.getCmp("pageattributepid").setValue(node.id);
+                                                }
+                                            });
                                             break;
                                     }
 
@@ -505,8 +926,7 @@
                             collapsible: false,
                             xtype: "panel",
                             layout: "anchor",
-                            autoScroll: true,
-                            items: [channelForm, webSiteform, classifyForm, pageTypefrom]
+                            items: [channelForm, webSiteform, classifyForm, pageTypePanel]
 
                         }
 

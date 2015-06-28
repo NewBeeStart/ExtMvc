@@ -55,6 +55,7 @@ namespace COM.XXXX.Controllers
         /// <param name="filterContext"></param>
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            
             if (null == CurrentUser)
             {
                 filterContext.Result = Redirect("~/Account/Index");
