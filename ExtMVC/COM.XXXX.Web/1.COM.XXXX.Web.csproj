@@ -9397,6 +9397,7 @@
     <Content Include="Areas\Cms\Views\CmsPageTitle\Index.cshtml" />
     <Content Include="Areas\Cms\Views\CmsPageContent\Index.cshtml" />
     <Content Include="Areas\Cms\Views\CmsPageAttribute\Index.cshtml" />
+    <Content Include="Areas\Cms\Views\CmsPage\Index.cshtml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Views\Shared\_Layout.cshtml" />

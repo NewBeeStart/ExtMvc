@@ -21,12 +21,11 @@ namespace COM.XXXX.Models.CMS
         [DataMember]
         public string Remark { get; set; }
         /// <summary>
-        /// 创建类型ID
+        /// 页面ID
         /// </summary>
         [DataMember]
-        public Guid? PageTypeID { get; set; }
+        public Guid? PageID { get; set; }
 
-
-        public Cms_PageType PageType { get; set; }
+        public virtual Cms_Page Page { get; set; }
     }
 }

@@ -78,6 +78,7 @@
     <Compile Include="Class\NamespaceHttpControllerSelector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Cms\Controllers\CmsPageApiController.cs" />
     <Compile Include="Cms\Controllers\CmsPageContentApiController.cs" />
     <Compile Include="Cms\Controllers\CmsPageAttributeApiController.cs" />
     <Compile Include="Cms\Controllers\CmsPageTypeApiController.cs" />

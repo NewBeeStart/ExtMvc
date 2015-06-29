@@ -1,0 +1,356 @@
+﻿@using COM.XXXX.Common
+@{
+    ViewBag.Title = "Index";
+}
+<script type="text/javascript">
+    var PageID = "@Request["PageID"]";
+    var ClassifyID = "@Request["ClassifyID"]";
+    
+    //页面标题
+    var PageTitleForm = new Ext.form.FieldSet({
+        xtype: 'fieldset',
+        checkboxToggle: true,
+        title: '标题',
+        autoHeight: true,
+        anchor: "100%",
+        collapsed: true,
+        buttons: [{
+            text: "保存",
+            handler: function () {
+                var formpanel = Ext.getCmp("pageTitleForm");
+                if (formpanel.getForm().isValid()) {
+                    formpanel.getForm().submit({
+                        url: '/Api/Cms/CmsPageTitle/Add',
+                        method: "Post",
+                        waitTitle: '请等待',
+                        waitMsg: '正在提交中',
+                        success: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        },
+                        failure: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        }
+                    });
+                }
+            }
+        }],
+        items: [
+            new Ext.form.FormPanel({
+                frame: true,
+                id: 'pageTitleForm',
+                autoScroll: true,
+                layout: 'form',
+                labelAlign: "right",
+                labelWidth: 65,
+                reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+                    [
+                        'ID', 'TitleContent', 'Remark', 'PageTypeID'
+                    ]),
+                items: [
+                    { xtype: 'hidden', name: 'ID' },
+                    //{ xtype: 'Starthtmleditor', hideLabel: false, name: 'Remark', fieldLabel: '内容摘要', labelWidth: 65, anchor: "100%", height: 200 },
+                   //{ xtype: 'Starthtmleditor', hideLabel: false, name: 'TitleContent', fieldLabel: '标题内容', labelWidth: 65, anchor: "100%", height: 800 },
+                    { xtype: 'textarea', readOnly: false, fieldLabel: '标题内容', name: 'TitleContent', labelWidth: 50,anchor:"100%" },
+                    { xtype: 'textarea', readOnly: false, fieldLabel: '标题备注', name: 'Remark', labelWidth: 50 ,anchor:"100%" },
+                    { xtype: 'hidden', id: "pagetitlepid", name: 'PageID', value: PageID }
+                ]
+            })
+        ]
+    });
+
+
+    //页面属性
+    var PageAttributeForm = new Ext.form.FieldSet({
+        xtype: 'fieldset',
+        checkboxToggle: true,
+        title: '属性',
+        autoHeight: true,
+        collapsed: true,
+        buttons: [{
+            text: "保存",
+            handler: function () {
+                var formpanel = Ext.getCmp("pageAttributeForm");
+                if (formpanel.getForm().isValid()) {
+                    formpanel.getForm().submit({
+                        url: '/Api/Cms/CmsPageAttribute/Add',
+                        method: "Post",
+                        waitTitle: '请等待',
+                        waitMsg: '正在提交中',
+                        success: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        },
+                        failure: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        }
+                    });
+                }
+            }
+        }],
+        items: [
+            new Ext.form.FormPanel({
+                frame: true,
+                id: 'pageAttributeForm',
+                autoScroll: false,
+                baseCls: 'x-plain',
+                layout: 'form',
+                labelAlign: "right",
+                labelWidth: 65,
+                reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+                    [
+                        'ID', 'isTop', 'isPic', 'isHot', 'isRecommend', 'isComment', 'SortIndex', 'ReadCount', 'CreateUserID', 'UpdateTime', 'UpdateUserID', 'PageTypeID'
+                    ]),
+                items: [
+                    {
+                        layout: 'column',
+                        items: [
+                            {
+                                columnWidth: .14,
+                                layout: 'form',
+                                items: [
+
+                                    {
+                                        xtype: 'combo',
+                                        fieldLabel: '顶置',
+                                        name: 'isTop',
+                                        hiddenName: 'isTop',
+                                        mode: 'local',
+                                        displayField: "Name",
+                                        valueField: "Id",
+                                        editable: false,
+                                        typeAhead: true,
+                                        emptyText: '请选择...',
+                                        forceSelection: true,
+                                        triggerAction: 'all',
+                                        anchor: "100%",
+                                        store: new Ext.data.JsonStore({
+                                            autoLoad: true,
+                                            method: 'Post',
+                                            idProperty: 'ID',
+                                            url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                            fields: [{
+                                                    name: 'Name',
+                                                    mapping: 'Title'
+                                                }, {
+                                                    name: 'Id',
+                                                    mapping: 'Value'
+                                                }]
+                                        })
+                                    }
+                                ]
+                            },
+                            {
+                                columnWidth: .14,
+                                layout: 'form',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: '幻灯片',
+                                    name: 'isPic',
+                                    hiddenName: 'isPic',
+                                    mode: 'local',
+                                    displayField: "Name",
+                                    valueField: "Id",
+                                    editable: false,
+                                    typeAhead: true,
+                                    emptyText: '请选择...',
+                                    forceSelection: true,
+                                    triggerAction: 'all',
+                                    anchor: "100%",
+                                    store: new Ext.data.JsonStore({
+                                        autoLoad: true,
+                                        method: 'Post',
+                                        idProperty: 'ID',
+                                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                        fields: [{
+                                                name: 'Name',
+                                                mapping: 'Title'
+                                            }, {
+                                                name: 'Id',
+                                                mapping: 'Value'
+                                            }]
+                                    })
+                                }]
+                            },
+                            {
+                                columnWidth: .14,
+                                layout: 'form',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: '热门',
+                                    name: 'isHot',
+                                    hiddenName: 'isHot',
+                                    mode: 'local',
+                                    displayField: "Name",
+                                    valueField: "Id",
+                                    editable: false,
+                                    typeAhead: true,
+                                    emptyText: '请选择...',
+                                    forceSelection: true,
+                                    triggerAction: 'all',
+                                    anchor: "100%",
+                                    store: new Ext.data.JsonStore({
+                                        autoLoad: true,
+                                        method: 'Post',
+                                        idProperty: 'ID',
+                                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                        fields: [{
+                                                name: 'Name',
+                                                mapping: 'Title'
+                                            }, {
+                                                name: 'Id',
+                                                mapping: 'Value'
+                                            }]
+                                    })
+                                }]
+                            },
+                            {
+                                columnWidth: .14,
+                                layout: 'form',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: '推荐',
+                                    name: 'isRecommend',
+                                    hiddenName: 'isRecommend',
+                                    mode: 'local',
+                                    displayField: "Name",
+                                    valueField: "Id",
+                                    editable: false,
+                                    typeAhead: true,
+                                    emptyText: '请选择...',
+                                    forceSelection: true,
+                                    triggerAction: 'all',
+                                    anchor: "100%",
+                                    store: new Ext.data.JsonStore({
+                                        autoLoad: true,
+                                        method: 'Post',
+                                        idProperty: 'ID',
+                                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                        fields: [{
+                                                name: 'Name',
+                                                mapping: 'Title'
+                                            }, {
+                                                name: 'Id',
+                                                mapping: 'Value'
+                                            }]
+                                    })
+                                }]
+                            },
+                            {
+                                columnWidth: .14,
+                                layout: 'form',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: '评论',
+                                    name: 'isComment',
+                                    hiddenName: 'isComment',
+                                    mode: 'local',
+                                    displayField: "Name",
+                                    valueField: "Id",
+                                    editable: false,
+                                    typeAhead: true,
+                                    emptyText: '请选择...',
+                                    forceSelection: true,
+                                    triggerAction: 'all',
+                                    anchor: "100%",
+                                    store: new Ext.data.JsonStore({
+                                        autoLoad: true,
+                                        method: 'Post',
+                                        idProperty: 'ID',
+                                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
+                                        fields: [{
+                                                name: 'Name',
+                                                mapping: 'Title'
+                                            }, {
+                                                name: 'Id',
+                                                mapping: 'Value'
+                                            }]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .14,
+                                layout: 'form',
+                                items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '排序', value: 0, name: 'SortIndex', anchor: "100%" }]
+                            }, {
+                                columnWidth: .14,
+                                layout: 'form',
+                                items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '浏览次数', value: 0, name: 'ReadCount', anchor: "100%" }]
+                            }
+                        ]
+                    },
+                    { xtype: 'hidden', name: 'ID' },
+                    { xtype: 'hidden', name: 'CreateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
+                    { xtype: 'hidden', name: 'UpdateTime', value: "@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" },
+                    { xtype: 'hidden', name: 'UpdateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
+                    { xtype: 'hidden', id: 'pageattributepid', name: 'PageID', value: PageID }
+                ]
+            })]
+    });
+
+    //页面属性
+    var PageContentForm = new Ext.form.FieldSet({
+        xtype: 'fieldset',
+        checkboxToggle: true,
+        title: '内容',
+        autoHeight: true,
+        collapsed: true,
+        buttons: [{
+            text: "保存",
+            handler: function () {
+                var formpanel = Ext.getCmp("PageContentForm");
+                if (formpanel.getForm().isValid()) {
+                    formpanel.getForm().submit({
+                        url: '/Api/Cms/CmsPageContent/Add',
+                        method: "Post",
+                        waitTitle: '请等待',
+                        waitMsg: '正在提交中',
+                        success: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        },
+                        failure: function (form, action) {
+                            Ext.Msg.alert('提示', action.result.message);
+                        }
+                    });
+                }
+            }
+        }],
+        items: [new Ext.form.FormPanel({
+            baseCls: 'x-plain',
+            autoHeight: true,
+            autoWidth: true,
+            id: "PageContentForm",
+            layout: 'form',
+            defaultType: 'textfield',
+            reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
+                [
+                    'ID', 'PageContent', 'CreateTime', 'Remark', 'PageID'
+                ]),
+            items: [
+                { xtype: 'hidden', id: 'ID' },
+                { xtype: 'hidden', name: 'PageID', value: PageID },
+                
+                { xtype: 'Starthtmleditor', hideLabel: false, name: 'Remark', fieldLabel: '内容摘要', labelWidth: 65, anchor: "100%", height: 200 },
+                { xtype: 'Starthtmleditor', hideLabel: false, name: 'PageContent', fieldLabel: '页面内容', labelWidth: 65, anchor: "100%", height: 800 },
+                { xtype: 'hidden', name: 'CreateTime', value: "@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")", labelWidth: 50 },
+                   
+                //{ xtype: 'textfield', readOnly: false, fieldLabel: '页面内容', id: 'PageContent', labelWidth: 50 },
+                    //{ xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', id: 'Remark', labelWidth: 50 },
+            ]
+        })]
+    });
+
+
+    var contentPanel = new Ext.Panel({
+        title: '新增模板内容',
+        frame: true,
+        autoScroll: true,
+        id: "contentpanel",
+        items: [PageAttributeForm, PageTitleForm, PageContentForm]
+    });
+
+
+    Ext.onReady(function() {
+        Ext.QuickTips.init();
+        contentPanel.render(Ext.getBody());
+    });            
+
+</script>
+

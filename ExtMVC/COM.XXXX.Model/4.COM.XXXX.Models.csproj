@@ -66,8 +66,9 @@
     <Compile Include="Models\Admin\Role.cs" />
     <Compile Include="Models\Admin\RoleRight.cs" />
     <Compile Include="Models\Admin\User.cs" />
-    <Compile Include="Models\CMS\Cms_PageContent.cs" />
+    <Compile Include="Models\CMS\Cms_Page.cs" />
     <Compile Include="Models\CMS\Cms_PageAttribute.cs" />
+    <Compile Include="Models\CMS\Cms_PageContent.cs" />
     <Compile Include="Models\CMS\Cms_PageTitle.cs" />
     <Compile Include="Models\CMS\Cms_PageType.cs" />
     <Compile Include="Models\CMS\Cms_Channel.cs" />

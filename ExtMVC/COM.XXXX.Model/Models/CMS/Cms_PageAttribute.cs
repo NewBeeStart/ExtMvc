@@ -20,7 +20,7 @@ namespace COM.XXXX.Models.CMS
         /// 是否幻灯片
         /// </summary>
         [DataMember]
-        public bool? isPic { get; set; }
+        public bool isPic { get; set; }
         /// <summary>
         /// 是否热门
         /// </summary>
@@ -62,17 +62,14 @@ namespace COM.XXXX.Models.CMS
         [DataMember]
         public Guid? UpdateUserID { get; set; }
         /// <summary>
-        /// 页面类型ID
+        /// 页面ID
         /// </summary>
         [DataMember]
-        public Guid? PageTypeID { get; set; }
-
-
+        public Guid? PageID { get; set; }
+         
+        public virtual Cms_Page Page { get; set; }
         public virtual User CreateUser { get; set; }
-
         public virtual User UpdateUser { get; set; }
-
-        public virtual Cms_PageType PageType { get; set; }
 
 
     }

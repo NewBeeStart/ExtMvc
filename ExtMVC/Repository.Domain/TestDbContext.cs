@@ -50,8 +50,8 @@ namespace Repository.Domain
         public DbSet<Cms_PageTitle> Cms_PageTitles { get; set; }
         public DbSet<Cms_PageContent> Cms_PageContents { get; set; }
         public DbSet<Cms_Privilege> Cms_Privileges { get; set; }
-        public DbSet<Cms_WebSite> Cms_WebSites { get; set; }   
-        //public DbSet<Page> Pages { get; set; } 
+        public DbSet<Cms_WebSite> Cms_WebSites { get; set; }
+        public DbSet<Cms_Page> Cms_Pages { get; set; }  
             
 
     } 
