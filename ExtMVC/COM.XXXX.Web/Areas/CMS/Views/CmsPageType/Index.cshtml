@@ -592,6 +592,7 @@
                     frame: true,
                     id:'pageAttributeForm',
                     autoScroll: true,
+                    baseCls: 'x-plain',
                     layout: 'form',
                     anchor: "100% 100%",
                     reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
@@ -603,13 +604,14 @@
                             layout: 'column',
                             items: [
                                 {
-                                    columnWidth: .2,
+                                    columnWidth: .15,
                                     layout: 'form',
                                     items: [
                                         { xtype: 'hidden', name: 'ID' },
                                         {
+                                            align: 'left',
                                             xtype: 'combo',
-                                            fieldLabel: '是否顶置',
+                                            fieldLabel: '顶置',
                                             name: 'isTop',
                                             hiddenName: 'isTop',
                                             mode: 'local',
@@ -621,7 +623,7 @@
                                             forceSelection: true,
                                             triggerAction: 'all',
                                             width: 100,
-                                            labelWidth: 50,
+                                            labelWidth:20,
                                             store: new Ext.data.JsonStore({
                                                 autoLoad: true,
                                                 method: 'Post',
@@ -639,11 +641,11 @@
                                     ]
                                 },
                                 {
-                                    columnWidth: .2,
+                                    columnWidth: .15,
                                     layout: 'form',
                                     items: [{
                                         xtype: 'combo',
-                                        fieldLabel: '是否幻灯片',
+                                        fieldLabel: '幻灯片',
                                         name: 'isPic',
                                         hiddenName: 'isPic',
                                         mode: 'local',
@@ -654,8 +656,8 @@
                                         emptyText: '请选择...',
                                         forceSelection: true,
                                         triggerAction: 'all',
-                                        width: 100,
-                                        labelWidth: 50,
+                                        anchor: "100%",
+                                        labelWidth: 20,
                                         store: new Ext.data.JsonStore({
                                             autoLoad: true,
                                             method: 'Post',
@@ -672,11 +674,11 @@
                                     }]
                                 },
                                 {
-                                    columnWidth: .2,
+                                    columnWidth: .15,
                                     layout: 'form',
                                     items: [{
                                         xtype: 'combo',
-                                        fieldLabel: '是否热门',
+                                        fieldLabel: '热门',
                                         name: 'isHot',
                                         hiddenName: 'isHot',
                                         mode: 'local',
@@ -687,8 +689,8 @@
                                         emptyText: '请选择...',
                                         forceSelection: true,
                                         triggerAction: 'all',
-                                        width: 100,
-                                        labelWidth: 50,
+                                        anchor:"100%",
+                                        labelWidth: 20,
                                         store: new Ext.data.JsonStore({
                                             autoLoad: true,
                                             method: 'Post',
@@ -705,11 +707,11 @@
                                     }]
                                 },
                                 {
-                                    columnWidth: .2,
+                                    columnWidth: .15,
                                     layout: 'form',
                                     items: [{
                                         xtype: 'combo',
-                                        fieldLabel: '是否推荐',
+                                        fieldLabel: '推荐',
                                         name: 'isRecommend',
                                         hiddenName: 'isRecommend',
                                         mode: 'local',
@@ -720,8 +722,8 @@
                                         emptyText: '请选择...',
                                         forceSelection: true,
                                         triggerAction: 'all',
-                                        width: 100,
-                                        labelWidth: 50,
+                                        anchor: "100%",
+                                        labelWidth: 20,
                                         store: new Ext.data.JsonStore({
                                             autoLoad: true,
                                             method: 'Post',
@@ -738,11 +740,11 @@
                                     }]
                                 },
                                 {
-                                    columnWidth: .2,
+                                    columnWidth: .1,
                                     layout: 'form',
                                     items: [{
                                         xtype: 'combo',
-                                        fieldLabel: '是否评论',
+                                        fieldLabel: '评论',
                                         name: 'isComment',
                                         hiddenName: 'isComment',
                                         mode: 'local',
@@ -753,8 +755,8 @@
                                         emptyText: '请选择...',
                                         forceSelection: true,
                                         triggerAction: 'all',
-                                        width: 100,
-                                        labelWidth: 50,
+                                        width: 50,
+                                        labelWidth: 20,
                                         store: new Ext.data.JsonStore({
                                             autoLoad: true,
                                             method: 'Post',
@@ -769,21 +771,30 @@
                                                 }]
                                         })
                                     }]
+                                }, {
+                                    columnWidth: .15,
+                                    layout: 'form',
+                                    items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '排序', value: 0, name: 'SortIndex', labelWidth: 20, width: 50 }]
+                                }, {
+                                    columnWidth: .15,
+                                    layout: 'form',
+                                    items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '浏览次数', value: 0, name: 'ReadCount', labelWidth: 20, width: 50 }]
                                 }
                             ]
-                        }, {
-                            layout: 'column',
-                            items: [
-                                {
-                                    columnWidth: .33,
-                                    layout: 'form',
-                                    items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '排序', value: 0, name: 'SortIndex', labelWidth: 50, width: 100 }]
-                                }, {
-                                    columnWidth: .33,
-                                    layout: 'form',
-                                    items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '浏览次数', value: 0, name: 'ReadCount', labelWidth: 50, width: 100 }]
-                                }]
                         },
+                        //{
+                        //    layout: 'column',
+                        //    items: [
+                        //        {
+                        //            columnWidth: .33,
+                        //            layout: 'form',
+                        //            items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '排序', value: 0, name: 'SortIndex', labelWidth: 50, width: 100 }]
+                        //        }, {
+                        //            columnWidth: .33,
+                        //            layout: 'form',
+                        //            items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '浏览次数', value: 0, name: 'ReadCount', labelWidth: 50, width: 100 }]
+                        //        }]
+                        //},
                         { xtype: 'hidden', name: 'CreateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
                         { xtype: 'hidden', name: 'UpdateTime', value: "@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" },
                         { xtype: 'hidden', name: 'UpdateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
