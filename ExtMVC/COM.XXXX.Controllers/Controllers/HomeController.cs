@@ -30,5 +30,23 @@ namespace COM.XXXX.Controllers
           job.Add("data",  "上传成功");
           return job;
         }
+
+        public JObject UploadWater()
+        {
+            string text = "Eric测试";
+            var c = Request.Files[0];
+            JObject job = new JObject();
+            string destination = Server.MapPath("~/UploadFile/");
+            string filename = string.Empty;
+            if (c != null && c.ContentLength > 0)
+            {
+                filename = Guid.NewGuid().ToString() + c.FileName;
+                c.SaveAs(destination + c.FileName);
+                COM.XXXX.Common.WaterMark.AddImageSignText("~/UploadFile/" + c.FileName, "~/UploadFile/" + filename, text, 9, 100, "", 50);
+                job.Add("path", "~/UploadFile/" + filename);
+            }
+            job.Add("success", true);
+            return job;
+        }
     }
 }

@@ -3693,6 +3693,7 @@
     <Content Include="Scripts\Ext\ext-all-debug-w-comments.js" />
     <Content Include="Scripts\Ext\ext-all-debug.js" />
     <Content Include="Scripts\Ext\ext-all.js" />
+    <Content Include="Scripts\Ext\FileupLoad.js" />
     <Content Include="Scripts\Ext\gpl-3.0.txt" />
     <Content Include="Scripts\Ext\icons\arrow-down.gif" />
     <Content Include="Scripts\Ext\icons\arrow-up.gif" />
@@ -3806,6 +3807,7 @@
     <Content Include="Scripts\Ext\resources\css\debug.css" />
     <Content Include="Scripts\Ext\resources\css\ext-all-notheme.css" />
     <Content Include="Scripts\Ext\resources\css\ext-all.css" />
+    <Content Include="Scripts\Ext\resources\css\Ext.ux.UploadDialog.css" />
     <Content Include="Scripts\Ext\resources\css\README.txt" />
     <Content Include="Scripts\Ext\resources\css\reset-min.css" />
     <Content Include="Scripts\Ext\resources\css\structure\borders.css" />
@@ -4090,6 +4092,7 @@
     <Content Include="Scripts\Ext\resources\images\access\window\left-right.png" />
     <Content Include="Scripts\Ext\resources\images\access\window\right-corners.png" />
     <Content Include="Scripts\Ext\resources\images\access\window\top-bottom.png" />
+    <Content Include="Scripts\Ext\resources\images\check.gif" />
     <Content Include="Scripts\Ext\resources\images\default\box\corners-blue.gif" />
     <Content Include="Scripts\Ext\resources\images\default\box\corners.gif" />
     <Content Include="Scripts\Ext\resources\images\default\box\l-blue.gif" />
@@ -4304,6 +4307,11 @@
     <Content Include="Scripts\Ext\resources\images\default\window\left-right.png" />
     <Content Include="Scripts\Ext\resources\images\default\window\right-corners.png" />
     <Content Include="Scripts\Ext\resources\images\default\window\top-bottom.png" />
+    <Content Include="Scripts\Ext\resources\images\done.gif" />
+    <Content Include="Scripts\Ext\resources\images\failed.gif" />
+    <Content Include="Scripts\Ext\resources\images\file-add.gif" />
+    <Content Include="Scripts\Ext\resources\images\file-remove.gif" />
+    <Content Include="Scripts\Ext\resources\images\file-uploading.gif" />
     <Content Include="Scripts\Ext\resources\images\gray\button\btn-arrow.gif" />
     <Content Include="Scripts\Ext\resources\images\gray\button\btn-sprite.gif" />
     <Content Include="Scripts\Ext\resources\images\gray\button\btn.gif" />
@@ -4408,6 +4416,11 @@
     <Content Include="Scripts\Ext\resources\images\gray\window\left-right.png" />
     <Content Include="Scripts\Ext\resources\images\gray\window\right-corners.png" />
     <Content Include="Scripts\Ext\resources\images\gray\window\top-bottom.png" />
+    <Content Include="Scripts\Ext\resources\images\loading.gif" />
+    <Content Include="Scripts\Ext\resources\images\reset.gif" />
+    <Content Include="Scripts\Ext\resources\images\uncheck.gif" />
+    <Content Include="Scripts\Ext\resources\images\upload-start.gif" />
+    <Content Include="Scripts\Ext\resources\images\upload-stop.gif" />
     <Content Include="Scripts\Ext\resources\images\vista\basic-dialog\bg-center.gif" />
     <Content Include="Scripts\Ext\resources\images\vista\basic-dialog\bg-left.gif" />
     <Content Include="Scripts\Ext\resources\images\vista\basic-dialog\bg-right.gif" />
@@ -4828,6 +4841,7 @@
     <Content Include="Scripts\Ext\src\util\Cookies.js" />
     <Content Include="Scripts\Ext\src\util\CSS.js" />
     <Content Include="Scripts\Ext\src\util\Date.js" />
+    <Content Include="Scripts\Ext\src\util\Ext.ux.UploadDialog.js" />
     <Content Include="Scripts\Ext\src\util\Format.js" />
     <Content Include="Scripts\Ext\src\util\Function.js" />
     <Content Include="Scripts\Ext\src\util\History.js" />

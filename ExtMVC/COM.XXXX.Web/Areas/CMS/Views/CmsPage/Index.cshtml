@@ -2,10 +2,40 @@
 @{
     ViewBag.Title = "Index";
 }
+    <style type=text/css>        
+    .upload-icon {
+            background: url('../../../../Scripts/Ext/icons/fam/add.gif') no-repeat 0 0 !important;  
+        }  
+    .x-form-file-wrap {  
+        position: relative;  
+        height: 22px;  
+    }  
+    .x-form-file-wrap .x-form-file {  
+        position: absolute;  
+        right: 0;  
+        -moz-opacity: 0;  
+        filter:alpha(opacity: 0);  
+        opacity: 0;  
+        z-index: 2;  
+        height: 22px;  
+    }  
+    .x-form-file-wrap .x-form-file-btn {  
+        position: absolute;  
+        right: 0;  
+        z-index: 1;  
+    }  
+    .x-form-file-wrap .x-form-file-text {  
+        position: absolute;  
+        left: 0;  
+        z-index: 3;  
+        color: #777;  
+    }  
+    </style> 
 <script type="text/javascript">
     var PageID = "@Request["PageID"]";
-    var ClassifyID = "@Request["ClassifyID"]";
-    
+    //var PageTypeID = "@Request["PageTypeID"]";
+
+    var PageTypeID = "12847605-B815-E511-8525-ECA86B017D49";
     //页面标题
     var PageTitleForm = new Ext.form.FieldSet({
         xtype: 'fieldset',
@@ -337,18 +367,125 @@
         })]
     });
 
-
+    //页面属性
+    var PagePictureForm = new Ext.form.FieldSet({
+        xtype: 'fieldset',
+        checkboxToggle: true,
+        title: '图片',
+        autoHeight: true,
+        collapsed: true,
+        items: [
+            new Ext.FormPanel({  
+                fileUpload: true,  
+                anchor:"100%",
+                id:'picPanel',
+                frame: true,  
+                title: '图片上传操作',  
+                autoHeight: true,  
+                bodyStyle: 'padding: 10px 10px 0 10px;',  
+                labelWidth: 50,  
+                defaults: {  
+                    anchor: '95%',  
+                    msgTarget: 'side'  
+                },  
+                items: [
+                    {
+                        xtype: 'textfield', readOnly: false, fieldLabel: '备注',
+                        value: 0, id: 'picRemark', anchor: "100%"
+                    }, {
+                    xtype: 'fileuploadfield',  
+                    emptyText: '请选择一个图片',  
+                    fieldLabel: '图片',  
+                    buttonText: '',
+                    allowBlank: false,
+                    buttonCfg: {  
+                        iconCls: 'upload-icon'  
+                    }
+                }, {
+                    xtype: "textarea",
+                    fieldLabel: '列表',
+                    id:"piclist"
+                }],
+                buttons: [{  
+                    text: 'Save',  
+                    handler: function () {
+                        var fp = Ext.getCmp("picPanel");
+                        if (fp.getForm().isValid()) {  
+                            fp.getForm().submit({  
+                                url: '@Url.Content("~/Home/UploadWater/")',//后台处理的页面  
+                                waitMsg: 'Uploading your photo...',  
+                                success: function (fp, o) {
+                                    var piclst=   Ext.getCmp("piclist")
+                                    piclst.setValue(o.result.path + "\n" + piclst.getValue());
+                                    Ext.Ajax.request({
+                                        url: '@Url.Content("~/Api/Cms/CmsPagePicture/")',
+                                        method: "Post",
+                                        params: {
+                                            PicPath: o.result.path,
+                                            Remark: Ext.getCmp("picRemark").getValue(),
+                                            PageID: PageID
+                                        },
+                                        success: function (response) {
+                                            var result = eval('(' + response.responseText + ')');
+                                            Ext.Msg.alert('错误', result.msg);
+                                        }
+                                    });
+                                }  
+                            });  
+                        }  
+                    }  
+                }, {  
+                    text: 'Reset',  
+                    handler: function() {  
+                        Ext.getCmp("picPanel").getForm().reset();
+                    }  
+                }]  
+            })
+        ]
+    });
     var contentPanel = new Ext.Panel({
         title: '新增模板内容',
         frame: true,
         autoScroll: true,
         id: "contentpanel",
-        items: [PageAttributeForm, PageTitleForm, PageContentForm]
+        items: []
+        //PageAttributeForm, PageTitleForm, PageContentForm
     });
 
 
     Ext.onReady(function() {
         Ext.QuickTips.init();
+        Ext.Ajax.request({
+            url: '@Url.Content("~/Api/Cms/CmsPageType/")' + PageTypeID,
+            method: "Get",
+            success: function (response) {
+                //根据classify加载控件
+                var obj = eval('(' + response.responseText + ')');
+                if(Ext.isArray(obj)){
+                    Ext.Msg.alert('错误', "页面错误：ClassifyID字段为空！");
+                    return;
+                }
+                contentPanel.items.add("PageAttribute", PageAttributeForm);
+                if (obj) {
+                    if (obj.hasTitle) {
+                        
+                        contentPanel.items.add("PageTitle", PageTitleForm);
+                    }
+                    
+                    if (obj.hasArticle) {
+                        contentPanel.items.add("PageContent", PageContentForm);
+                    }
+                   
+                    
+                    if (obj.hasPictrue) {
+                        contentPanel.items.add("PagePic", PagePictureForm);
+                    }
+                    contentPanel.doLayout();
+                }
+              
+            }
+        });
+        
         contentPanel.render(Ext.getBody());
     });            
 

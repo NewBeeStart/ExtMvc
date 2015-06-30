@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace COM.XXXX.Common
+namespace COM.XXXX.Common 
 {
     public class WaterMark
     {
@@ -158,7 +158,7 @@ namespace COM.XXXX.Common
             filename = Utils.GetMapPath(filename);
 
             Graphics g = Graphics.FromImage(img);
-            Font drawFont = new Font(fontname, fontsize, FontStyle.Regular, GraphicsUnit.Pixel);
+            Font drawFont = new Font("Arial", fontsize, FontStyle.Regular, GraphicsUnit.Pixel);
             SizeF crSize;
             crSize = g.MeasureString(watermarkText, drawFont);
 
@@ -224,14 +224,25 @@ namespace COM.XXXX.Common
 
             EncoderParameter encoderParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qualityParam);
             encoderParams.Param[0] = encoderParam;
+            try
+            {
+                if (ici != null)
+                    img.Save(filename, ici, encoderParams);
+                else
+                    img.Save(filename);
+            }
+            catch (Exception ex)
+            {
+                  
+            }
+            finally
+            {
+                g.Dispose();
+                img.Dispose();
+            }
 
-            if (ici != null)
-                img.Save(filename, ici, encoderParams);
-            else
-                img.Save(filename);
 
-            g.Dispose();
-            img.Dispose();
+
         }
     }
 }
