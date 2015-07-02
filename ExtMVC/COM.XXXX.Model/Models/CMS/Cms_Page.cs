@@ -21,7 +21,21 @@ namespace COM.XXXX.Models.CMS
         /// 缩略图
         /// </summary>
         [DataMember]
-        public string Pics { get; set; }
+        public string PicPath { get; set; }
+
+        /// <summary>
+        /// 页面名称
+        /// </summary>
+        [DataMember]
+        public string PageName { get; set; }
+
+       /// <summary>
+       /// 备注
+       /// </summary>
+        [DataMember]
+        public string Remark { get; set; }
+
+
 
         public virtual Cms_Page PageType { get; set; }
     }

@@ -12,5 +12,10 @@ namespace COM.XXXX.Controllers.Areas.Cms.Controllers
         {
             return View();
         }
+
+        public ActionResult PageList()
+        {
+            return View();
+        }
     }
 }
