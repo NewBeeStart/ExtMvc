@@ -39,7 +39,8 @@
                         { name:'ID'},
                         { name:'PageTypeID'},
                         { name:'PicPath'},
-                        { name:'PageName'},
+                        { name: 'PageName' },
+                       { name: 'PageCode' },
                         { name:'Remark'}
                    ])
                }),
@@ -51,6 +52,7 @@
                        //{ header: "", dataIndex: 'ID', width: 20, hidden: false, sortable: true },
                        //{ header: "", dataIndex: 'PageTypeID', width: 20, hidden: false, sortable: true },
                        { header: "页面名称", dataIndex: 'PageName', width: 20, hidden: false, sortable: true },
+                       { header: "页面名称", dataIndex: 'PageCode', width: 20, hidden: false, sortable: true },
                        { header: "缩略图", dataIndex: 'PicPath', width: 20, hidden: false, sortable: true },
                        { header: "备注信息", dataIndex: 'Remark', width: 20, hidden: false, sortable: true },
                 
@@ -121,6 +123,7 @@
                 {xtype: 'hidden',id:'ID'},
                 { xtype: 'hidden', value: PageTypeID, id: 'PageTypeID' },
                 { xtype: 'textfield', readOnly: false, fieldLabel: '页面名称', id: 'PageName', labelWidth: 50 },
+                 { xtype: 'textfield', readOnly: false, fieldLabel: '页面编码', id: 'PageCode', labelWidth: 50 },
                 {xtype: 'textfield',readOnly: false,fieldLabel: '缩略图',id:'PicPath',labelWidth: 50},
                 {xtype: 'textfield',readOnly: false,fieldLabel: '备注信息',id:'Remark',labelWidth: 50}
                 ]
@@ -177,12 +180,13 @@
             defaultType: 'textfield',
             reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
             [
-                'ID','PageTypeID','PicPath','PageName','Remark'
+                'ID','PageTypeID','PicPath','PageName','Remark',"PageCode"
             ]),
             items: [
                 { xtype: 'hidden', id: 'ID' },
                 { xtype: 'hidden',value: PageTypeID, id: 'PageTypeID' },
                 { xtype: 'textfield', readOnly: false, fieldLabel: '页面名称', id: 'PageName', labelWidth: 50 },
+                { xtype: 'textfield', readOnly: false, fieldLabel: '页面编码', id: 'PageCode', labelWidth: 50 },
                 { xtype: 'textfield', readOnly: false, fieldLabel: '缩略图', id: 'PicPath', labelWidth: 50 },
                 { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', id: 'Remark', labelWidth: 50 }
             ]

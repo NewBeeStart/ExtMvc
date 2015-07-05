@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using COM.XXXX.Common;
+using COM.XXXX.Models.CMS;
 using Newtonsoft.Json.Linq;
 
 namespace COM.XXXX.Controllers
@@ -48,5 +50,35 @@ namespace COM.XXXX.Controllers
             job.Add("success", true);
             return job;
         }
+        private string GetWebSitePage(string path)
+        {
+            return Com.XXXX.Common.ConstHelper.WebSitePath + path;
+        }
+
+        ///// <summary>
+        ///// 生成网站页面
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //public string CreateWebSite(string id)
+        //{
+        //    //Cms_WebSite website = new CmsWebSiteApiController().Repository.Query(u => u.ID.ToString() == id).First();
+        //    //FileWriter.Write(GetWebSitePage(website.IndexPage), website.PageContent);
+        //    //List<Cms_Channel> cmschanels = new CmsChannelApiController().Repository.Query(u => u.WebSiteID.ToString() == id).ToList();
+        //    //foreach (Cms_Channel cmsChannel in cmschanels)
+        //    //{
+        //    //    FileWriter.Write(GetWebSitePage(cmsChannel.ChannelCode), website.PageContent);
+
+        //    //    List<Cms_Classify> cmsClassifies =
+        //    //        new CmsClassifyApiController().Repository.Query(u => u.ChannelID == cmsChannel.ID).ToList();
+        //    //    foreach (Cms_Classify cmsClassify in cmsClassifies)
+        //    //    {
+
+
+        //    //    }
+        //    //}
+        //    //return "生成页面成功";
+        //}
+       
     }
 }

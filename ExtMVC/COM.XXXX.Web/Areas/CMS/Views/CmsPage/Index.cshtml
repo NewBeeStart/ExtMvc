@@ -38,10 +38,10 @@
         }
 </style>
 <script type="text/javascript">
-    //var PageID = "@Request["PageID"]";
-    //var PageTypeID = "@Request["PageTypeID"]";
-    var PageID = "7f13fd74-0420-e511-9f09-eca86b0d7d49";
-    var PageTypeID = "12847605-B815-E511-8525-ECA86B017D49";
+    var PageID = "@Request["PageID"]";
+    var PageTypeID = "@Request["PageTypeID"]";
+    //var PageID = "7f13fd74-0420-e511-9f09-eca86b0d7d49";
+    //var PageTypeID = "12847605-B815-E511-8525-ECA86B017D49";
     //页面标题
     var PageTitleForm = new Ext.form.FieldSet({
         xtype: 'fieldset',
@@ -54,10 +54,12 @@
             text: "保存",
             handler: function () {
                 var formpanel = Ext.getCmp("pageTitleForm");
+                var pagetitleid = Ext.getCmp("pagetitleid").getValue();
+                var type = pagetitleid ? "Put" : "Post";
                 if (formpanel.getForm().isValid()) {
                     formpanel.getForm().submit({
-                        url: '/Api/Cms/CmsPageTitle/Add',
-                        method: "Post",
+                        url: '/Api/Cms/CmsPageTitle/' + pagetitleid,
+                        method: type,
                         waitTitle: '请等待',
                         waitMsg: '正在提交中',
                         success: function (form, action) {
@@ -83,7 +85,7 @@
                         'ID', 'TitleContent', 'Remark', 'PageTypeID'
                     ]),
                 items: [
-                    { xtype: 'hidden', name: 'ID' },
+                    { xtype: 'hidden',id:"pagetitleid", name: 'ID' },
                     //{ xtype: 'Starthtmleditor', hideLabel: false, name: 'Remark', fieldLabel: '内容摘要', labelWidth: 65, anchor: "100%", height: 200 },
                    //{ xtype: 'Starthtmleditor', hideLabel: false, name: 'TitleContent', fieldLabel: '标题内容', labelWidth: 65, anchor: "100%", height: 800 },
                     { xtype: 'textarea', readOnly: false, fieldLabel: '标题内容', name: 'TitleContent', labelWidth: 50, anchor: "100%" },
@@ -106,10 +108,12 @@
             text: "保存",
             handler: function () {
                 var formpanel = Ext.getCmp("pageAttributeForm");
+                var pageattributeid = Ext.getCmp("pageattributeid").getValue();
+                var type = pageattributeid ? "Put" : "Post";
                 if (formpanel.getForm().isValid()) {
                     formpanel.getForm().submit({
-                        url: '/Api/Cms/CmsPageAttribute/Add',
-                        method: "Post",
+                        url: '/Api/Cms/CmsPageAttribute/' + pageattributeid,
+                        method: type,
                         waitTitle: '请等待',
                         waitMsg: '正在提交中',
                         success: function (form, action) {
@@ -303,7 +307,7 @@
                             items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '浏览次数', value: 0, name: 'ReadCount', anchor: "100%" }]
                         }]
                 },
-                    { xtype: 'hidden', name: 'ID' },
+                    { xtype: 'hidden',id:"pageattributeid", name: 'ID' },
                     { xtype: 'hidden', name: 'CreateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
                     { xtype: 'hidden', name: 'UpdateTime', value: "@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" },
                     { xtype: 'hidden', name: 'UpdateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
@@ -324,10 +328,12 @@
                 text: "保存",
                 handler: function () {
                     var formpanel = Ext.getCmp("PageContentForm");
+                    var pagecontentid = Ext.getCmp("pagecontentid").getValue();
+                    var type = pagecontentid ? "Put" : "Post";
                     if (formpanel.getForm().isValid()) {
                         formpanel.getForm().submit({
-                            url: '/Api/Cms/CmsPageContent/Add',
-                            method: "Post",
+                            url: '/Api/Cms/CmsPageContent/' + pagecontentid,
+                            method: type,
                             waitTitle: '请等待',
                             waitMsg: '正在提交中',
                             success: function (form, action) {
@@ -352,7 +358,7 @@
                                  ['ID', 'PageContent', 'CreateTime', 'Remark', 'PageID']
                     ),
                     items: [
-                        { xtype: 'hidden', id: 'ID' },
+                        { xtype: 'hidden',id:"pagecontentid", name: 'ID' },
                         { xtype: 'hidden', name: 'PageID', value: PageID },
                         { xtype: 'Starthtmleditor', hideLabel: false, name: 'Remark', fieldLabel: '内容摘要', labelWidth: 65, anchor: "100%", height: 200 },
                         { xtype: 'Starthtmleditor', hideLabel: false, name: 'PageContent', fieldLabel: '页面内容', labelWidth: 65, anchor: "100%", height: 800 },
@@ -513,19 +519,46 @@
                 success: function (response) {
                     //根据classify加载控件
                     var obj = eval('(' + response.responseText + ')');
+               
                     if (Ext.isArray(obj)) {
                         Ext.Msg.alert('错误', "页面错误：ClassifyID字段为空！");
                         return;
                     }
+                    
+                    Ext.getCmp("pageAttributeForm").form.load({
+                        url: '@Url.Content("/Api/Cms/CmsPageAttribute/GetFormByPageId/")'+PageID,
+                        method: "Get",
+                        waitMsg: 'Loading',
+                        success: function (form, response) {
+                        }
+                    });
+                    
                     contentPanel.items.add("PageAttribute", PageAttributeForm);
                     if (obj) {
                         if (obj.hasTitle) {
 
                             contentPanel.items.add("PageTitle", PageTitleForm);
+                            Ext.getCmp("pageTitleForm").form.load({
+                                url: '@Url.Content("/Api/Cms/CmsPageTitle/GetFormByPageID/")' + PageID,
+                                  method: "Get",
+                                  waitMsg: 'Loading',
+                                  success: function (form, response) {
+                                  }
+                              });
+
                         }
 
                         if (obj.hasArticle) {
                             contentPanel.items.add("PageContent", PageContentForm);
+                            
+                            Ext.getCmp("PageContentForm").form.load({
+                                url: '@Url.Content("/Api/Cms/CmsPageContent/GetFormByPageID/")' + PageID,
+                                  method: "Get",
+                                  waitMsg: 'Loading',
+                                  success: function (form, response) {
+
+                                  }
+                              });
                         }
 
 

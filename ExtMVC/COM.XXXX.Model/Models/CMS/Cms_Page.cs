@@ -29,6 +29,12 @@ namespace COM.XXXX.Models.CMS
         [DataMember]
         public string PageName { get; set; }
 
+        /// <summary>
+        /// 页面编号
+        /// </summary> 
+        [DataMember]
+        public string PageCode { get; set; }
+
        /// <summary>
        /// 备注
        /// </summary>

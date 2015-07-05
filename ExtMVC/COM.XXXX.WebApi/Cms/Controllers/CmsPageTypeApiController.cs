@@ -31,6 +31,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
             var cmschannel=new CmsChannelApiController();
             var cmsclassify=new CmsClassifyApiController();
             var cmspagetype=new CmsPageTypeApiController(); 
+            var cmspage=new CmsPageApiController(); 
             List<ExtTree> treelst = new List<ExtTree>();
 
             var website = websiteapi.Repository.List();
@@ -43,7 +44,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                     iconCls="icon-1753",
                     attributes = new { type = "WebSite" }
                 };
-                var channels = cmschannel.Repository.Query(item => item.WebSiteID == cmsWebSite.ID);
+                var channels = cmschannel.Repository.Query(item => item.WebSiteID == cmsWebSite.ID).OrderBy(u=>u.SortIndex);
                 tree.leaf = !channels.Any();
                 foreach (Cms_Channel cmsChannel in channels)
                 {
@@ -54,7 +55,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                         iconCls = "icon-1007",
                         attributes = new{type="CmsChannel"}
                     };
-                    var classifies = cmsclassify.Repository.Query(item => item.ChannelID == cmsChannel.ID);
+                    var classifies = cmsclassify.Repository.Query(item => item.ChannelID == cmsChannel.ID).OrderBy(u=>u.SortIndex);
                     cmsChanneltree.leaf = !classifies.Any();
                     foreach (Cms_Classify cmsClassify in classifies)
                     {
@@ -65,17 +66,35 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                                 iconCls = "icon-1056",
                                 attributes = new { type = "CmsClassify" }
                             };
-                        var pagetypes = cmspagetype.Repository.Query(item => item.ClassifyID == cmsClassify.ID);
+                        var pagetypes = cmspagetype.Repository.Query(item => item.ClassifyID == cmsClassify.ID).OrderBy(u=>u.TypeName);
                         classifytree.leaf = !pagetypes.Any();
                         foreach (Cms_PageType cmsPageType in pagetypes)
                         {
-                            classifytree.children.Add(new ExtTree()
+                           ExtTree pagetypetree=  new ExtTree()
+                                {
+                                    id = cmsPageType.ID.ToString(),
+                                    text = cmsPageType.TypeName,
+                                    iconCls = "icon-1186",
+                                    attributes = new {type = "CmsPageType"}
+                                };
+
+                           var pages = cmspage.Repository.Query(item => item.PageTypeID == cmsPageType.ID).OrderBy(u=>u.PageName);
+                            foreach (Cms_Page cmsPage in pages)
                             {
-                                id = cmsPageType.ID.ToString(),
-                                text = cmsPageType.Remark,
-                                iconCls = "icon-1186",
-                                attributes = new { type = "CmsPageType" }
-                            });
+                                    pagetypetree.children.Add(new ExtTree()
+                                    {
+                                        id = cmsPage.ID.ToString(),
+                                         text=cmsPage.PageName,
+                                        iconCls = "icon-1203",
+                                        attributes = new {type="CmsPage"},
+                                        leaf=true
+                                    });
+                            }
+
+
+                           classifytree.children.Add(pagetypetree);
+
+
                         }
                         cmsChanneltree.children.Add(classifytree);
                     }

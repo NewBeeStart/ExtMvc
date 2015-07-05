@@ -19,7 +19,12 @@ namespace COM.XXXX.Models.CMS
         /// 备注信息
         /// </summary>
         [DataMember]
-        public string Remark { get; set; }
+        public string TypeName { get; set; }
+        /// <summary>
+        /// 类型编号
+        /// </summary>
+        [DataMember]
+        public string TypeCode { get; set; }
         /// <summary>
         /// 是否有标题
         /// </summary>
@@ -40,6 +45,8 @@ namespace COM.XXXX.Models.CMS
         /// </summary>
         [DataMember]
         public bool hasForm { get; set; }
+
+      
 
         public virtual Cms_Classify Classify { get; set; }
     }

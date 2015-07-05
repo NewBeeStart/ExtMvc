@@ -31,5 +31,10 @@ namespace Com.XXXX.Common
         /// 只能在Area页面中使用
         /// </summary>
         public static string ExtIconPath = "../../Scripts/Ext/Icons/fam/";
+
+        /// <summary>
+        /// website生成的路径
+        /// </summary>
+        public static string WebSitePath = "~/WebSite/";
     }
 }

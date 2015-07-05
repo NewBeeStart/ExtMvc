@@ -15,6 +15,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
         {
             base.SetRepository();
         }
+
         public override HttpResponseMessage GetGridPager(JObject p)
         {
            

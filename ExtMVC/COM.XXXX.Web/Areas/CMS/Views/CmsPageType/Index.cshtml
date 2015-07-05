@@ -97,6 +97,18 @@
             },
             { xtype: 'Starthtmleditor', hideLabel: true, name: 'PageContent', labelWidth: 50, anchor: "100% 100%", }
         ], buttons: [{
+            text: '生成网站',
+            handler: function () {
+                var websitid = Ext.getCmp("websiteId").getValue();
+                Ext.Ajax.request({
+                    url: '@Url.Content("/Api/Cms/WebSite/GetWebSite")?id=' + websitid,
+                    method: "Get",
+                    success: function(response) {
+
+                    }
+                });
+            }
+        },{
                 text: '新增子频道',
                 handler: function () {
                     RefreshPanel(channelForm, Ext.getCmp("panel1"));
@@ -376,7 +388,7 @@
         autoHeight: true,
         reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
             [
-                'ID', 'ClassifyID', 'Remark', 'hasTitle', 'hasArticle', 'hasPictrue', 'hasForm'
+                'ID', 'ClassifyID', 'TypeName', 'hasTitle', 'hasArticle', 'hasPictrue', 'hasForm', "TypeCode"
             ]),
         items: [
             {
@@ -518,12 +530,17 @@
                 layout: 'column',
                 items: [
                     {
-                        columnWidth: .8,
+                        columnWidth: .4,
                         layout: 'form',
                         items: [
                             { xtype: "hidden", name: "ID", id: 'pageTypeId' },
-                            { xtype: 'hidden', id: "pageTypepid", readOnly: false, fieldLabel: 'ClassifyID', name: 'ClassifyID', labelWidth: 50 },
-                            { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', name: 'Remark', labelWidth: 50, anchor: "95%" }]
+                            { xtype: 'hidden', id: "pageTypepid", readOnly: false, fieldLabel: 'ClassifyID', name: 'ClassifyID', labelWidth:60 },
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '模板名称', name: 'TypeName', labelWidth: 50, anchor: "95%" }]
+                    }, {
+                        columnWidth: .4,
+                        layout: 'form',
+                        items: [
+                            { xtype: 'textfield', readOnly: false, fieldLabel: '模板编号', name: 'TypeCode', labelWidth: 60, anchor: "95%" }]
                     }, {
 
                         columnWidth: .2,
@@ -586,15 +603,29 @@
         items: [pageTypefrom, contentPanel]
     });
 
+
+    var pagePanel=new Ext.Panel({
+        title: "页面内容",
+        frame: true,
+        autoScroll: true,
+        height: 600,
+        layout: "fit",
+        hidden: true,
+        anchor: "100% 100%",
+        html: '<div id="PageFrame"></div>'
+    })
+
     //控制pannel及form的显示
     function RefreshPanel(formpanel, panel) {
         webSiteform.hide();
         channelForm.hide();
         classifyForm.hide();
         pageTypefrom.hide();
+        pagePanel.hide();
+        pageTypePanel.hide();
         formpanel.show();
         panel.doLayout();
-        pageTypePanel.hide();
+       
     }
 
 
@@ -632,7 +663,7 @@
                                     method: "Get",
                                     waitMsg: 'Loading',
                                     success: function (form, response) {
-                                        RefreshPanel(webSiteform, pannel)
+                                        RefreshPanel(webSiteform, pannel);
                                     }
                                 });
                                 break;
@@ -642,7 +673,7 @@
                                     method: "Get",
                                     waitMsg: 'Loading',
                                     success: function (form, response) {
-                                        RefreshPanel(channelForm, pannel)
+                                        RefreshPanel(channelForm, pannel);
                                     }
                                 });
                                 break;
@@ -652,7 +683,7 @@
                                     method: "Get",
                                     waitMsg: 'Loading',
                                     success: function (form, response) {
-                                        RefreshPanel(classifyForm, pannel)
+                                        RefreshPanel(classifyForm, pannel);
                                     }
                                 });
                                 break;
@@ -671,11 +702,16 @@
                                         channelForm.doLayout();
                                         pageTypePanel.doLayout();
                                         var temp = Ext.get("PageListFrame");
-                                        temp.dom.innerHTML = '<iframe id="PageListframe" scrolling="auto" height="500px"  frameborder="0" width="100%" height="100%" src="@Url.Content("~/Cms/CmsPage/PageList")?PageTypeID='+ node.id + '"> </iframe>';
+                                        temp.dom.innerHTML = '<iframe id="pagelistframe" scrolling="auto" height="500px"  frameborder="0" width="100%" height="100%" src="@Url.Content("~/Cms/CmsPage/PageList")?PageTypeID='+ node.id + '"> </iframe>';
                                         contentPanel.doLayout();
                                     }
                                 });
                                 break;
+                                case "CmsPage":
+                                    RefreshPanel(pagePanel, pannel);
+                                    var temp = Ext.get("PageFrame");
+                                    temp.dom.innerHTML = '<iframe id="pageframe" scrolling="auto" height="500px"  frameborder="0" width="100%" height="100%" src="@Url.Content("~/Cms/CmsPage/Index")?PageID=' + node.id + '&PageTypeID=' + node.parentNode.attributes.id + '"> </iframe>';
+                                    pagePanel.doLayout();
                             }
                         }
                     }
@@ -687,7 +723,7 @@
                     collapsible: false,
                     xtype: "panel",
                     layout: "anchor",
-                    items: [channelForm, webSiteform, classifyForm, pageTypePanel]
+                    items: [channelForm, webSiteform, classifyForm, pageTypePanel, pagePanel]
                 }
             ]
         });
