@@ -45,7 +45,7 @@ namespace COM.XXXX.Models.CMS
         public int SortIndex { get; set; }
 
         public virtual Cms_WebSite WebSite { get; set; }
-
+        //public virtual List<Cms_Classify> Classifies { get; set; }
     }
 }
 

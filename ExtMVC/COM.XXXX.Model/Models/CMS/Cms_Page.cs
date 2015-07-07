@@ -44,5 +44,13 @@ namespace COM.XXXX.Models.CMS
 
 
         public virtual Cms_Page PageType { get; set; }
+
+        //public virtual List<Cms_PageAttribute> Attributes { get; set; }
+
+        //public virtual  List<Cms_PageTitle> Title { get; set; }
+
+        //public virtual  List<Cms_PagePicture> Picture { get; set; }
+         
+        //public virtual  List<Cms_PageContent> PageContent { get; set; }
     }
 }

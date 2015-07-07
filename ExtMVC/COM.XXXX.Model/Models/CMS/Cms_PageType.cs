@@ -49,5 +49,7 @@ namespace COM.XXXX.Models.CMS
       
 
         public virtual Cms_Classify Classify { get; set; }
+
+        //public virtual List<Cms_Page> Pages { get; set; }
     }
 }

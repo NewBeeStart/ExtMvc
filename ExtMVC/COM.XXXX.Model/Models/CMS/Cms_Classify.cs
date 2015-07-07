@@ -44,6 +44,9 @@ namespace COM.XXXX.Models.CMS
         public string PageContent { get; set; }
         
         public virtual Cms_Channel Channel { get; set; }
+
+        //public virtual List<Cms_PageType> PageTypes { get; set; }
+
     }
 }
 

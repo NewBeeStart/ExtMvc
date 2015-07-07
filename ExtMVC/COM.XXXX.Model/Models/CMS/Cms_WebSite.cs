@@ -54,9 +54,9 @@ namespace COM.XXXX.Models.CMS
         /// 网站页面内容
         /// </summary>
         [DataMember]
-        public string  PageContent { get; set; }
+        public string PageContent { get; set; }
 
-        //public virtual Cms_PageTemplate LayOutTemplate { get; set; }
+        //public virtual List<Cms_Channel> Channels { get; set; }
 
     }
 }

@@ -69,11 +69,32 @@ namespace COM.XXXX.WebApi.Cms.Controllers
 
 
         #region 前台调用方法
+
+        /// <summary>
+        /// 获取当前网站信息
+        /// </summary>
+        /// <param name="webid"></param>
+        /// <returns></returns>
         [HttpPost]
         public HttpResponseMessage GetWebMenusByWebID(Guid? webid)
         {
            return toJson(base.Repository.Query(u => u.WebSiteID == webid).OrderBy(u=>u.SortIndex));
         }
+
+        /// <summary>
+        /// 通过站点id和频道编号获取频道信息
+        /// </summary>
+        /// <param name="webid"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+          [HttpPost]
+        public HttpResponseMessage GetChannelByCode(Guid? webid, string code)
+        {
+            return
+                toJson(
+                    base.Repository.Query(u => u.WebSiteID == webid && u.ChannelCode == code).OrderBy(u => u.SortIndex).First());
+        }
+
         #endregion
     }
 }
