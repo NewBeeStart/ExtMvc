@@ -78,7 +78,7 @@ namespace COM.XXXX.WebApi.Cms.Controllers
         [HttpPost]
         public HttpResponseMessage GetWebMenusByWebID(Guid? webid)
         {
-           return toJson(base.Repository.Query(u => u.WebSiteID == webid).OrderBy(u=>u.SortIndex));
+           return toJson(base.Repository.Query(u => u.WebSiteID == webid&&u.InUse==true).OrderBy(u=>u.SortIndex));
         }
 
         /// <summary>

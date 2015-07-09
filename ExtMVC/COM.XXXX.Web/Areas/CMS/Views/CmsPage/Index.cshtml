@@ -71,6 +71,22 @@
                     });
                 }
             }
+        }, {
+            text: "删除",
+            handler: function () {
+                var pagetitleid = Ext.getCmp("pagetitleid").getValue();
+                Ext.Ajax.request({
+                    waitMsg: '正在提交...',
+                    url: '@Url.Content("/Api/Cms/CmsPageTitle/Delete/")' + pagetitleid,
+                    method: "delete",
+                    success: function (form, action) {
+                        Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+                    }
+                });
+            }
         }],
         items: [
             new Ext.form.FormPanel({
@@ -85,7 +101,7 @@
                         'ID', 'TitleContent', 'Remark', 'PageTypeID'
                     ]),
                 items: [
-                    { xtype: 'hidden',id:"pagetitleid", name: 'ID' },
+                    { xtype: 'hidden', id: "pagetitleid", name: 'ID' },
                     //{ xtype: 'Starthtmleditor', hideLabel: false, name: 'Remark', fieldLabel: '内容摘要', labelWidth: 65, anchor: "100%", height: 200 },
                    //{ xtype: 'Starthtmleditor', hideLabel: false, name: 'TitleContent', fieldLabel: '标题内容', labelWidth: 65, anchor: "100%", height: 800 },
                     { xtype: 'textarea', readOnly: false, fieldLabel: '标题内容', name: 'TitleContent', labelWidth: 50, anchor: "100%" },
@@ -124,6 +140,22 @@
                         }
                     });
                 }
+            }
+        }, {
+            text: "删除",
+            handler: function () {
+                var pageattributeid = Ext.getCmp("pageattributeid").getValue();
+                Ext.Ajax.request({
+                    waitMsg: '正在提交...',
+                    url: '@Url.Content("/Api/Cms/CmsPageAttribute/Delete/")' + pageattributeid,
+                    method: "delete",
+                    success: function (form, action) {
+                        Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                    },
+                    failure: function (form, action) {
+                        Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+                    }
+                });
             }
         }],
         items: [
@@ -307,7 +339,7 @@
                             items: [{ xtype: 'textfield', readOnly: false, fieldLabel: '浏览次数', value: 0, name: 'ReadCount', anchor: "100%" }]
                         }]
                 },
-                    { xtype: 'hidden',id:"pageattributeid", name: 'ID' },
+                    { xtype: 'hidden', id: "pageattributeid", name: 'ID' },
                     { xtype: 'hidden', name: 'CreateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
                     { xtype: 'hidden', name: 'UpdateTime', value: "@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" },
                     { xtype: 'hidden', name: 'UpdateUserID', value: "@CurrentLogInfo.CurrentLog.ID" },
@@ -345,6 +377,23 @@
                         });
                     }
                 }
+            }, {
+                text: "删除",
+                handler: function () {
+                    var pagecontentid = Ext.getCmp("pagecontentid").getValue();
+                    Ext.Ajax.request({
+                        waitMsg: '正在提交...',
+                        url: '@Url.Content("/Api/Cms/CmsPageContent/Delete/")' + pagecontentid,
+                        method: "delete",
+                        success: function (form, action) {
+                            Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+                            Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 } });
+                        },
+                        failure: function (form, action) {
+                            Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
+                        }
+                    });
+                }
             }],
             items: [
                 new Ext.form.FormPanel({
@@ -358,7 +407,7 @@
                                  ['ID', 'PageContent', 'CreateTime', 'Remark', 'PageID']
                     ),
                     items: [
-                        { xtype: 'hidden',id:"pagecontentid", name: 'ID' },
+                        { xtype: 'hidden', id: "pagecontentid", name: 'ID' },
                         { xtype: 'hidden', name: 'PageID', value: PageID },
                         { xtype: 'Starthtmleditor', hideLabel: false, name: 'Remark', fieldLabel: '内容摘要', labelWidth: 65, anchor: "100%", height: 200 },
                         { xtype: 'Starthtmleditor', hideLabel: false, name: 'PageContent', fieldLabel: '页面内容', labelWidth: 65, anchor: "100%", height: 800 },
@@ -369,57 +418,57 @@
                 })
             ]
         });
-        
-    var panelpic = new Ext.Panel({
-        id: 'images-view',
-        frame: true,
-        width: 535,
-        autoHeight: true,
-        collapsible: true,
-        layout: 'fit',
-        title: '图片视图',
-        items: {
-            height: 200,
-            xtype: "dataview",
-            store: new Ext.data.JsonStore({
-                id:"picview",
-                url: '../../Api/CmsPagePicture/GetPictureByPage?id=' + PageID,
-                root: 'images',
-                fields: ['PicPath', 'Remark', 'PageID', 'ID']
-            }),
-            tpl: new Ext.XTemplate(
-                '<tpl for=".">',
-                    '<div class="thumb-wrap" id="{ID}">',
-                    '<div class="thumb"><img src="{PicPath}" title="{Remark}"></div>',
-                    '<span class="x-editable">{Remark}</span></div>',
-                '</tpl>',
-                '<div class="x-clear"></div>'
-            ),
-            //autoHeight: true,
-            multiSelect: true,
-            overClass: 'x-view-over',
-            itemSelector: 'div.thumb-wrap',
-            emptyText: 'No images to display',
-            plugins: [
-                new Ext.DataView.DragSelector(),
-                new Ext.DataView.LabelEditor({ dataIndex: 'PicPath' })
-            ],
-            prepareData: function (data) {
-                data.PicPath ="../../"+data.PicPath.replace("~","");
-                return data;
-            },
 
-            listeners: {
-                selectionchange: {
-                    //fn: function (dv, nodes) {
-                    //    var l = nodes.length;
-                    //    var s = l != 1 ? 's' : '';
-                    //    panel.setTitle('Simple DataView (' + l + ' item' + s + ' selected)');
-                    //}
-                }
-            }
-        }
-    });
+                var panelpic = new Ext.Panel({
+                    id: 'images-view',
+                    frame: true,
+                    width: 535,
+                    autoHeight: true,
+                    collapsible: true,
+                    layout: 'fit',
+                    title: '图片视图',
+                    items: {
+                        height: 200,
+                        xtype: "dataview",
+                        store: new Ext.data.JsonStore({
+                            id: "picview",
+                            url: '../../Api/CmsPagePicture/GetPictureByPage?id=' + PageID,
+                            root: 'images',
+                            fields: ['PicPath', 'Remark', 'PageID', 'ID']
+                        }),
+                        tpl: new Ext.XTemplate(
+                            '<tpl for=".">',
+                                '<div class="thumb-wrap" id="{ID}">',
+                                '<div class="thumb"><img src="{PicPath}" title="{Remark}"></div>',
+                                '<span class="x-editable">{Remark}</span></div>',
+                            '</tpl>',
+                            '<div class="x-clear"></div>'
+                        ),
+                        //autoHeight: true,
+                        multiSelect: true,
+                        overClass: 'x-view-over',
+                        itemSelector: 'div.thumb-wrap',
+                        emptyText: 'No images to display',
+                        plugins: [
+                            new Ext.DataView.DragSelector(),
+                            new Ext.DataView.LabelEditor({ dataIndex: 'PicPath' })
+                        ],
+                        prepareData: function (data) {
+                            data.PicPath = "../../" + data.PicPath.replace("~", "");
+                            return data;
+                        },
+
+                        listeners: {
+                            selectionchange: {
+                                //fn: function (dv, nodes) {
+                                //    var l = nodes.length;
+                                //    var s = l != 1 ? 's' : '';
+                                //    panel.setTitle('Simple DataView (' + l + ' item' + s + ' selected)');
+                                //}
+                            }
+                        }
+                    }
+                });
 
 
                 //页面属性
@@ -456,7 +505,6 @@
                                 value: 0, id: 'picRemark', anchor: "100%"
                             },
                                 panelpic
-                              
                             ],
                             buttons: [{
                                 text: 'Save',
@@ -465,100 +513,100 @@
                                     if (fp.getForm().isValid()) {
                                         fp.getForm().submit({
                                             url: '@Url.Content("~/Home/UploadWater/")',//后台处理的页面  
-                                        waitMsg: '正在上传图片...',
-                                        success: function (fp, o) {
-                                            //var piclst = Ext.get("picinfoList");
-                                            //piclst.innerHTML += o.result.path + "\n" + piclst.getValue()
-                                            Ext.Ajax.request({
-                                                url: '@Url.Content("/Api/Cms/CmsPagePicture/")',
-                                                method: "Post",
-                                                params: {
-                                                    PicPath: o.result.path,
-                                                    Remark: Ext.getCmp("picRemark").getValue(),
-                                                    PageID: PageID
-                                                },
-                                                success: function (response) {
-                                                    var result = eval('(' + response.responseText + ')');
-                                                    Ext.Msg.alert('提示', result.message);
-                                                }
+                                            waitMsg: '正在上传图片...',
+                                            success: function (fp, o) {
+                                                //var piclst = Ext.get("picinfoList");
+                                                //piclst.innerHTML += o.result.path + "\n" + piclst.getValue()
+                                                Ext.Ajax.request({
+                                                    url: '@Url.Content("/Api/Cms/CmsPagePicture/")',
+                                                    method: "Post",
+                                                    params: {
+                                                        PicPath: o.result.path,
+                                                        Remark: Ext.getCmp("picRemark").getValue(),
+                                                        PageID: PageID
+                                                    },
+                                                    success: function (response) {
+                                                        var result = eval('(' + response.responseText + ')');
+                                                        Ext.Msg.alert('提示', result.message);
+                                                    }
+                                                });
+                                            }
                                         });
-                                    }
-                                    });
                                     }
                                 }
                             },
                             {
                                 text: 'Reset',
-                                handler: function() {
+                                handler: function () {
                                     Ext.getCmp("picPanel").getForm().reset();
                                 }
                             }]
-                })
-            ]
-        });
-            var contentPanel = new Ext.Panel({
-                title: '新增模板内容',
-                frame: true,
-                autoScroll: true,
-                id: "contentpanel",
-                items: []
-                //PageAttributeForm, PageTitleForm, PageContentForm
-            });
-
-       
-      function InitForm() {
-          //加载三个form中的数据
-
-      }
-
-            Ext.onReady(function () {
-                Ext.QuickTips.init();
-                Ext.Ajax.request({
-                    url: '@Url.Content("~/Api/Cms/CmsPageType/")' + PageTypeID,
-                method: "Get",
-                success: function (response) {
-                    //根据classify加载控件
-                    var obj = eval('(' + response.responseText + ')');
-               
-                    if (Ext.isArray(obj)) {
-                        Ext.Msg.alert('错误', "页面错误：ClassifyID字段为空！");
-                        return;
-                    }
-                    
-                    Ext.getCmp("pageAttributeForm").form.load({
-                        url: '@Url.Content("/Api/Cms/CmsPageAttribute/GetFormByPageId/")'+PageID,
-                        method: "Get",
-                        waitMsg: 'Loading',
-                        success: function (form, response) {
-                        }
+                        })
+                    ]
+                });
+                    var contentPanel = new Ext.Panel({
+                        title: '新增模板内容',
+                        frame: true,
+                        autoScroll: true,
+                        id: "contentpanel",
+                        items: []
+                        //PageAttributeForm, PageTitleForm, PageContentForm
                     });
-                    
-                    contentPanel.items.add("PageAttribute", PageAttributeForm);
-                    if (obj) {
-                        if (obj.hasTitle) {
 
-                            contentPanel.items.add("PageTitle", PageTitleForm);
-                            Ext.getCmp("pageTitleForm").form.load({
-                                url: '@Url.Content("/Api/Cms/CmsPageTitle/GetFormByPageID/")' + PageID,
-                                  method: "Get",
-                                  waitMsg: 'Loading',
-                                  success: function (form, response) {
-                                  }
-                              });
+
+                    function InitForm() {
+                        //加载三个form中的数据
+
+                    }
+
+                    Ext.onReady(function () {
+                        Ext.QuickTips.init();
+                        Ext.Ajax.request({
+                            url: '@Url.Content("~/Api/Cms/CmsPageType/")' + PageTypeID,
+                        method: "Get",
+                        success: function (response) {
+                            //根据classify加载控件
+                            var obj = eval('(' + response.responseText + ')');
+
+                            if (Ext.isArray(obj)) {
+                                Ext.Msg.alert('错误', "页面错误：ClassifyID字段为空！");
+                                return;
+                            }
+
+                            Ext.getCmp("pageAttributeForm").form.load({
+                                url: '@Url.Content("/Api/Cms/CmsPageAttribute/GetFormByPageId/")' + PageID,
+                            method: "Get",
+                            waitMsg: 'Loading',
+                            success: function (form, response) {
+                            }
+                        });
+
+                        contentPanel.items.add("PageAttribute", PageAttributeForm);
+                        if (obj) {
+                            if (obj.hasTitle) {
+
+                                contentPanel.items.add("PageTitle", PageTitleForm);
+                                Ext.getCmp("pageTitleForm").form.load({
+                                    url: '@Url.Content("/Api/Cms/CmsPageTitle/GetFormByPageID/")' + PageID,
+                                method: "Get",
+                                waitMsg: 'Loading',
+                                success: function (form, response) {
+                                }
+                            });
 
                         }
 
                         if (obj.hasArticle) {
                             contentPanel.items.add("PageContent", PageContentForm);
-                            
+
                             Ext.getCmp("PageContentForm").form.load({
                                 url: '@Url.Content("/Api/Cms/CmsPageContent/GetFormByPageID/")' + PageID,
-                                  method: "Get",
-                                  waitMsg: 'Loading',
-                                  success: function (form, response) {
+                                method: "Get",
+                                waitMsg: 'Loading',
+                                success: function (form, response) {
 
-                                  }
-                              });
+                                }
+                            });
                         }
 
 
@@ -568,12 +616,12 @@
                         contentPanel.doLayout();
                     }
 
-                }
-                });
-                Ext.StoreMgr.get("picview").load();
+                    }
+                    });
+                    Ext.StoreMgr.get("picview").load();
 
-            contentPanel.render(Ext.getBody());
-        });
+                    contentPanel.render(Ext.getBody());
+                });
 
 </script>
 

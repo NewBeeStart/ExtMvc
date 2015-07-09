@@ -46,7 +46,11 @@ namespace COM.XXXX.Models.CMS
         [DataMember]
         public bool hasForm { get; set; }
 
-      
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        [DataMember]
+        public bool? InUse { get; set; }
 
         public virtual Cms_Classify Classify { get; set; }
 

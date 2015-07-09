@@ -42,6 +42,11 @@ namespace COM.XXXX.Models.CMS
         public string Remark { get; set; }
 
 
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        [DataMember]
+        public bool? InUse { get; set; }
 
         public virtual Cms_Page PageType { get; set; }
 

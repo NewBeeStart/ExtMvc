@@ -1,321 +1,229 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title>农业网站</title>
-    <script src="static/jquery/jquery.min.js"></script>
-    <link href="/WebSite/static/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/WebSite/static/bootstrap/dist/css/nav-justified.css" rel="stylesheet">
-    <script src="/WebSite/static/angular/angular.js"></script>
-    <script src="/WebSite/static/bootstrap/dist/js/bootstrap.min.js"></script>
-    <style>
-        .footer {
-            background: #007ACC;
-            height: 50px;
-            line-height: 24px;
-            padding: 15px 0;
-            text-align: center;
-        }
+﻿@{
+    Layout = "Shared/_Layout.cshtml";
+}
 
-            .footer a {
-                color: #000;
-            }
-    </style>
-    <script type="text/javascript">
-        var app = angular.module('index', []);
-        //加载标题和菜单
-        app.controller("headController", ['$scope', '$http', function ($scope, $http) {
-            var titleUrl = "../Api/Cms/WebSite/Get/@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
-            var menusUrl = "../Api/Cms/CmsChannel/GetWebMenusByWebID?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
-            $http.get(titleUrl).success(function (data) {
-                $scope.websiteTitle = data;
-            });
-            $http.post(menusUrl).success(function (data) {
-                $scope.menus = data;
-            });
-        }]);
-
-        //加载图片轮转
-        app.controller("imagesController", function () {
-            this.images = [
-                { path: "/WebSite/static/img/imagrotation/1.jpg", index: 0, cls: "item active" },
-                { path: "/WebSite/static/img/imagrotation/2.jpg", index: 1, cls: "item" },
-                { path: "/WebSite/static/img/imagrotation/3.jpg", index: 2, cls: "item" },
-                { path: "/WebSite/static/img/imagrotation/4.jpg", index: 3, cls: "item" }
-            ];
-        });
-        app.controller("companyInfoController", ['$scope', '$http', function ($scope, $http) {
-            var companyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=CompanyInfo";
-            $http.post(companyUrl).success(function (data) {
-                $scope.companyInfo = data;
-                $("#companyInfo").html(data.PageContent);
-            });
-        }]);
-        app.controller("newsInfoController", ['$scope', '$http', function ($scope, $http) {
-            var newsinfoUrl = "../Api/Cms/CmsPage/GetPages?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=News";
-            $http.post(newsinfoUrl).success(function (data) {
-                $scope.ChannelName = data.channel.ChannelName;
-                var temp = new Array();
-                angular.forEach(data.data, function (item) {
-                    angular.forEach(item.title, function(sub) {
-                        temp.push({
-                            title: sub.TitleContent,
-                            index: temp.length + 1,
-                            pageid: temp.PageID
-
-                    });
-                    });
-                });
-                $scope.newsList = temp;
-                $("#newsInfo").html($scope.PageContent(data));
-             });
-         }]);
+@section head
+{
+    <script>
         
+        app.controller("companyInfoController", [
+           '$scope', '$http', function ($scope, $http) {
+               var companyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=CompanyInfo";
+                $http.post(companyUrl).success(function (data) {
+                    $scope.companyInfo = data;
+                    $("#companyInfo").html(data.PageContent);
+                });
+            }
+        ]);
+        //新闻
+            app.controller("newsInfoController", [
+                '$scope', '$http', function ($scope, $http) {
+                    var newsinfoUrl = "../Api/Cms/CmsPage/GetPages?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=News";
+                $http.post(newsinfoUrl).success(function (data) {
+                    $scope.ChannelName = data.channel.ChannelName;
+                    var temp = new Array();
+                    angular.forEach(data.data, function (item) {
+                        angular.forEach(item.title, function (sub) {
+                            temp.push({
+                                title: sub.TitleContent,
+                                index: temp.length + 1,
+                                pageid: temp.PageID
+                            });
+                        });
+                    });
+                    $scope.newsList = temp;
+                });
+            }
+        ]);
+            //基地展示轮转
+            app.controller("baseShowController", [
+                '$scope', '$http', function ($scope, $http) {
+                    this.images = [
+                        { path: "/WebSite/static/img/imagrotation/1.jpg", index: 0, cls: "item active" },
+                        { path: "/WebSite/static/img/imagrotation/2.jpg", index: 1, cls: "item" },
+                        { path: "/WebSite/static/img/imagrotation/3.jpg", index: 2, cls: "item" },
+                        { path: "/WebSite/static/img/imagrotation/4.jpg", index: 3, cls: "item" }
+                    ];
+                    var baseShowUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=BaseShow";
+                $http.post(baseShowUrl).success(function (data) {
+                    $scope.baseShowInfo = data;
+                });
+
+            }
+        ]);
+            //联系我们
+            app.controller("contactController", [
+                '$scope', '$http', function ($scope, $http) {
+                    var contactUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=Contact";
+                $http.post(contactUrl).success(function (data) {
+                    $scope.contactInfo = data;
+                    $("#contactInfo").html(data.PageContent);
+                });
+            }
+        ]);
+
+            //联系我们
+            app.controller("classifyController", [
+                '$scope', '$http', function ($scope, $http) {
+                    var classifyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=Contact";
+                $http.post(classifyUrl).success(function (data) {
+                    $scope.classifyInfo = data;
+                    $("#classifyInfo").html(data.PageContent);
+                });
+            }
+        ]);
+            app.controller("productPicController", [
+                '$scope', '$http', function ($scope, $http) {
+                    var productPic = "../Api/Cms/CmsPagePicture/GetPictureByCode?code=picscoller";
+                    $http.post(productPic).success(function (data) {
+                        $scope.productPicInfo = data.images;
+                    });
+                }
+            ]);
+
     </script>
-</head>
-<body ng-app="index">
-    <!-- 导航 -->
-    <div ng-controller="headController" class="container navbar-fixed-top">
-        <div class="row">
-            <div class="col-md-3">
-                <a class="navbar-brand" href="#">{{websiteTitle.CompanyName}}</a>
-            </div>
-            <div class="col-md-9">
-                <nav>
-                    <ul class="nav nav-justified">
-                        <li class='active'><a href='#'>首页</a></li>
-                        <li ng-repeat="menu in menus">
-                            <a href='/{{menu.ChannelCode}}/Index.cshtml'>{{menu.ChannelName}} </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+}
 
-    <!-- 图片轮转 -->
-    <div ng-controller="imagesController as imagesCtrl" class="container" style="margin-top: 52px">
-        <div id="carousel-id" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li ng-repeat="image in imagesCtrl.images" data-target="#carousel-id" data-slide-to="{{image.index}}" class=""></li>
-            </ol>
-            <div class="carousel-inner" style="height: 400px">
-                <div ng-repeat="image in imagesCtrl.images" class="{{image.cls}}">
-                    <img ng-src="{{image.path}}" />
-                </div>
 
-            </div>
-            <a class="left carousel-control" href="#carousel-id" data-slide="prev"></a>
-            <a class="right carousel-control" href="#carousel-id" data-slide="next"></a>
-        </div>
-    </div>
+<!-- 内容布局 -->
+<div class="container" style="margin-top: 10px">
+    <div class="row">
+        <!-- 公司简介 -->
+        <div ng-controller="companyInfoController" class="col-md-6">
 
-    <!-- 内容布局 -->
-    <div class="container" style="margin-top: 10px">
-        <div class="row">
-            <!-- 公司简介 -->
-            <div ng-controller="companyInfoController" class="col-md-6">
-
-                <div class="panel panel-default" style="height: 250px">
-                    <div class="panel-body">
-                        <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px">
-                            <b>{{companyInfo.ChannelName}}</b>
-                        </div>
-                        <ul class="media-list">
-                            <li id="companyInfo" class="media"></li>
-                        </ul>
+            <div class="panel panel-default" style="height: 250px">
+                <div class="panel-body">
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px">
+                        <b>{{companyInfo.ChannelName}}</b>
                     </div>
+                    <ul class="media-list">
+                        <li id="companyInfo" class="media"></li>
+                    </ul>
                 </div>
             </div>
-            <!-- 新闻列表 -->
-            <div ng-controller="newsInfoController" class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-body" style="height: 250px">
-                        <div style="border-bottom: 1px solid #dbdbdb">
-                            <b>{{ChannelName}}</b>
-                        </div>
-
-                        <div ng-repeat="new in newsList" style="border-bottom: 1px dashed #cacaca; margin: 5px 5px">
-                            <span>
+        </div>
+        <!-- 新闻列表 -->
+        <div ng-controller="newsInfoController" class="col-md-6">
+            <div class="panel panel-default" style="height: 250px">
+                <div class="panel-body">
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px">
+                        <b>{{ChannelName}}</b>
+                    </div>
+                    <div ng-repeat="new in newsList" style="border-bottom: 1px dashed #cacaca; margin: 5px 5px">
+                        <span>
                                 <i style="background-color: #3A6EA5; color: white; border-radius: 4px; padding-left: 3px; padding-right: 3px; margin-left: 5px; margin-right: 5px">
                                     {{new.index}}
                                 </i>
                             </span>
-                            <span style=""><small>{{new.title}}</small></span>
-                            <span class="num" style="float: right"><small><a href="{{new.pageid}}">更多...</a></small></span>
-                        </div>
-                       
+                        <span style=""><small>{{new.title}}</small></span>
+                        <span class="num" style="float: right"><small><a href="{{new.pageid}}">更多...</a></small></span>
                     </div>
+
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="panel panel-default" style="height: 250px">
-                    <div class="panel-body">
-                        <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>基地全景</b></div>
-                        <ul class="media-list">
-                            <li class="media">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object" style="height: 150px; width: 200px; float: left" src="/WebSite/static/img/company1.jpg">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading"></h4>
-                                    鑫港人力资源服务有限公司，是经河南省人社厅备案，市人社局批准的，尉氏县首家具有劳务派遣资质的人力资源服务公司
-                                </div>
-                            </li>
-                        </ul>
+    </div>
+    <div class="row">
+        <div ng-controller="contactController" class="col-md-4">
+            <div class="panel panel-default" style="height: 250px">
+                <div class="panel-body">
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>{{contactInfo.ChannelName }}</b>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="panel panel-default" style="height: 250px">
-                    <div class="panel-body">
-                        <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>联系我们</b></div>
-                        <ul class="media-list">
-                            <li class="media">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object" style="height: 150px; width: 200px; float: left" src="/WebSite/static/img/company1.jpg">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading"></h4>
-                                    鑫港人力资源服务有限公司，是经河南省人社厅备案，市人社局批准的，尉氏县首家具有劳务派遣资质的人力资源服务公司
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="panel panel-default" style="height: 250px">
-                    <div class="panel-body">
-                        <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>产品分类</b></div>
-                        <ul class="media-list">
-                            <li class="media">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object" style="height: 150px; width: 200px; float: left" src="/WebSite/static/img/company1.jpg">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading"></h4>
-                                    鑫港人力资源服务有限公司，是经河南省人社厅备案，市人社局批准的，尉氏县首家具有劳务派遣资质的人力资源服务公司
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="media-list">
+                        <li class="media">
+                            <li id="contactInfo" class="media"></li>
+
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <!--产品图片滚动 -->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>产品列表</b></div>
-
-                        <div style="padding: 0px">
-                            <script src="/WebSite/static/jquery/productroll10.js"></script>
-                            <link href="/WebSite/static/css/productroll10.css" rel="stylesheet">
-                            <div class="productlistx">
-
-                                <div id="listx" class="blkproductlistx">
-                                    <div class="LeftButton" id="LeftArr1"></div>
-                                    <div class="Cont" id="ISL_Cont_11" style="overflow: hidden;">
-                                        <div class="box">
-                                            <div class="fang">
-                                                <img src="/WebSite/static/img/picscroll/01.jpg" width="150px" height="110px">
-                                            </div>
-                                            <a href="" target="_self" class="prodtitle">产品应用案例</a>
-                                        </div>
-                                        <div class="box">
-                                            <div class="fang">
-                                                <img src="/WebSite/static/img/picscroll/02.jpg" width="150px" height="110px">
-                                            </div>
-                                            <a href="" target="_self" class="prodtitle">产品应用案例</a>
-                                        </div>
-                                        <div class="box">
-                                            <div class="fang">
-                                                <a href="product/html/?92.html" target="_self">
-                                                    <img src="/WebSite/static/img/picscroll/03.jpg" width="150px" height="110px"></a>
-                                            </div>
-                                            <a href="" target="_self" class="prodtitle">产品应用案例</a>
-                                        </div>
-                                        <div class="box">
-                                            <div class="fang">
-                                                <a href="product/html/?91.html" target="_self">
-                                                    <img src="/WebSite/static/img/picscroll/04.jpg" width="150px" height="110px"></a>
-                                            </div>
-                                            <a href="" target="_self" class="prodtitle">产品应用案例</a>
-                                        </div>
-                                        <div class="box">
-                                            <div class="fang">
-                                                <a href="product/html/?91.html" target="_self">
-                                                    <img src="/WebSite/static/img/picscroll/06.jpg" width="150px" height="110px"></a>
-                                            </div>
-                                            <a href="" target="_self" class="prodtitle">产品应用案例</a>
-                                        </div>
-                                        <div class="box">
-                                            <div class="fang">
-                                                <a href="product/html/?91.html" target="_self">
-                                                    <img src="/WebSite/static/img/picscroll/07.jpg" width="150px" height="110px"></a>
-                                            </div>
-                                            <a href="" target="_self" class="prodtitle">产品应用案例</a>
-                                        </div>
+        <div ng-controller="baseShowController as baseShowCtrl" class="col-md-4">
+            <div class="panel panel-default" style="height: 250px">
+                <div class="panel-body">
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>{{baseShowInfo.ChannelName}}</b>
+                    </div>
+                    <ul class="media-list">
+                        <li class="media">
+                            <div id="carouselbase" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li ng-repeat="image in baseShowCtrl.images" data-target="#carouselbase" data-slide-to="{{image.index}}" class=""></li>
+                                </ol>
+                                <div class="carousel-inner" style="height: 200px">
+                                    <div ng-repeat="image in baseShowCtrl.images" class="{{image.cls}}">
+                                        <img ng-src="{{image.path}}"/>
                                     </div>
-                                    <div class="RightButton" id="RightArr1"></div>
-                                    <script type="text/javascript">
-                                        <!--//--><![CDATA[//><!--
-    var scrollPic_03 = new ScrollPic();
-    scrollPic_03.scrollContId = "ISL_Cont_11"; //内容容器ID
-    scrollPic_03.arrLeftId = "LeftArr1";//左箭头ID
-    scrollPic_03.arrRightId = "RightArr1"; //右箭头ID
-    scrollPic_03.frameWidth = 10000;//显示框宽度
-    scrollPic_03.pageWidth = 159; //翻页宽度
-    scrollPic_03.speed = 10; //移动速度(单位毫秒，越小越快)
-    scrollPic_03.space = 10; //每次移动像素(单位px，越大越快)
-    scrollPic_03.autoPlay = true; //自动播放
-    scrollPic_03.autoPlayTime = 3; //自动播放间隔时间(秒)
-    scrollPic_03.initialize(); //初始化
-    //--><!]]>
-                                    </script>
-                                </div>
 
+                                </div>
+                                <a class="left carousel-control" href="#carouselbase" data-slide="prev"></a>
+                                <a class="right carousel-control" href="#carouselbase" data-slide="next"></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div ng-controller="classifyController" class="col-md-4">
+            <div class="panel panel-default" style="height: 250px">
+                <div class="panel-body">
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px">
+                        <b>{{classifyInfo.ChannelName}}</b>
+                    </div>
+                    <ul class="media-list">
+                        <li id="classifyInfo" class="media"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div ng-controller="productPicController" class="col-md-12">
+            <!--产品图片滚动 -->
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>产品列表</b>
+                    </div>
+
+                    <div style="padding: 0px">
+                        <script src="/WebSite/static/jquery/productroll10.js"></script>
+                        <link href="/WebSite/static/css/productroll10.css" rel="stylesheet">
+                        <div class="productlistx">
+
+                            <div id="listx" class="blkproductlistx">
+                                <div class="LeftButton" id="LeftArr1"></div>
+                                <div class="Cont" id="ISL_Cont_11" style="overflow: hidden;">
+                                    <div ng-repeat="pic in productPicInfo" class="box">
+                                        <div class="fang">
+                                            <img ng-src="{{pic.PicPath}}" width="150px" height="110px">
+                                        </div>
+                                        <a href="" target="_self" class="prodtitle">{{pic.Remark}}</a>
+                                    </div>
+                                </div>
+                                <div class="RightButton" id="RightArr1"></div>
+                                <script type="text/javascript">
+                                    <!-- //--><![CDATA[//><!--
+                                    var scrollPic_03 = new ScrollPic();
+                                    scrollPic_03.scrollContId = "ISL_Cont_11"; //内容容器ID
+                                    scrollPic_03.arrLeftId = "LeftArr1"; //左箭头ID
+                                    scrollPic_03.arrRightId = "RightArr1"; //右箭头ID
+                                    scrollPic_03.frameWidth = 10000; //显示框宽度
+                                    scrollPic_03.pageWidth = 159; //翻页宽度
+                                    scrollPic_03.speed = 10; //移动速度(单位毫秒，越小越快)
+                                    scrollPic_03.space = 10; //每次移动像素(单位px，越大越快)
+                                    scrollPic_03.autoPlay = true; //自动播放
+                                    scrollPic_03.autoPlayTime = 3; //自动播放间隔时间(秒)
+                                    scrollPic_03.initialize(); //初始化
+                                    //--><!]]>
+                                </script>
                             </div>
 
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <!--页面底部 -->
-        <footer class="footer">
-            <small>
-                <span style="float: left; margin-left: 100px">
-
-                    <a href="">首页</a> |
-                        <a href="">公司简介</a> |
-                        <a href="">经营范围</a> | 
-                        <a href="">新闻动态</a> | 
-                        <a href="">基地展示</a> | 
-                        <a href="">联系我们</a> | 
-                        <a href="">在线订单</a>
-                </span>
-                <span style="float: right; margin-right: 100px">版权所有<span>?</span><a href="#" title="鑫港人力资源股份有限公司">鑫港人力资源股份有限公司</a></span>
-            </small>
-        </footer>
-
     </div>
 
-
-
-</body>
-</html>
-
-
+</div>

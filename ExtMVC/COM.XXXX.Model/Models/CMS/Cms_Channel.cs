@@ -44,6 +44,11 @@ namespace COM.XXXX.Models.CMS
         [DataMember]
         public int SortIndex { get; set; }
 
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        [DataMember]
+        public bool? InUse { get; set; }
         public virtual Cms_WebSite WebSite { get; set; }
         //public virtual List<Cms_Classify> Classifies { get; set; }
     }

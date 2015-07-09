@@ -1,14 +1,134 @@
 ﻿<!DOCTYPE html>
 <html>
-	<head>
-		<title>鑫港人力资源有限公司</title>
-		<link href="/WebSite/static/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link href="/WebSite/static/bootstrap/dist/css/nav-justified.css" rel="stylesheet">
-		<script src="/WebSite/static/jquery/jquery.min.js"></script>
-		<script src="/WebSite/static/bootstrap/dist/js/bootstrap.min.js"></script>
-        @RenderSection("Head",false)
-	</head>
-	<body>
-		@RenderBody()
-	</body>
+<head>
+    <title>农业网站</title>
+    <script src="static/jquery/jquery.min.js"></script>
+    <link href="/WebSite/static/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/WebSite/static/bootstrap/dist/css/nav-justified.css" rel="stylesheet">
+    <script src="/WebSite/static/angular/angular.js"></script>
+    <script src="/WebSite/static/bootstrap/dist/js/bootstrap.min.js"></script>
+    <style>
+        .footer {
+            background: #007ACC;
+            height: 50px;
+            line-height: 24px;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+            .footer a {
+                color: #000;
+            }
+    </style>
+    <script type="text/javascript">
+        var app = angular.module('index', []);
+        //加载标题和菜单
+        app.controller("headController", [
+            '$scope', '$http', function($scope, $http) {
+                var titleUrl = "../Api/Cms/WebSite/Get/@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
+            var menusUrl = "../Api/Cms/CmsChannel/GetWebMenusByWebID?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
+                $http.get(titleUrl).success(function(data) {
+                    $scope.websiteTitle = data;
+                });
+                $http.post(menusUrl).success(function(data) {
+                    $scope.menus = data;
+                });
+            }
+        ]);
+
+        //加载图片轮转
+        app.controller("imagesController", [
+            '$scope', '$http', function($scope, $http) {
+                var picUrl = "../Api/Cms/CmsPagePicture/GetPictureByCode?code=bigpic";
+                $http.post(picUrl).success(function(data) {
+                    var temp = new Array();
+                    angular.forEach(data.images, function(item) {
+                        temp.push({
+                            path: item.PicPath,
+                            index: temp.length,
+                            cls: temp.length === 0 ? "item active" : "item"
+                        });
+                    });
+                    $scope.images = temp;
+                });
+            }
+        ]);
+        //页脚
+        app.controller("footController", [
+            '$scope', '$http', function ($scope, $http) {
+                var titleUrl = "../Api/Cms/WebSite/Get/@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
+                var menusUrl = "../Api/Cms/CmsChannel/GetWebMenusByWebID?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
+                $http.get(titleUrl).success(function (data) {
+                    $scope.websiteTitle = data;
+                });
+
+                $http.post(menusUrl).success(function (data) {
+                    $scope.menus = data;
+                });
+            }
+        ]);
+       
+    </script>
+    @RenderSection("head",false)
+</head>
+<body ng-app="index">
+    <!-- 导航 -->
+    <div ng-controller="headController" class="container  navbar-top">
+        <div class="row">
+            <div class="col-md-3">
+                <a class="navbar-brand" href="#">{{websiteTitle.CompanyName}}</a>
+            </div>
+            <div class="col-md-9">
+                <nav>
+                    <ul class="nav nav-justified">
+                        <li class='active'><a href='/WebSite/Index'>首页</a></li>
+                        <li ng-repeat="menu in menus">
+                            <a ng-href='{{menu.ChannelCode}}'>{{menu.ChannelName}} </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片轮转 -->
+    <div ng-controller="imagesController" class="container" >
+        <div id="carousel-id" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li ng-repeat="image in images" data-target="#carousel-id" data-slide-to="{{image.index}}" class=""></li>
+            </ol>
+            <div class="carousel-inner" style="height: 350px">
+                <div ng-repeat="image in images" class="{{image.cls}}">
+                    <img ng-src="{{image.path}}" />
+                </div>
+
+            </div>
+            <a class="left carousel-control" href="#carousel-id" data-slide="prev"></a>
+            <a class="right carousel-control" href="#carousel-id" data-slide="next"></a>
+        </div>
+    </div>
+
+
+    @RenderBody()
+
+
+    <div class="container" style="margin-top: 10px">
+        <!--页面底部 -->
+        <footer ng-controller="footController" class="footer">
+            <small>
+                <span style="float: left; margin-left: 100px">
+                        <a href="">首页</a> |
+                        <span ng-repeat="menu in menus"><a href="">{{menu.ChannelName}}</a> |</span> 
+                </span>
+                <span style="float: right; margin-right: 100px">版权所有<span></span><a href="#" title="{{websiteTitle}}">{{websiteTitle.CompanyName}}</a></span>
+            </small>
+        </footer>
+
+    </div>
+
+
+
+</body>
 </html>
+
+

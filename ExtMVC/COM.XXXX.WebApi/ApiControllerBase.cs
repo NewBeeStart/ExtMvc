@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -18,6 +19,7 @@ using COM.XXXX.Common;
 using COM.XXXX.Models.Admin;
 using Com.XXXX.Common;
 using System.Web;
+using Newtonsoft.Json.Converters;
 
 namespace COM.XXXX.WebApi
 {
@@ -83,7 +85,9 @@ namespace COM.XXXX.WebApi
             {
                 //JavaScriptSerializer serializer = new JavaScriptSerializer();
                 //str = serializer.Serialize(obj);
-                str = JsonConvert.SerializeObject(obj);
+                IsoDateTimeConverter timeFormat = new IsoDateTimeConverter();
+                timeFormat.DateTimeFormat = "yyyy-MM-dd";
+                str = JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented, timeFormat);
             }
             HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
             return result;
@@ -157,47 +161,53 @@ namespace COM.XXXX.WebApi
         // POST api/<controller>
         public virtual HttpResponseMessage Post([FromBody]M model)
         {
-            Repository.Insert(model);
-
-            if (UnitOfWork.Save() == 1)
+            if (PostMD(model))
             {
                 return toJson(new { success = true, message = "恭喜你,~O(∩_∩)O~添加数据成功了耶！" });
             }
             return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
         }
 
+
+       
+
         // PUT api/<controller>/5
         public virtual HttpResponseMessage Put(Guid id, [FromBody]M model)
         {
-            model.ID = id;
-            Repository.Update(model);
-            if (UnitOfWork.Save() == 1)
+            if (PutMD(id,model))
             {
                 return toJson(new { success = true, message = "恭喜你,~O(∩_∩)O~更新数据成功了耶！" });
             }
             return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" });
         }
 
+       
+
+
         // DELETE api/<controller>/5
         public virtual HttpResponseMessage Delete(Guid id)
         {
-            Repository.Delete(new M { ID = id });
-            if (UnitOfWork.Save() == 1)
+            if (DeleteMD(new M { ID = id }))
             {
                 return toJson(new { success = true, message = "恭喜你,~O(∩_∩)O~删除数据成功了耶！" });
             }
             return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" }); ;
         }
+
+
+
         // DELETE api/<controller>/5
         public virtual HttpResponseMessage Delete(M model)
         {
-            Repository.Delete(model);
-            if (UnitOfWork.Save() == 1)
+            if (DeleteMD(model))
             {
                 return toJson(new { success = true, message = "恭喜你,~O(∩_∩)O~删除数据成功了耶！" });
             }
             return toJson(new { success = false, message = "Σ( ° △ °|||)︴~,由于某种原因导致数据失败，请稍后重新操作！" }); ;
         }
+
+
+   
         #endregion
 
 
@@ -215,26 +225,41 @@ namespace COM.XXXX.WebApi
             jb.Add("count",0);
             return jb;
         }
-
-//        public JObject GetEntitiesPaging(int pageSize, int currPage)
-//        {
-//            string query = string.Format(@"
-//                                             select * from (
-//	                                              select a.*,b.RealName,ROW_NUMBER() over (order by a.CreateTime) as rownum
-//	                                               from  tb_Work_WorkSchedule a left join tb_sys_User b  on a.CreatorId=b.UserId 
-//                                             ) temp
-//                                            where rownum between {0} and {1}
-//                               ", pageSize * (currPage - 1), pageSize * currPage);
-
-//            DataSet ds = Repository.ExecuteDataSet(query);
-//            if (ds == null) return null;
-//            var rows = ds.Tables[0].ToJsonList();
-//            JObject jb = new JObject();
-//            jb.Add("data", rows);
-//            jb.Add("count", ds.Tables[0].Rows.Count);
-//            return jb;
-//        }
-
+        #region 基础操作
+        internal bool PostMD(M model)
+        {
+            Repository.Insert(model);
+            if (UnitOfWork.Save() == 1)
+            {
+                return true;
+            }
+            return false;
+        }
+        internal bool PutMD(Guid id, M model)
+        {
+            model.ID = id;
+            Repository.Update(model);
+            if (UnitOfWork.Save() == 1)
+            {
+                return true;
+            }
+            return false;
+        }
+        internal bool DeleteMD(M model)
+        {
+            Repository.Delete(model);
+            if (UnitOfWork.Save() == 1)
+            {
+                return true;
+            }
+            return false;
+        }
+        internal int DeleteByWhere(Expression<Func<M, bool>> filter)
+        {
+            Repository.DeleteByWhere(filter);
+            return UnitOfWork.Save();
+        }
+        #endregion
 
     }
 }

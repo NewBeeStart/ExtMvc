@@ -42,7 +42,13 @@ namespace COM.XXXX.Models.CMS
         /// </summary>
         [DataMember] 
         public string PageContent { get; set; }
-        
+
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        [DataMember]
+        public bool? InUse { get; set; }
+
         public virtual Cms_Channel Channel { get; set; }
 
         //public virtual List<Cms_PageType> PageTypes { get; set; }

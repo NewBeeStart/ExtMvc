@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "Shared/_Layout.cshtml";
+}
+@section head
+{
+    <script>
+        app.controller("newsInfoController", [
+            '$scope', '$http', function($scope, $http) {
+                function getinfo(id) {
+                    var pageinfoUrl = "../Api/Cms/CmsPage/GetPageInfo?id=" + id;
+                    $http.post(pageinfoUrl).success(function(data) {
+                        $scope.pageContent = data.content.PageContent;
+                        $scope.pageTitle = data.title.TitleContent;
+                        $scope.pageCreateTime = "日期：" + data.attribute.UpdateTime;
+
+                    });
+                }
+
+                this.click = getinfo;
+                var newsinfoUrl = "../Api/Cms/CmsPage/GetPageTitleListByCode?code=News";
+                $http.post(newsinfoUrl).success(function(data) {
+                    var temp = new Array();
+                    angular.forEach(data, function(item) {
+                        temp.push({
+                                title: item.TitleContent,
+                                index: temp.length + 1,
+                                pageid: item.PageID
+                            }
+                        );
+                    });
+                    $scope.newsList = temp;
+                    if (temp.length > 0) {
+                    }
+                    getinfo(temp[0].pageid);
+                });
+
+            }
+        ]);
+    </script>
+
+}
+
+<div ng-controller="newsInfoController as newsinfo" class="container"   style="height: auto; margin-top: 10px">
+    <div class="row">
+        <div class="col-md-3">
+            <div  class="panel panel-default" style="height: auto; min-height: 600px">
+                <div class="panel-heading text-box"><b class="glyphicon glyphicon-align-justify">&nbsp;<b>列表资源</b></b></div>
+                <ul class="list-group">
+                    <li ng-repeat="news in newsList" ng-click="newsinfo.click(news.pageid)" class="list-group-item">
+                        <span>
+                                <i style="background-color: #3A6EA5; color: white; border-radius: 4px; padding-left: 3px; padding-right: 3px; margin-left: 5px; margin-right: 5px">
+                                    {{news.index}}
+                                </i>
+                            </span>
+                        {{news.title}}
+                    </li>
+                   
+                    <li class="list-group-item"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default" style="height: auto; min-height: 600px">
+                <div class="panel-heading"><span class="glyphicon glyphicon-comment">&nbsp;<b>新闻内容</b></span></div>
+                <div class="panel-body">
+                    <div class="page-header">
+                        <h2 class="text-center text-box">{{pageTitle}}</h2>
+                        <h5 class="text-center" style="margin-left: 200px">{{pageCreateTime}}</h5>
+                    </div>
+                    <div class="page">
+                      {{pageContent}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

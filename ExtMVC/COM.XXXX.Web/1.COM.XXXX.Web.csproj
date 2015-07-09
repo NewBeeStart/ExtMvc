@@ -11168,6 +11168,7 @@
     <Content Include="WebSite\static\angular\docs\img\tutorial\tutorial_05.pptx" />
     <Content Include="WebSite\static\angular\errors.json" />
     <Content Include="WebSite\static\angular\version.json" />
+    <Content Include="WebSite\CompanyInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\COM.XXXX.Common\6.COM.XXXX.Common.csproj">
