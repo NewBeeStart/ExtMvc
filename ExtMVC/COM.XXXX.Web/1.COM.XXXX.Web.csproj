@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\JObjectModelBinder.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -10609,6 +10610,7 @@
     <Content Include="WebSite\static\bootstrap\_config.yml" />
     <Content Include="WebSite\static\css\productroll10.css" />
     <Content Include="WebSite\static\img\company.jpg" />
+    <Content Include="WebSite\static\img\contact.jpg" />
     <Content Include="WebSite\static\img\imagrotation\1.jpg" />
     <Content Include="WebSite\static\img\imagrotation\2.jpg" />
     <Content Include="WebSite\static\img\imagrotation\3.jpg" />
@@ -10978,6 +10980,7 @@
     <Content Include="Areas\Cms\Views\CmsPageAttribute\Index.cshtml" />
     <Content Include="Areas\Cms\Views\CmsPage\Index.cshtml" />
     <Content Include="Areas\Cms\Views\CmsPage\PageList.cshtml" />
+    <Content Include="Areas\Cms\Views\CmsPagePicture\Index.cshtml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -11168,7 +11171,11 @@
     <Content Include="WebSite\static\angular\docs\img\tutorial\tutorial_05.pptx" />
     <Content Include="WebSite\static\angular\errors.json" />
     <Content Include="WebSite\static\angular\version.json" />
+    <Content Include="WebSite\News.cshtml" />
     <Content Include="WebSite\CompanyInfo.cshtml" />
+    <Content Include="WebSite\Products.cshtml" />
+    <Content Include="WebSite\BaseShow.cshtml" />
+    <Content Include="WebSite\Contact.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\COM.XXXX.Common\6.COM.XXXX.Common.csproj">

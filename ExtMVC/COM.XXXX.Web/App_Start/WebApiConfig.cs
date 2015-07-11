@@ -5,8 +5,10 @@ using System.Net.Http.Formatting;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
+using System.Web.Mvc;
 using COM.XXXX.WebApi;
 using COM.XXXX.WebApi.Class;
+using Newtonsoft.Json.Linq;
 
 namespace COM.XXXX.Web
 {
@@ -14,6 +16,7 @@ namespace COM.XXXX.Web
     {
         public static void Register(HttpConfiguration config)
         {
+            ModelBinders.Binders.Add(typeof(JObject), new JObjectModelBinder()); 
             config.Services.Replace(typeof(IHttpControllerSelector), new NamespaceHttpControllerSelector(config));
             //自己定义的WebApi错误记录
             config.Filters.Add(new WebApiExceptionFilter());

@@ -48,6 +48,12 @@ namespace COM.XXXX.Models.CMS
         [DataMember]
         public bool? InUse { get; set; }
 
+        /// <summary>
+        /// 排序字段
+        /// </summary>
+        [DataMember]
+        public int? SortIndex { get; set; }
+
         public virtual Cms_Page PageType { get; set; }
 
         //public virtual List<Cms_PageAttribute> Attributes { get; set; }

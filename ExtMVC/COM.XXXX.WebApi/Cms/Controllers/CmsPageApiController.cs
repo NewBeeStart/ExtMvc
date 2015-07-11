@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -93,13 +94,13 @@ namespace COM.XXXX.WebApi.Cms.Controllers
         [HttpPost]
         public HttpResponseMessage GetPages(Guid? webid, string code)
         {
-            Cms_Channel channels = new CmsChannelApiController().Repository.Query(u => u.ChannelCode == code && u.WebSiteID == webid).First();
+            Cms_Channel channels = new CmsChannelApiController().Repository.Query(u => u.ChannelCode == code && u.WebSiteID == webid && u.InUse == true).First();
 
-            Cms_Classify cmsClassifies = new CmsClassifyApiController().Repository.Query(u => u.Code == code && u.ChannelID == channels.ID).First();
+            Cms_Classify cmsClassifies = new CmsClassifyApiController().Repository.Query(u => u.Code == code && u.ChannelID == channels.ID && u.InUse == true).First();
 
-            Cms_PageType cmsPageTypes = new CmsPageTypeApiController().Repository.Query(u => u.TypeCode == code && u.ClassifyID == cmsClassifies.ID).First();
+            Cms_PageType cmsPageTypes = new CmsPageTypeApiController().Repository.Query(u => u.TypeCode == code && u.ClassifyID == cmsClassifies.ID && u.InUse == true).First();
 
-            List<Cms_Page> pages =new CmsPageApiController().Repository.Query(u => u.PageCode == code && u.PageTypeID == cmsPageTypes.ID)
+            List<Cms_Page> pages =new CmsPageApiController().Repository.Query(u => u.PageCode == code && u.PageTypeID == cmsPageTypes.ID&&u.InUse==true).OrderBy(item=>item.SortIndex)
                     .ToList();
 
 
@@ -135,7 +136,12 @@ namespace COM.XXXX.WebApi.Cms.Controllers
         [HttpPost]
         public HttpResponseMessage GetPageTitleListByCode(string code)
         {
-            List<Cms_Page> pages =new CmsPageApiController().Repository.Query(u => u.PageCode == code).ToList();
+
+            List<Cms_Page> pages =
+                new CmsPageApiController().Repository.SqlQuery<Cms_Page>(@"select * from Cms_Page 
+                where PageCode=@Code and InUse=1
+                order by sortindex", new SqlParameter("@Code",code)).ToList();
+
             List<Cms_PageTitle> result = new List<Cms_PageTitle>();
             foreach (var page in pages)
             {
@@ -144,6 +150,23 @@ namespace COM.XXXX.WebApi.Cms.Controllers
             return toJson(result);
         }
 
+
+        [HttpPost]
+        public HttpResponseMessage GetClassifyListByChannelCode(string code) 
+        {
+            var cmsChannel = new CmsChannelApiController().Repository.Query(u => u.ChannelCode == code);
+            if (cmsChannel.Any())
+            {
+                var model = cmsChannel.First();
+                List<Cms_Classify> classifies =
+                     new CmsClassifyApiController().Repository.Query(u => u.ChannelID==model.ID).ToList();
+                return toJson(classifies);
+
+            }
+
+            return toJson(new List<Cms_Classify>());
+          
+        }
 
         /// <summary>
         /// 通过pageid获取Page页面详细信息
@@ -156,12 +179,17 @@ namespace COM.XXXX.WebApi.Cms.Controllers
             Cms_Page page = new CmsPageApiController().Get(id);
             if (page != null)
             {
+                var titleList = new CmsPageTitleApiController().Repository.Query(item => item.PageID == page.ID);
+                var attributeList = new CmsPageAttributeApiController().Repository.Query(item => item.PageID == page.ID);
+                var contentList = new CmsPageContentApiController().Repository.Query(item => item.PageID == page.ID);
+                var picturesList = new CmsPagePictureApiController().Repository.Query(item => item.PageID == page.ID);
                 return toJson(new
                 {
-                    title = new CmsPageTitleApiController().Repository.Query(item => item.PageID == page.ID).First(),
-                    attribute = new CmsPageAttributeApiController().Repository.Query(item => item.PageID == page.ID).First(),
-                    content = new CmsPageContentApiController().Repository.Query(item => item.PageID == page.ID).First(),
-                    pictures = new CmsPagePictureApiController().Repository.Query(item => item.PageID == page.ID).ToList()
+                    title = titleList.Any() ? titleList.First() : new Cms_PageTitle(),
+                    attribute = attributeList.Any() ? attributeList.First() : new Cms_PageAttribute(),
+                    content = contentList.Any() ? contentList.First() : new Cms_PageContent(),
+                    pictures = picturesList.Any() ? picturesList.ToList() : new List<Cms_PagePicture>()
+
                 });
             }
             return toJson(new
@@ -171,6 +199,86 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                 content = new Cms_PageContent(),
                 pictures = new List<Cms_PagePicture>()
             });
+        }
+
+
+
+        /// <summary>
+        /// 通过pagecode获取Page页面详细信息
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public HttpResponseMessage GetPageInfoByCode(string code) 
+        {
+            var  pages = new CmsPageApiController().Repository.Query(u=>u.PageCode==code);
+            if (pages.Any())
+            {
+                var page = pages.First();
+                var titleList = new CmsPageTitleApiController().Repository.Query(item => item.PageID == page.ID);
+                var attributeList = new CmsPageAttributeApiController().Repository.Query(item => item.PageID == page.ID);
+                var contentList = new CmsPageContentApiController().Repository.Query(item => item.PageID == page.ID);
+                var picturesList = new CmsPagePictureApiController().Repository.Query(item => item.PageID == page.ID);
+                return toJson(new
+                {
+                    title = titleList.Any()? titleList.First():new Cms_PageTitle(),
+                    attribute = attributeList.Any() ?  attributeList.First():new Cms_PageAttribute() ,
+                    content = contentList.Any() ? contentList.First() : new Cms_PageContent(),
+                    pictures = picturesList.Any() ? picturesList.ToList() : new List<Cms_PagePicture>()
+
+                });
+            }
+            return toJson(new
+            {
+                title = new Cms_PageTitle(),
+                attribute = new Cms_PageAttribute(),
+                content = new Cms_PageContent(),
+                pictures = new List<Cms_PagePicture>()
+            });
+        }
+
+        /// <summary>
+        /// 通过pagecode获取Page页面详细信息
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpPost] 
+        public HttpResponseMessage GetOnline(JObject form)
+        {
+            var name = form["name"].ToString().Trim();
+            var telephone = form["telephone"].ToString().Trim();
+            var email = form["email"].ToString().Trim();
+            var product = form["product"].ToString().Trim();
+            var remark = form["Remark"].ToString().Trim();
+            var address = form["address"].ToString().Trim();
+            if (string.IsNullOrEmpty(name)||string.IsNullOrEmpty(telephone)||string.IsNullOrEmpty(email)||string.IsNullOrEmpty(product)||string.IsNullOrEmpty(remark)||string.IsNullOrEmpty(address))
+            {
+                return toJson(new {success = false, msg = "请填写完整的表单，否则我们无法与您取得联系"});
+            }
+            var channel = new CmsChannelApiController().Repository.Query(u => u.ChannelCode == "Online");
+            if (channel.Any())
+            {
+                var model = channel.First();
+                var count=new CmsClassifyApiController().Repository.GetCount(u => u.ChannelID == model.ID);
+                var flag = new CmsClassifyApiController().PostMD(new Cms_Classify()
+                {
+                    Code = "Online",
+                    ChannelID = model.ID,
+                    InUse = true,
+                    PageContent =
+                        string.Format(@"姓名:{0}<br/>电话:{1}<br/>email:{2}<br/>产品：{3}<br/>备注:{4}<br/>地址:{5}<br/>",
+                            name, telephone, email, product, remark, address),
+                    Name = "在线订单-" + DateTime.Now.ToString("YY-MM-DD"),
+                    Remark = "在线订单",
+                    SortIndex = 0
+
+                });
+                if (flag)
+                {
+                    return toJson(new { success = true, msg = "谢谢您的支持,我们将尽快与您联系！" }); 
+                }
+            }
+            return toJson(new { success = true, msg = "您的信息有误!请重新输入" }); 
         }
 
         #endregion

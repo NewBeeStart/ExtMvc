@@ -460,11 +460,11 @@
 
                         listeners: {
                             selectionchange: {
-                                //fn: function (dv, nodes) {
-                                //    var l = nodes.length;
-                                //    var s = l != 1 ? 's' : '';
-                                //    panel.setTitle('Simple DataView (' + l + ' item' + s + ' selected)');
-                                //}
+                                fn: function (dv, nodes) {
+                                    console.log(this.getSelectedNodes()[0]);
+                                    console.log(dv);
+                                    console.log(nodes);
+                                }
                             }
                         }
                     }
@@ -539,6 +539,23 @@
                                 text: 'Reset',
                                 handler: function () {
                                     Ext.getCmp("picPanel").getForm().reset();
+                                }
+                            }, {
+                                text: 'Reset',
+                                handler: function () {
+                                    //top.top.ExtWindow("图片列表",500,600,"/Cms/CmsPagePictrue",PageID)
+                                    var win = new Ext.Window({
+                                        title: "图片列表",
+                                        layout: 'fit',    //设置布局模式为fit，能让frame自适应窗体大小
+                                        modal: true,    //打开遮罩层
+
+                                        height: 500,    //初始高度
+                                        width: 600,  //初始宽度
+                                        frame: true,    //去除窗体的panel框架
+                                        html: '<iframe frameborder=0 width="100%" height="100%" allowtransparency="true" scrolling=auto src="/Cms/CmsPagePicture/index?id=' + PageID + '"></iframe>'
+                                    });
+                                    
+                                    win.show();
                                 }
                             }]
                         })

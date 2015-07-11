@@ -5,7 +5,9 @@
 
 
 <script type="text/javascript">
-    var PageTypeID = "@Request["PageTypeID"]";
+
+    var PageID = "@Request["id"]";
+
     Ext.onReady(function () {
         Ext.QuickTips.init();
         Ext.form.Field.prototype.msgTarget = 'side';
@@ -19,31 +21,28 @@
                 xtype: "grid",
                 layout: "fit",
                 id: "usergrid",
-                title: '页面列表',
+                title: '网站管理',
                 store: new Ext.data.Store({
                     storeId: "gridstore",
                     paramNames: {
                         start: 'start',  // The parameter name which specifies the start row
                         limit: 'limit',  // The parameter name which specifies number of rows to return
-                        PageTypeID: PageTypeID
+                        PageID: PageID
                     },
                     proxy: new Ext.data.HttpProxy({
-                        url: "@Url.Content("/Api/Cms/CmsPage/GetGridPager")",
+                        url: "@Url.Content("/Api/Cms/CmsPagePicture/GetGridPager")",
                         method: "Post",
-                        params: { PageTypeID: PageTypeID }
-                               }),
+                        params: { PageID: PageID }
+                    }),
                    reader: new Ext.data.JsonReader({
                        root: "data",
                        totalProperty: "count"
                    }, [
                         { name:'ID'},
-                        { name:'PageTypeID'},
                         { name:'PicPath'},
-                        { name: 'PageName' },
-                        { name: 'PageCode' },
-                        { name: 'Remark' },
-                        { name: "InUse" },
-                        { name: "SortIndex" }
+                        { name:'Remark'},
+                        { name:'PageID'},
+                        { name:'SortIndex'}
                    ])
                }),
                 stripeRows: true,
@@ -51,14 +50,12 @@
                 trackMouseOver: false,
                 loadMask: true,
                 columns: [
-                       //{ header: "", dataIndex: 'ID', width: 20, hidden: false, sortable: true },
-                       //{ header: "", dataIndex: 'PageTypeID', width: 20, hidden: false, sortable: true },
-                       { header: "页面名称", dataIndex: 'PageName', width: 20, hidden: false, sortable: true },
-                       { header: "页面名称", dataIndex: 'PageCode', width: 20, hidden: false, sortable: true },
-                       { header: "缩略图", dataIndex: 'PicPath', width: 20, hidden: false, sortable: true },
-                       { header: "备注信息", dataIndex: 'Remark', width: 20, hidden: false, sortable: true },
-                       { header: "启用", dataIndex: 'InUse', width: 20, hidden: false, sortable: true },
+                       { header: "ID", dataIndex: 'ID', width: 20, hidden: false, sortable: true },
+                       { header: "图片路径", dataIndex: 'PicPath', width: 20, hidden: false, sortable: true },
+                       { header: "图片说明", dataIndex: 'Remark', width: 20, hidden: false, sortable: true },
+                       { header: "页面标识", dataIndex: 'PageID', width: 20, hidden: false, sortable: true },
                        { header: "排序", dataIndex: 'SortIndex', width: 20, hidden: false, sortable: true },
+                
                    {
                        header: '操作',
                        width: 20,
@@ -94,7 +91,7 @@
                 })
             }]
         });
-        Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10 ,PageTypeID: PageTypeID} });
+        Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10, PageID: PageID } });
 
 
     
@@ -102,11 +99,11 @@
     function Delete(data) {
         Ext.Ajax.request({
             waitMsg: '正在提交...',
-            url: '@Url.Content("/Api/Cms/CmsPage/Delete/")'+data.ID,
+            url: '@Url.Content("/Api/Cms/CmsPagePicture/Delete/")'+data.ID,
                 method:"delete",
                 success: function (form, action) {
                     Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
-                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10, PageTypeID: PageTypeID } });
+                    Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10, PageID: PageID } });
                 },
                 failure: function (form, action) {
                     Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
@@ -123,47 +120,11 @@
             layout: 'form',
             defaultType: 'textfield',
             items: [
-                {xtype: 'hidden',id:'ID'},
-                { xtype: 'hidden', value: PageTypeID, id: 'PageTypeID' },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '页面名称', id: 'PageName', labelWidth: 50 },
-                 { xtype: 'textfield', readOnly: false, fieldLabel: '页面编码', id: 'PageCode', labelWidth: 50 },
-                {xtype: 'textfield',readOnly: false,fieldLabel: '缩略图',id:'PicPath',labelWidth: 50},
-                { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', id: 'Remark', labelWidth: 50 },
-                
-                {
-                    fieldLabel: '启用',
-                    name: 'InUse',
-                    hiddenName: 'InUse',
-                    xtype: 'combo',
-                    mode: 'local',
-                    displayField: "Name",
-                    valueField: "Id",
-                    editable: false,
-                    typeAhead: true,
-                    emptyText: '请选择...',
-                    forceSelection: true,
-                    triggerAction: 'all',
-                    width: 100,
-                    labelWidth: 50,
-                    store: new Ext.data.JsonStore({
-                        autoLoad: true,
-                        method: 'Post',
-                        idProperty: 'ID',
-                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
-                        fields: [{
-                            name: 'Name',
-                            mapping: 'Title'
-                        }, {
-                            name: 'Id',
-                            mapping: 'Value'
-                        }]
-                    })
-                }, {
-                    fieldLabel: '字典排序',
-                    name: 'SortIndex',
-                    xtype: 'textfield',
-                    value:1
-                }
+                {xtype: 'textfield',readOnly: false,fieldLabel: 'ID',id:'ID',labelWidth: 50},
+                {xtype: 'textfield',readOnly: false,fieldLabel: '图片路径',id:'PicPath',labelWidth: 50},
+                {xtype: 'textfield',readOnly: false,fieldLabel: '图片说明',id:'Remark',labelWidth: 50},
+                {xtype: 'textfield',readOnly: false,fieldLabel: '页面标识',id:'PageID',labelWidth: 50},
+                {xtype: 'textfield',readOnly: false,fieldLabel: '排序',id:'SortIndex',labelWidth: 50}
                 ]
         });
         var win = new Ext.Window({
@@ -181,7 +142,7 @@
                 handler: function () {
                     if (formpanel.getForm().isValid()) {
                         formpanel.getForm().submit({
-                            url: '/Api/Cms/CmsPage/Add',
+                            url: '/Api/Cms/CmsPagePicture/Add',
                             method: "Post",
                             params: {
                             },
@@ -189,7 +150,7 @@
                             waitMsg: '正在提交中',
                             success: function (form, action) {
                                 Ext.Msg.alert('提示', action.result.message);
-                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10, PageTypeID: PageTypeID } });
+                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10, PageID: PageID } });
                             },
                             failure: function (form, action) {
                                 Ext.Msg.alert('提示', action.result.message);
@@ -218,56 +179,19 @@
             defaultType: 'textfield',
             reader: new Ext.data.JsonReader({ successProperty: 'success', root: 'message' },
             [
-                'ID','PageTypeID','PicPath','PageName','Remark',"PageCode","InUse","SortIndex"
+'ID','PicPath','Remark','PageID','SortIndex'
             ]),
             items: [
-                { xtype: 'hidden', id: 'ID' },
-                { xtype: 'hidden',value: PageTypeID, id: 'PageTypeID' },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '页面名称', id: 'PageName', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '页面编码', id: 'PageCode', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '缩略图', id: 'PicPath', labelWidth: 50 },
-                { xtype: 'textfield', readOnly: false, fieldLabel: '备注信息', id: 'Remark', labelWidth: 50 },
-                 {
-                     fieldLabel: '字典排序',
-                     name: 'SortIndex',
-                     xtype: 'textfield',
-                     value:1
-                    
-                 },
-                {
-                    fieldLabel: '启用',
-                    name: 'InUse',
-                    hiddenName: 'InUse',
-                    xtype: 'combo',
-                    mode: 'local',
-                    displayField: "Name",
-                    valueField: "Id",
-                    editable: false,
-                    typeAhead: true,
-                    emptyText: '请选择...',
-                    forceSelection: true,
-                    triggerAction: 'all',
-                    width: 100,
-                    labelWidth: 50,
-                    store: new Ext.data.JsonStore({
-                        autoLoad: true,
-                        method: 'Post',
-                        idProperty: 'ID',
-                        url: "/Api/Dictionary/GetDictionaryByPCode?pcode=Status",
-                        fields: [{
-                            name: 'Name',
-                            mapping: 'Title'
-                        }, {
-                            name: 'Id',
-                            mapping: 'Value'
-                        }]
-                    })
-                }
+                {xtype: 'textfield',readOnly: false,fieldLabel: 'ID',id:'ID',labelWidth: 50},
+                            {xtype: 'textfield',readOnly: false,fieldLabel: '图片路径',id:'PicPath',labelWidth: 50},
+                            {xtype: 'textfield',readOnly: false,fieldLabel: '图片说明',id:'Remark',labelWidth: 50},
+                            {xtype: 'textfield',readOnly: false,fieldLabel: '页面标识',id:'PageID',labelWidth: 50},
+                            {xtype: 'textfield',readOnly: false,fieldLabel: '排序',id:'SortIndex',labelWidth: 50}
             ]
         });
         
         formpanel.form.load({
-            url: '@Url.Content("/Api/Cms/CmsPage/GetForm/")'+data.ID,
+            url: '@Url.Content("/Api/Cms/CmsPagePicture/GetForm/")'+data.ID,
                method: "Get",
                waitMsg: 'Loading',
                success: function (form, response) {
@@ -289,13 +213,13 @@
                 handler: function () {
                     if (formpanel.getForm().isValid()) {
                         formpanel.getForm().submit({
-                            url: '/Api/Cms/CmsPage/Put?id=' + data.ID,
+                            url: '/Api/Cms/CmsPagePicture/Put?id=' + data.ID,
                             method: "Put",
                             waitTitle: '请等待',
                             waitMsg: '正在提交中',
                             success: function (form, action) {
                                 Ext.Msg.alert('提示', action.result.message);
-                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10, PageTypeID: PageTypeID } });
+                                Ext.StoreMgr.get("gridstore").load({ params: { start: 0, limit: 10, PageID: PageID } });
                             },
                             failure: function (form, action) {
                                 Ext.Msg.alert('提示', action.result.message);

@@ -94,7 +94,18 @@ namespace COM.XXXX.WebApi.Cms.Controllers
                 toJson(
                     base.Repository.Query(u => u.WebSiteID == webid && u.ChannelCode == code).OrderBy(u => u.SortIndex).First());
         }
-
+          /// <summary>
+          /// 通过站点id和频道编号获取频道信息
+          /// </summary>
+          /// <param name="code"></param>
+          /// <returns></returns>
+          [HttpPost]
+          public HttpResponseMessage GetChannelByCode(string code)
+          {
+              return
+                  toJson(
+                      base.Repository.Query(u =>  u.ChannelCode == code).OrderBy(u => u.SortIndex).First());
+          }
         #endregion
     }
 }

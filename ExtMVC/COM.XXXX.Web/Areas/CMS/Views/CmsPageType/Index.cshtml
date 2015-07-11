@@ -131,7 +131,8 @@
                         waitMsg: '正在提交中',
                         success: function (form, action) {
                             Ext.Msg.alert('提示', action.result.message);
-                            // Ext.getCmp("webSiteTree").root.reload()
+                            Ext.getCmp("webSiteTree").root.reload();
+                            Ext.getCmp("webSiteTree").expandAll();
                         },
                         failure: function (form, action) {
                             Ext.Msg.alert('提示', action.result.message);
@@ -253,6 +254,8 @@
                                     success: function (form, action) {
                                         Ext.Msg.alert('提示', action.result.message);
                                         // Ext.getCmp("webSiteTree").root.reload()
+                                        Ext.getCmp("webSiteTree").root.reload();
+                                        Ext.getCmp("webSiteTree").expandAll();
                                     },
                                     failure: function (form, action) {
                                         Ext.Msg.alert('提示', action.result.message);
@@ -284,6 +287,9 @@
                         method: "delete",
                         success: function (form, action) {
                             Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+
+                            Ext.getCmp("webSiteTree").root.reload();
+                            Ext.getCmp("webSiteTree").expandAll();
                         },
                         failure: function (form, action) {
                             Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
@@ -426,6 +432,8 @@
                             waitMsg: '正在提交中',
                             success: function (form, action) {
                                 Ext.Msg.alert('提示', action.result.message);
+                                Ext.getCmp("webSiteTree").root.reload();
+                                Ext.getCmp("webSiteTree").expandAll();
                             },
                             failure: function (form, action) {
                                 Ext.Msg.alert('提示', action.result.message);
@@ -442,7 +450,7 @@
                         method: "Get",
                         waitMsg: 'Loading',
                         success: function (form, response) {
-                            RefreshPanel(channelForm, Ext.getCmp("panel1"))
+                            RefreshPanel(channelForm, Ext.getCmp("panel1"));
 
                         }
                     });
@@ -458,6 +466,9 @@
                     method: "delete",
                     success: function (form, action) {
                         Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+
+                        Ext.getCmp("webSiteTree").root.reload();
+                        Ext.getCmp("webSiteTree").expandAll();
                     },
                     failure: function (form, action) {
                         Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
@@ -498,8 +509,9 @@
                             ///重新加载contentPanel
                             var temp = Ext.get("PageListFrame");
                             temp.dom.innerHTML = '<iframe id="PageListframe" scrolling="auto" height="500px"  frameborder="0" width="100%" height="100%" src="@Url.Content("~/Cms/CmsPage/PageList")?PageTypeID=' + pageTypeId + '"> </iframe>'
-                            ;
                             contentPanel.doLayout();
+                            Ext.getCmp("webSiteTree").root.reload();
+                            Ext.getCmp("webSiteTree").expandAll();
                         },
                         failure: function (form, action) {
                             Ext.Msg.alert('提示', action.result.message);
@@ -517,6 +529,9 @@
                     method: "delete",
                     success: function (form, action) {
                         Ext.Msg.alert("网站信息：", '亲~,恭喜你，删除成功~');
+
+                        Ext.getCmp("webSiteTree").root.reload();
+                        Ext.getCmp("webSiteTree").expandAll();
                     },
                     failure: function (form, action) {
                         Ext.Msg.alert('异常警告：', "亲~，不好意思，数据删除失败~");
@@ -869,143 +884,3 @@
     });
 
 </script>
-@* var pid;
-
-    
-    var addform = new Ext.FormPanel({
-        buttonAlign: 'center',
-        labelAlign: "right",
-        plain: true,
-        anchor: '100% 100%',
-        layout: "anchor",
-        frame: true,
-        reader: new Ext.data.JsonReader(
-            { successProperty: 'success', root: 'message' },
-            ['ID', 'PDictionaryID', 'Code', 'Title', 'Value', 'Sort', 'iconCls', 'Desc']
-         ),
-        defaults: { margins: '0 5 0 0' },
-        title: "字典信息",
-        items: [
-            {
-                xtype: 'fieldset',
-                collapsible: false,
-                anchor: '100% 100%',
-                items: [{
-                    xtype: "hidden",
-                    name: "PDictionaryID",
-                    id: "pid"
-                },
-                {
-                    xtype: "hidden",
-                    name: "ID",
-                    id:'id'
-                }, {
-                    xtype: "textfield",
-                    name: "Code",
-                    fieldLabel: '字典代码',
-                },
-                    {
-                        fieldLabel: '字典键',
-                        name: 'Title',
-                        xtype: 'textfield',
-                        width: 300
-                    }, {
-                        fieldLabel: '字典值',
-                        name: 'Value',
-                        xtype: 'textfield',
-                        width: 300
-                    }, {
-                        fieldLabel: '字典排序',
-                        name: 'Sort',
-                        xtype: 'textfield',
-                        width: 300
-                    },
-                    {
-                        fieldLabel: '备注',
-                        xtype: 'textarea',
-                        name: "Desc",
-                        height: 150,
-                        anchor: '95%'
-                    }
-                ]
-            }
-        ], buttons: [{
-            xtype: "button",
-            text: "新增子项",
-            id: 'subadd',
-            style: "float:right",
-            handler: function () {
-                addform.form.reset();
-            }
-        }, {
-            xtype: "button",
-            text: "保存",
-            id:"update",
-            style: "float:right",
-            handler: function () {
-                var pid = Ext.getCmp("id").getValue();
-                var type = pid ? "Put" : "Post";
-                addform.getForm().submit({
-                    url: '/Api/Dictionary/' + pid,
-                    method: type,
-                    waitTitle: '请等待',
-                    waitMsg: '正在提交中',
-                    success: function (form, action) {
-                        Ext.getCmp("dictree").root.reload()
-                        Ext.Msg.alert('提示', action.result.message);
-                    },
-                    failure: function (form, action) {
-                        Ext.Msg.alert('提示', action.result.message);
-                    }
-                });
-            }
-        }, {
-            xtype: "button",
-            text: "返回",
-            id: "return",
-            hidden: true,
-            style: "float:right",
-            handler: function () {
-                addform.form.reset()
-                Ext.getCmp("update").show();
-                Ext.getCmp("subadd").show();
-                Ext.getCmp("return").hide();
-                Ext.getCmp("reset").hide();
-                addform.form.load({
-                    url: '@Url.Content("/Api//Dictionary/GetForm/")' + pid,
-                    method: "Get",
-                    waitMsg: 'Loading',
-                    success: function (form, action) {
-                      //  ;
-                    }
-                });
-            }
-        }, {
-            xtype: "button",
-            text: "删除",
-            id: "delete",
-            style: "float:right",
-            handler: function () {
-                addform.form.submit({
-                    url: '@Url.Content("/Api/Dictionary/")' + Ext.getCmp("id").getValue(),
-                     method: "Delete",
-                     waitMsg: 'Loading',
-                     success: function (form, action) {
-                         Ext.getCmp("dictree").root.reload()
-                         addform.form.reset();
-                         Ext.Msg.alert('提示', action.result.message);
-                     }
-                });
-            }
-        }, {
-            xtype: "button",
-            text: "重置",
-            id: "reset",
-            hidden: true,
-            style: "float:right",
-            handler: function () {
-                addform.form.reset();
-                Ext.getCmp("pid").setValue(pid);
-            }
-        }]
-    });*@

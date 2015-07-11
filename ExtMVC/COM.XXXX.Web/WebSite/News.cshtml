@@ -5,14 +5,13 @@
 {
     <script>
         app.controller("newsInfoController", [
-            '$scope', '$http', function($scope, $http) {
+            '$scope', '$http', '$sce', function ($scope, $http, $sce) {
                 function getinfo(id) {
                     var pageinfoUrl = "../Api/Cms/CmsPage/GetPageInfo?id=" + id;
                     $http.post(pageinfoUrl).success(function(data) {
-                        $scope.pageContent = data.content.PageContent;
+                        $scope.pageContent = $sce.trustAsHtml(data.content.PageContent);
                         $scope.pageTitle = data.title.TitleContent;
                         $scope.pageCreateTime = "日期：" + data.attribute.UpdateTime;
-
                     });
                 }
 
@@ -30,8 +29,8 @@
                     });
                     $scope.newsList = temp;
                     if (temp.length > 0) {
+                        getinfo(temp[0].pageid);
                     }
-                    getinfo(temp[0].pageid);
                 });
 
             }
@@ -47,7 +46,7 @@
                 <div class="panel-heading text-box"><b class="glyphicon glyphicon-align-justify">&nbsp;<b>列表资源</b></b></div>
                 <ul class="list-group">
                     <li ng-repeat="news in newsList" ng-click="newsinfo.click(news.pageid)" class="list-group-item">
-                        <span>
+                            <span>
                                 <i style="background-color: #3A6EA5; color: white; border-radius: 4px; padding-left: 3px; padding-right: 3px; margin-left: 5px; margin-right: 5px">
                                     {{news.index}}
                                 </i>
@@ -67,8 +66,8 @@
                         <h2 class="text-center text-box">{{pageTitle}}</h2>
                         <h5 class="text-center" style="margin-left: 200px">{{pageCreateTime}}</h5>
                     </div>
-                    <div class="page">
-                      {{pageContent}}
+                    <div ng-bind-html="pageContent" class="page">
+                     
                     </div>
                 </div>
             </div>

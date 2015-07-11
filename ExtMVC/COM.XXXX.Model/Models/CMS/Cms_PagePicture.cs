@@ -25,6 +25,11 @@ namespace COM.XXXX.Models.CMS
         /// </summary>
         [DataMember]
         public Guid? PageID { get; set; }
+        /// <summary>
+        /// 图片排序
+        /// </summary>
+        [DataMember]
+        public int? SortIndex { get; set; }
 
         public  virtual Cms_PageType Page { get; set; }
     }

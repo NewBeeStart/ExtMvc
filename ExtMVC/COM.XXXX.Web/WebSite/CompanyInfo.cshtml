@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "Shared/_Layout.cshtml";
+}
+@section head
+{
+    <script>
+        app.controller("CompanyInfoController", [
+            '$scope', '$http', '$sce', function ($scope, $http, $sce) {
+                function getinfo(code) {
+                    var pageinfoUrl = "../Api/Cms/CmsPage/GetPageInfoByCode?code=" + code;
+                    $http.post(pageinfoUrl).success(function (data) {
+                        $scope.pageContent = $sce.trustAsHtml(data.content.PageContent);
+                        $scope.pageTitle = data.title.TitleContent;
+                        $scope.pageCreateTime = "日期：" + data.attribute.UpdateTime;
+                    });
+                }
+                getinfo("CompanyInfo");
+            }
+        ]);
+
+        //联系我们 
+        app.controller("contactController", [
+                   '$scope', '$http', '$sce', function ($scope, $http, $sce) {
+                       var pageinfoUrl = "../Api/Cms/CmsChannel/GetChannelByCode?code=Contact";
+                           $http.post(pageinfoUrl).success(function (data) {
+                               $scope.ChannelName = data.ChannelName;
+                               $scope.ChannelCode = data.ChannelCode;
+                               $scope.PageContent = $sce.trustAsHtml(data.PageContent);
+                           });
+                   }
+        ]);
+</script>
+
+
+
+}
+
+
+<div  class="container"   style="height: auto; margin-top: 10px">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default" style="height: auto; min-height: 290px">
+                <div class="panel-heading"><span class="glyphicon glyphicon-comment">&nbsp;<b></b></span></div>
+
+            </div>
+             <div ng-controller="contactController"  class="panel panel-default" style="height: auto; min-height: 290px;background-image: url('static/img/contact.jpg')">
+                 <div class="panel-heading"><span class="glyphicon glyphicon-comment">&nbsp;<b>{{ChannelName}}</b></span></div>
+                 <div ng-bind-html="PageContent" class="panel-body">
+                        
+                 </div>
+            </div>
+        </div>
+        <div ng-controller="CompanyInfoController as compayinfo" class="col-md-9">
+            <div class="panel panel-default" style="height: auto; min-height: 600px">
+                <div class="panel-heading"><span class="glyphicon glyphicon-comment">&nbsp;<b>公司简介</b></span></div>
+                <div class="panel-body">
+                    <div class="page-header">
+                        <h2 class="text-center text-box">{{pageTitle}}</h2>
+                        <h5 class="text-center" style="margin-left: 200px">{{pageCreateTime}}</h5>
+                    </div>
+                    <div ng-bind-html="pageContent" class="page">
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

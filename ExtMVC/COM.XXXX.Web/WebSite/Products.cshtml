@@ -1,0 +1,73 @@
+﻿@{
+    Layout = "Shared/_Layout.cshtml";
+}
+@section head
+{
+  
+    <script>
+        app.controller("productListController", [
+            '$scope', '$http','$sce', function ($scope, $http, $sce) {
+               function getinfo(code) {
+                    var pageinfoUrl = "../Api/Cms/CmsPage/GetPageInfoByCode?code=" + code;
+                    $http.post(pageinfoUrl).success(function (data) {
+                        $scope.pictures = data.pictures;
+                    });
+                }
+
+                this.click = getinfo;
+                var productListUrl = "../Api/Cms/CmsPage/GetClassifyListByChannelCode?code=Products";
+                $http.post(productListUrl).success(function (data) {
+                    var temp = new Array();
+                    angular.forEach(data, function (item) {
+                        temp.push({
+                            Name: item.Name,
+                            Code:item.Code,
+                            PageContent:$sce.trustAsHtml(item.PageContent)
+                        });
+                    });
+
+                    $scope.ProductTypeList = temp;
+                    if (temp.length > 0) {
+                         getinfo(temp[0].Code);
+                    }
+                    
+                });
+
+            }
+        ]);
+    </script>
+}
+
+
+<div ng-controller="productListController as productList" class="container" style="height: auto; margin-top: 10px">
+    <div  class="row">
+        <div  class="col-md-3">
+            <div class="panel panel-default" style="height: auto; min-height: 600px">
+                <div class="panel-heading text-box" style="margin-bottom: 20px" ><b class="glyphicon glyphicon-align-justify">&nbsp;<b>列表资源</b></b></div>
+                <div ng-repeat="productType in ProductTypeList" class="col-md-6">
+                      <div  ng-click="productList.click(productType.Code)" ng-bind-html="productType.PageContent" class="thumbnail"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default" style="height: auto; min-height: 600px">
+                <div class="panel-heading"><span class="glyphicon glyphicon-comment">&nbsp;<b>产品列表</b></span></div>
+                <div class="panel-body">
+                    <div class="page">
+                        <div class="row">
+                            <div ng-repeat="pic in pictures" class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img ng-src="{{pic.PicPath.replace('~','')}}" style="height: 100%;width: 100%" alt="{{pic.Remark}}">
+                                    <div class="caption">
+                                        <h3 >{{pic.Remark}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

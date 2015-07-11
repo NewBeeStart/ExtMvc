@@ -89,6 +89,7 @@
     <Compile Include="Areas\Cms\Controllers\CmsPageAttributeController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsPageContentController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsPageController.cs" />
+    <Compile Include="Areas\Cms\Controllers\CmsPagePictureController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsPageTypeController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsClassifyController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsChannelController.cs" />
