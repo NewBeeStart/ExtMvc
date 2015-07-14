@@ -4,6 +4,7 @@
 @section head
 {
     <script>
+        var newsid = "@Request["id"]";
         app.controller("newsInfoController", [
             '$scope', '$http', '$sce', function ($scope, $http, $sce) {
                 function getinfo(id) {
@@ -29,7 +30,11 @@
                     });
                     $scope.newsList = temp;
                     if (temp.length > 0) {
-                        getinfo(temp[0].pageid);
+
+                        if (newsid)
+                            getinfo(newsid);
+                        else
+                            getinfo(temp[0].pageid);
                     }
                 });
 
