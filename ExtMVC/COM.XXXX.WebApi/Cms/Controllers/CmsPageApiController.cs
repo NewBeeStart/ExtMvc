@@ -248,9 +248,20 @@ namespace COM.XXXX.WebApi.Cms.Controllers
             var name = form["name"].ToString().Trim();
             var telephone = form["telephone"].ToString().Trim();
             var email = form["email"].ToString().Trim();
-            var product = form["product"].ToString().Trim();
-            var remark = form["Remark"].ToString().Trim();
-            var address = form["address"].ToString().Trim();
+            var product = string.Empty;
+            var remark = string.Empty;
+            var address = string.Empty;
+            if (form["product"]!=null)
+                product= form["product"].ToString().Trim();
+            if (form["Remark"]!=null)
+            {
+               remark= form["Remark"].ToString().Trim();
+            }
+            if (form["address"]!=null)
+            {
+              address= form["address"].ToString().Trim();
+            }
+           
             if (string.IsNullOrEmpty(name)||string.IsNullOrEmpty(telephone)||string.IsNullOrEmpty(email)||string.IsNullOrEmpty(product)||string.IsNullOrEmpty(remark)||string.IsNullOrEmpty(address))
             {
                 return toJson(new {success = false, msg = "请填写完整的表单，否则我们无法与您取得联系"});

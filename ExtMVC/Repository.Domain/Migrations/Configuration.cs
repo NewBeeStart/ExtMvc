@@ -14,6 +14,7 @@ namespace Repository.Domain.Migrations
 
         protected override void Seed(Repository.Domain.TestDbContext context)
         {
+            DBConfiguration.Seed(context);
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
@@ -26,6 +27,7 @@ namespace Repository.Domain.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
         }
     }
 }

@@ -3,11 +3,12 @@
 }
 @section head
 {
-  
+
     <script>
+        var ProductTypeid = "@Request["id"]";
         app.controller("productListController", [
             '$scope', '$http','$sce', function ($scope, $http, $sce) {
-               function getinfo(code) {
+                function getinfo(code) {
                     var pageinfoUrl = "../Api/Cms/CmsPage/GetPageInfoByCode?code=" + code;
                     $http.post(pageinfoUrl).success(function (data) {
                         $scope.pictures = data.pictures;
@@ -28,7 +29,11 @@
 
                     $scope.ProductTypeList = temp;
                     if (temp.length > 0) {
-                         getinfo(temp[0].Code);
+                        if (ProductTypeid)
+                            getinfo(ProductTypeid);
+                        else
+                            getinfo(temp[0].Code);
+                        getinfo(temp[0].Code);
                     }
                     
                 });
@@ -45,7 +50,7 @@
             <div class="panel panel-default" style="height: auto; min-height: 600px">
                 <div class="panel-heading text-box" style="margin-bottom: 20px" ><b class="glyphicon glyphicon-align-justify">&nbsp;<b>列表资源</b></b></div>
                 <div ng-repeat="productType in ProductTypeList" class="col-md-6">
-                      <div  ng-click="productList.click(productType.Code)" ng-bind-html="productType.PageContent" class="thumbnail"></div>
+                      <div  ng-click="click(productType.Code)" ng-bind-html="productType.PageContent" class="thumbnail"></div>
                 </div>
             </div>
         </div>

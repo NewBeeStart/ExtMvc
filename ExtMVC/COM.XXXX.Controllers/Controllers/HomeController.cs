@@ -35,7 +35,7 @@ namespace COM.XXXX.Controllers
 
         public JObject UploadWater()
         {
-            string text = "Eric测试";
+            string text = System.Configuration.ConfigurationManager.AppSettings["PictrueWater"];
             var c = Request.Files[0];
             JObject job = new JObject();
             string destination = Server.MapPath("~/UploadFile/");

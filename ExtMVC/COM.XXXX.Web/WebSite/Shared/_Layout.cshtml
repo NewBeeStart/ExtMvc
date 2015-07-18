@@ -2,12 +2,12 @@
 <html>
 <head>
     <title>农业网站</title>
-    <script src="static/jquery/jquery.min.js"></script>
+    <script src="/WebSite/static/jquery/jquery.min.js"></script>
     <link href="/WebSite/static/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/WebSite/static/bootstrap/dist/css/nav-justified.css" rel="stylesheet">
     <script src="/WebSite/static/angular/angular.js"></script>
     <script src="/WebSite/static/bootstrap/dist/js/bootstrap.min.js"></script>
-      <script src="static/angular/angular-sanitize.min.js"></script>
+      <script src="/WebSite/static/angular/angular-sanitize.min.js"></script>
     <style>
         .footer {
             background: #007ACC;
@@ -84,7 +84,7 @@
                     <ul class="nav nav-justified">
                         <li class='active'><a href='/WebSite/Index'>首页</a></li>
                         <li ng-repeat="menu in menus">
-                            <a ng-href='{{menu.ChannelCode}}'>{{menu.ChannelName}} </a>
+                            <a ng-href='/WebSite/{{menu.ChannelCode}}'>{{menu.ChannelName}} </a>
                         </li>
                     </ul>
                 </nav>
@@ -118,8 +118,8 @@
         <footer ng-controller="footController" class="footer">
             <small>
                 <span style="float: left; margin-left: 100px">
-                        <a href="">首页</a> |
-                        <span ng-repeat="menu in menus"><a href="">{{menu.ChannelName}}</a> |</span> 
+                        <a href="Index">首页</a> |
+                       <a ng-repeat="menu in menus" ng-href="/WebSite/{{menu.ChannelCode}}">&nbsp;{{menu.ChannelName}}&nbsp;|</a> 
                 </span>
                 <span style="float: right; margin-right: 100px">版权所有<span></span><a href="#" title="{{websiteTitle}}">{{websiteTitle.CompanyName}}</a></span>
             </small>

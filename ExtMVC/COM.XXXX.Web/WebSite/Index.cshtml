@@ -5,10 +5,10 @@
 @section head
 {
     <script>
-        
+
         app.controller("companyInfoController", [
-           '$scope', '$http', function ($scope, $http) {
-               var companyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=CompanyInfo";
+            '$scope', '$http', function($scope, $http) {
+                var companyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=CompanyInfo";
                 $http.post(companyUrl).success(function(data) {
                     $scope.companyInfo = data;
                     $("#companyInfo").html(data.PageContent);
@@ -19,9 +19,9 @@
         app.controller("newsInfoController", [
             '$scope', '$http', function($scope, $http) {
                 var newsinfoUrl = "../Api/Cms/CmsPage/GetPageTitleListByCode?code=News";
-                $http.post(newsinfoUrl).success(function (data) {
+                $http.post(newsinfoUrl).success(function(data) {
                     var temp = new Array();
-                    angular.forEach(data, function (item) {
+                    angular.forEach(data, function(item) {
                         temp.push({
                             title: item.TitleContent,
                             index: temp.length + 1,
@@ -34,11 +34,11 @@
         ]);
         //基地展示轮转
         app.controller("baseShowController", [
-            '$scope', '$http', function ($scope, $http) {
+            '$scope', '$http', function($scope, $http) {
                 var picUrl = "../Api/Cms/CmsPagePicture/GetPictureByCode?code=baseshow";
-                $http.post(picUrl).success(function (data) {
+                $http.post(picUrl).success(function(data) {
                     var temp = new Array();
-                    angular.forEach(data.images, function (item) {
+                    angular.forEach(data.images, function(item) {
                         temp.push({
                             path: item.PicPath,
                             index: temp.length,
@@ -49,7 +49,7 @@
                 });
             }
         ]);
-            @*app.controller("baseShowController", [
+        @*app.controller("baseShowController", [
                 '$scope', '$http', function ($scope, $http) {
                     this.images = [
                         { path: "/WebSite/static/img/imagrotation/1.jpg", index: 0, cls: "item active" },
@@ -64,35 +64,58 @@
 
             }
         ]);*@
-            //联系我们
-            app.controller("contactController", [
-                '$scope', '$http', function ($scope, $http) {
-                    var contactUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=Contact";
-                $http.post(contactUrl).success(function (data) {
+        //联系我们
+        app.controller("contactController", [
+            '$scope', '$http', function($scope, $http) {
+                var contactUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=Contact";
+                $http.post(contactUrl).success(function(data) {
                     $scope.contactInfo = data;
                     $("#contactInfo").html(data.PageContent);
                 });
             }
         ]);
 
-            //联系我们
-            app.controller("classifyController", [
-                '$scope', '$http', function ($scope, $http) {
-                    var classifyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=Contact";
-                $http.post(classifyUrl).success(function (data) {
+        //联系我们
+        app.controller("classifyController", [
+            '$scope', '$http', function($scope, $http) {
+                var classifyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=Contact";
+                $http.post(classifyUrl).success(function(data) {
                     $scope.classifyInfo = data;
                     $("#classifyInfo").html(data.PageContent);
                 });
             }
         ]);
-            app.controller("productPicController", [
-                '$scope', '$http', function ($scope, $http) {
-                    var productPic = "../Api/Cms/CmsPagePicture/GetPictureByCode?code=picscoller";
-                    $http.post(productPic).success(function (data) {
-                        $scope.productPicInfo = data.images;
-                    });
+        app.controller("productPicController", [
+            '$scope', '$http', function($scope, $http) {
+                var productPic = "../Api/Cms/CmsPagePicture/GetPictureByCode?code=picscoller";
+                $http.post(productPic).success(function(data) {
+                    $scope.productPicInfo = data.images;
+                });
+            }
+        ]);
+
+        app.controller("productListController", [
+            '$scope', '$http', '$sce', function($scope, $http, $sce) {
+                function OpenProduct(code) {
+                    window.location.href = '/WebSite/Products?id='+code;
                 }
-            ]);
+
+                this.click = OpenProduct;
+                var productListUrl = "../Api/Cms/CmsPage/GetClassifyListByChannelCode?code=Products";
+                $http.post(productListUrl).success(function(data) {
+                    var temp = new Array();
+                    angular.forEach(data, function(item) {
+                        temp.push({
+                            Name: item.Name,
+                            Code: item.Code,
+                            PageContent: $sce.trustAsHtml(item.PageContent)
+                        });
+                    });
+                    $scope.ProductTypeList = temp;
+                });
+            }
+        ]);
+
 
     </script>
 }
@@ -129,7 +152,7 @@
                                 </i>
                             </span>
                         <span style=""><small>{{new.title}}</small></span>
-                        <span class="num" style="float: right"><small><a ng-href="news?id={{new.pageid}}">更多...</a></small></span>
+                        <span class="num" style="float: right"><small><a ng-href="/website/news?id={{new.pageid}}">更多...</a></small></span>
                     </div>
 
                 </div>
@@ -137,15 +160,18 @@
         </div>
     </div>
     <div class="row">
-        <div ng-controller="contactController" class="col-md-4">
-            <div class="panel panel-default" style="height: 290px;background-image: url('static/img/contact.jpg')">
+        <div ng-controller="productListController as productList" class="col-md-4">
+            <div class="panel panel-default" style="height: 290px">
                 <div class="panel-body">
-                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px;"><b>{{contactInfo.ChannelName }}</b>
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px;"><b>产品分类</b>
                     </div>
                     <ul class="media-list">
                         <li class="media">
-                            <li id="contactInfo" class="media"></li>
-
+                           <div ng-repeat="productType in ProductTypeList" class="col-md-6">
+                               <div ng-click="productList.click(productType.Code)">
+                                   <div ng-bind-html="productType.PageContent" class="thumbnail"></div> 
+                               </div>  
+                            </div>
                         </li>
                     </ul>
                 </div>

@@ -2,47 +2,97 @@
     Layout = "Shared/_Layout.cshtml";
 }
 @section head
-{
+{<script src="static/jquery/Validation.js"></script>
     <script>
 
+
         app.controller("onlineController", [
-            '$scope', '$http', function ($scope, $http) {
-               
-                this.submit = function () {
-                    $http.post("../Api/Cms/CmsPage/GetOnline", {
-                        name: $scope.name,
-                        telephone: $scope.telephone,
-                        email: $scope.email,
-                        product: $scope.product,
-                        Remark: $scope.Remark,
-                        address: $scope.address
-                    }).success(function (data) {
-                        console.log(data);
-                    });
+            '$scope', '$http', function($scope, $http) {
+
+                this.submit = function() {
+                    if ($scope.name || $scope.telephone || $scope.email ) {
+
+                        if (!isChina($scope.name)) {
+                            $scope.title = "网站信息！";
+                            $scope.result = "请输入有效的姓名";
+                            return
+                        }
+
+                        if (!isTelephone($scope.telephone)) {
+                            $scope.title = "网站信息！";
+                            $scope.result = "请输入有效的电话号";
+                            return 
+                        }
+
+                        if (!isEmail($scope.email)) {
+                            $scope.title = "网站信息！";
+                            $scope.result = "请输入有效的Email";
+                            return
+                        }
+
+
+                        $http.post("../Api/Cms/CmsPage/GetOnline", {
+                            name: $scope.name,
+                            telephone: $scope.telephone,
+                            email: $scope.email,
+                            product: $scope.product,
+                            Remark: $scope.Remark,
+                            address: $scope.address
+                        }).success(function(data) {
+                            $scope.title = "网站信息！";
+                            $scope.result = data.msg;
+                        });
+                    } else {
+                        $scope.title = "网站信息！";
+                        $scope.result = "请填写正确的表单信息";
+                    }
+
+
                 }
-                this.reset = function () {
+                this.reset = function() {
 
                     $scope.name = "";
                     $scope.telephone = "";
                     $scope.email = "";
                     $scope.product = "";
                     $scope.Remark = "";
-                    $scope.address= "";
-                  
+                    $scope.address = "";
+
                 }
             }
         ]);
 
         //联系我们 
         app.controller("contactController", [
-            '$scope', '$http', '$sce', function ($scope, $http, $sce) {
+            '$scope', '$http', '$sce', function($scope, $http, $sce) {
                 var pageinfoUrl = "../Api/Cms/CmsChannel/GetChannelByCode?code=Contact";
-                $http.post(pageinfoUrl).success(function (data) {
+                $http.post(pageinfoUrl).success(function(data) {
                     $scope.ChannelName = data.ChannelName;
                     $scope.ChannelCode = data.ChannelCode;
                     $scope.PageContent = $sce.trustAsHtml(data.PageContent);
                 });
             }
+        ]);
+        app.controller("productListController", [
+        '$scope', '$http', '$sce', function ($scope, $http, $sce) {
+            function OpenProduct(code) {
+                window.location.href = 'Products?id=' + code;
+            }
+
+            this.click = OpenProduct;
+            var productListUrl = "../Api/Cms/CmsPage/GetClassifyListByChannelCode?code=Products";
+            $http.post(productListUrl).success(function (data) {
+                var temp = new Array();
+                angular.forEach(data, function (item) {
+                    temp.push({
+                        Name: item.Name,
+                        Code: item.Code,
+                        PageContent: $sce.trustAsHtml(item.PageContent)
+                    });
+                });
+                $scope.ProductTypeList = temp;
+            });
+        }
         ]);
     </script>
 
@@ -54,8 +104,20 @@
 <div class="container" style="height: auto; margin-top: 10px">
     <div class="row">
         <div class="col-md-3">
-            <div class="panel panel-default" style="height: auto; min-height: 290px">
-                <div class="panel-heading"><span class="glyphicon glyphicon-comment">&nbsp;<b></b></span></div>
+           <div ng-controller="productListController as productList"  class="panel panel-default" style="height: auto; min-height: 290px">
+              <div class="panel-body">
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px;"><b>产品分类</b>
+                    </div>
+                    <ul class="media-list">
+                        <li class="media">
+                           <div ng-repeat="productType in ProductTypeList" class="col-md-6">
+                               <div ng-click="productList.click(productType.Code)">
+                                   <div ng-bind-html="productType.PageContent" class="thumbnail"></div> 
+                               </div>  
+                            </div>
+                        </li>
+                    </ul>
+                </div>
 
             </div>
             <div ng-controller="contactController" class="panel panel-default" style="height: auto; min-height: 290px; background-image: url('static/img/contact.jpg')">
@@ -69,14 +131,14 @@
                 <div class="panel-heading"><span class="glyphicon glyphicon-comment">&nbsp;<b>在线订单</b></span></div>
                 <div class="panel-body">
                     <div class="page">
-                        <form class="form-horizontal" role="form">
+                        <form name="myform" class="form-horizontal" role="form">
                             <fieldset>
                                 <legend class="text-box text-center text-danger">非常感谢您购买我们的产品，请填好下面的表格，我们会尽快与您联系。</legend>
 
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label" for="name">姓名</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="name" id="name" type="text" placeholder="请输入您的姓名" />
+                                        <input class="form-control" ng-model="name" required data-validation-required-message="error"  id="name" type="text" placeholder="请输入您的姓名" />
                                     </div>
                                     <div class="col-sm-1">
                                         *
@@ -86,7 +148,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label" for="telephone">电话</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="telephone" id="telephone" type="text" placeholder="请输入您的电话" />
+                                        <input class="form-control" ng-model="telephone" required  id="telephone" type="text" placeholder="请输入您的电话" />
                                     </div>
                                     <div class="col-sm-1">
                                         *
@@ -96,7 +158,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label" for="email">Email</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="email" id="email" type="text" placeholder="请输入您的Email" />
+                                        <input class="form-control" ng-model="email"   id="email" required  type="email" placeholder="请输入您的Email" />
                                     </div>
                                     <div class="col-sm-1">
                                         *
@@ -107,28 +169,28 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label" for="product">产品名称</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="product" id="product" type="text" placeholder="您要订购的产品" />
+                                        <input class="form-control" ng-model="product" id="product" required  type="text" placeholder="您要订购的产品" />
                                     </div>
                                     <div class="col-sm-1">
-                                        *
+                                      
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label" for="Remark">备注信息</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="Remark" id="Remark" type="text" placeholder="订购说明" />
+                                        <input class="form-control" ng-model="Remark" id="Remark" type="text" required  placeholder="订购说明" />
                                     </div>
                                     <div class="col-sm-1">
-                                        *
+                                       
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label" for="address">送货地址</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="address" id="address" type="text" placeholder="请输入送货地址" />
+                                        <input class="form-control" ng-model="address" id="address" type="text" required  placeholder="请输入送货地址" />
                                     </div>
                                     <div class="col-sm-1">
-                                        *
+                                       
                                     </div>
                                 </div>
 
@@ -139,6 +201,10 @@
                                         <button type="button" class="btn btn-default" ng-click="online.reset()">重置</button>
                                     </div>
 
+                                </div>
+                                <div class="alert alert-warning alert-dismissible" role="alert">
+                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <strong id="title" >{{title}}</strong><span >{{result}}</span>
                                 </div>
                             </fieldset>
 

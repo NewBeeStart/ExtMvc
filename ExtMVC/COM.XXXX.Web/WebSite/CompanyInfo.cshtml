@@ -29,6 +29,28 @@
                            });
                    }
         ]);
+        app.controller("productListController", [
+        '$scope', '$http', '$sce', function ($scope, $http, $sce) {
+            function OpenProduct(code) {
+                window.location.href = 'Products?id=' + code;
+            }
+
+            this.click = OpenProduct;
+            var productListUrl = "../Api/Cms/CmsPage/GetClassifyListByChannelCode?code=Products";
+            $http.post(productListUrl).success(function (data) {
+                var temp = new Array();
+                angular.forEach(data, function (item) {
+                    temp.push({
+                        Name: item.Name,
+                        Code: item.Code,
+                        PageContent: $sce.trustAsHtml(item.PageContent)
+                    });
+                });
+                $scope.ProductTypeList = temp;
+            });
+        }
+        ]);
+
 </script>
 
 
@@ -38,9 +60,21 @@
 
 <div  class="container"   style="height: auto; margin-top: 10px">
     <div class="row">
-        <div class="col-md-3">
-            <div class="panel panel-default" style="height: auto; min-height: 290px">
-                <div class="panel-heading"><span class="glyphicon glyphicon-comment">&nbsp;<b></b></span></div>
+        <div  class="col-md-3">
+            <div ng-controller="productListController as productList"  class="panel panel-default" style="height: auto; min-height: 290px">
+              <div class="panel-body">
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px;"><b>产品分类</b>
+                    </div>
+                    <ul class="media-list">
+                        <li class="media">
+                           <div ng-repeat="productType in ProductTypeList" class="col-md-6">
+                               <div ng-click="productList.click(productType.Code)">
+                                   <div ng-bind-html="productType.PageContent" class="thumbnail"></div> 
+                               </div>  
+                            </div>
+                        </li>
+                    </ul>
+                </div>
 
             </div>
              <div ng-controller="contactController"  class="panel panel-default" style="height: auto; min-height: 290px;background-image: url('static/img/contact.jpg')">
