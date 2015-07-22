@@ -100,6 +100,7 @@
     <Compile Include="Class\HomeControllerBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\WebSiteController.cs" />
     <Compile Include="MvcHandleErrorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ControllerBase.cs" />

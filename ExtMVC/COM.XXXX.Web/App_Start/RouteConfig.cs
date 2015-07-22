@@ -16,20 +16,20 @@ namespace COM.XXXX.Web
                 string parameterName, RouteValueDictionary values,
                 RouteDirection routeDirection)
             {
-                return httpContext.Request.RawUrl.ToLowerInvariant() == "/" || httpContext.Request.RawUrl.ToLowerInvariant().Contains("website");
+                return httpContext.Request.RawUrl.ToLowerInvariant() == "/" || httpContext.Request.RawUrl.ToLowerInvariant().Contains("website") || httpContext.Request.RawUrl.ToLowerInvariant()==string.Empty;
             }
         }
         public static void RegisterRoutes(RouteCollection routes)
         {
             //routes.RouteExistingFiles = true;
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.IgnoreRoute("", new { DomainConstraint = new DomainWebSiteConstraint() });
+            //routes.IgnoreRoute("", new { DomainConstraint = new DomainWebSiteConstraint() });
             
             //默认的无区域路由
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "webSite", action = "Index", id = UrlParameter.Optional },
+                defaults: new { controller = "WebSite", action = "Index", id = UrlParameter.Optional },
                 namespaces: new string[] { "COM.XXXX.Controllers" }
                 );
 

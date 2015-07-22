@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "Shared/_Layout.cshtml";
 }
+
 @section head
 {
 
@@ -50,7 +51,7 @@
             <div class="panel panel-default" style="height: auto; min-height: 600px">
                 <div class="panel-heading text-box" style="margin-bottom: 20px" ><b class="glyphicon glyphicon-align-justify">&nbsp;<b>列表资源</b></b></div>
                 <div ng-repeat="productType in ProductTypeList" class="col-md-6">
-                      <div  ng-click="click(productType.Code)" ng-bind-html="productType.PageContent" class="thumbnail"></div>
+                      <div style=" cursor:pointer" ng-click="productList.click(productType.Code)" ng-bind-html="productType.PageContent" class="thumbnail"></div>
                 </div>
             </div>
         </div>
