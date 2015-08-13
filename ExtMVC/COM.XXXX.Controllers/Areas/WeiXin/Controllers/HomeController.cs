@@ -31,6 +31,7 @@ namespace COM.XXXX.Controllers.Areas.WeiXin.Controllers
         [ActionName("Index")]
         public ActionResult Get(PostModel postModel, string echostr)
         {
+
             if (CheckSignature.Check(postModel.Signature, postModel.Timestamp, postModel.Nonce, Token))
             {
                 return Content(echostr); //返回随机字符串则表示验证通过
