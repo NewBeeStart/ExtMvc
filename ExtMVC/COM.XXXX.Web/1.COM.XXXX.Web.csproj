@@ -61,6 +61,13 @@
     <Reference Include="RouteDebugger">
       <HintPath>..\packages\routedebugger.2.1.4.0\lib\net40\RouteDebugger.dll</HintPath>
     </Reference>
+    <Reference Include="Senparc.Weixin">
+      <HintPath>..\packages\Senparc.Weixin.3.3.9\lib\net40\Senparc.Weixin.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=12.4.6.38710, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Senparc.Weixin.MP.12.4.6\lib\net40\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -134,6 +141,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Cms\CmsAreaRegistration.cs" />
+    <Compile Include="Areas\WeiXin\WeiXinAreaRegistration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -9070,6 +9078,8 @@
     <Content Include="Areas\Cms\Views\CmsPage\PageList.cshtml" />
     <Content Include="Areas\Cms\Views\CmsPagePicture\Index.cshtml" />
     <Content Include="Areas\Cms\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\WeiXin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\WeiXin\Views\Web.config" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Views\Shared\_Layout.cshtml" />

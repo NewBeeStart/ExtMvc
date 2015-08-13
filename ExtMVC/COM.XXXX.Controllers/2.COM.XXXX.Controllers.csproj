@@ -43,6 +43,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Senparc.Weixin, Version=3.3.9.33960, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Senparc.Weixin.3.3.9\lib\net40\Senparc.Weixin.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=12.4.6.38710, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Senparc.Weixin.MP.12.4.6\lib\net40\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -96,6 +104,7 @@
     <Compile Include="Areas\Cms\Controllers\CmsChannelController.cs" />
     <Compile Include="Areas\Cms\Controllers\CmsPageTitleController.cs" />
     <Compile Include="Areas\Cms\Controllers\WebSiteController.cs" />
+    <Compile Include="Areas\WeiXin\Controllers\HomeController.cs" />
     <Compile Include="Class\CustomJsonResult.cs" />
     <Compile Include="Class\HomeControllerBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -121,6 +130,14 @@
     <ProjectReference Include="..\Repository.Domain\7.Repository.Domain.csproj">
       <Project>{16b18c4e-47f6-4117-aae6-467f03ff4fa4}</Project>
       <Name>7.Repository.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Weixin.CommonService.CustomMessageHandler\Weixin.CustomMessageHandler.csproj">
+      <Project>{3acb38d5-02aa-4ab9-94cb-1dcf510e4fe8}</Project>
+      <Name>Weixin.CustomMessageHandler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WeiXin.MvcExtension\WeiXin.MvcExtension.csproj">
+      <Project>{2e57070e-4f2b-47c4-805f-eef801104115}</Project>
+      <Name>WeiXin.MvcExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

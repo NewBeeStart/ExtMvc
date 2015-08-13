@@ -1,0 +1,3 @@
+ExecptionMessage:未将对象引用设置到对象的实例。
+COM.XXXX.Controllers
+   在 COM.XXXX.Controllers.Areas.WeiXin.Controllers.HomeController.Post(PostModel postModel) 位置 f:\PrimaryFile\project\NewBeeStart\ExtMvc\ExtMVC\COM.XXXX.Controllers\Areas\WeiXin\Controllers\HomeController.cs:行号 107

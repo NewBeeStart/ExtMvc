@@ -1,0 +1,9 @@
+ExecptionMessage:文件“F:\PrimaryFile\project\NewBeeStart\ExtMvc\ExtMVC\COM.XXXX.Web\App_Data\MP\2015-08-13\635750670825999139_Request_oKfXGs1gsnGzrP7XMSt3kYl76S60.txt”正由另一进程使用，因此该进程无法访问此文件。
+mscorlib
+   在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   在 System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy)
+   在 System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, Boolean useAsync)
+   在 System.Xml.XmlWriterSettings.CreateWriter(String outputFileName)
+   在 System.Xml.Linq.XDocument.Save(String fileName, SaveOptions options)
+   在 COM.XXXX.Controllers.Areas.WeiXin.Controllers.HomeController.Post(PostModel postModel) 位置 f:\PrimaryFile\project\NewBeeStart\ExtMvc\ExtMVC\COM.XXXX.Controllers\Areas\WeiXin\Controllers\HomeController.cs:行号 78

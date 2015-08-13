@@ -21,6 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{F5F7680D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSite", "WebSite\WebSite.csproj", "{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WeiXin", "WeiXin", "{42C8F8FE-B9B7-41C9-9376-E25276F222CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeiXin.MvcExtension", "WeiXin.MvcExtension\WeiXin.MvcExtension.csproj", "{2E57070E-4F2B-47C4-805F-EEF801104115}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weixin.CustomMessageHandler", "Weixin.CommonService.CustomMessageHandler\Weixin.CustomMessageHandler.csproj", "{3ACB38D5-02AA-4AB9-94CB-1DCF510E4FE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,11 +69,22 @@ Global
 		{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF38E5A7-1896-4FCF-B059-5DB15EFF5DED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E57070E-4F2B-47C4-805F-EEF801104115}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E57070E-4F2B-47C4-805F-EEF801104115}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E57070E-4F2B-47C4-805F-EEF801104115}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E57070E-4F2B-47C4-805F-EEF801104115}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ACB38D5-02AA-4AB9-94CB-1DCF510E4FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ACB38D5-02AA-4AB9-94CB-1DCF510E4FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ACB38D5-02AA-4AB9-94CB-1DCF510E4FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ACB38D5-02AA-4AB9-94CB-1DCF510E4FE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0487D52D-72D6-46C4-8E9D-5F743D6A5550} = {F5F7680D-54A7-40E0-8933-E01E09692A00}
+		{42C8F8FE-B9B7-41C9-9376-E25276F222CD} = {F5F7680D-54A7-40E0-8933-E01E09692A00}
+		{2E57070E-4F2B-47C4-805F-EEF801104115} = {42C8F8FE-B9B7-41C9-9376-E25276F222CD}
+		{3ACB38D5-02AA-4AB9-94CB-1DCF510E4FE8} = {42C8F8FE-B9B7-41C9-9376-E25276F222CD}
 	EndGlobalSection
 EndGlobal
