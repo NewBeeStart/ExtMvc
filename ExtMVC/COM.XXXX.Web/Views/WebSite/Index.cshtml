@@ -7,7 +7,6 @@
 @section head
 {
     <script>
-
         app.controller("companyInfoController", [
             '$scope', '$http', function($scope, $http) {
                 var companyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=CompanyInfo";
@@ -76,8 +75,7 @@
                 });
             }
         ]);
-
-        //联系我们
+        //产品分类
         app.controller("classifyController", [
             '$scope', '$http', function($scope, $http) {
                 var classifyUrl = "../Api/Cms/CmsChannel/GetChannelByCode?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]&code=Contact";
@@ -132,7 +130,7 @@
             <div class="panel panel-default" style="height: 250px">
                 <div class="panel-body">
                     <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px">
-                        <b>{{companyInfo.ChannelName}}</b>
+                        <span class="glyphicon glyphicon-home"> <b>{{companyInfo.ChannelName}}</b></span>   
                     </div>
                     <ul class="media-list">
                         <li id="companyInfo" class="media"></li>
@@ -145,7 +143,7 @@
             <div class="panel panel-default" style="height: 250px">
                 <div class="panel-body">
                     <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px">
-                        <b>新闻动态</b>
+                        <span class="glyphicon glyphicon-book"> <b>新闻动态</b></span>
                     </div>
                     <div ng-repeat="new in newsList" style="border-bottom: 1px dashed #cacaca; margin: 5px 5px;cursor:pointer">
                         <span>
@@ -165,7 +163,7 @@
         <div ng-controller="productListController as productList" class="col-md-4">
             <div class="panel panel-default" style="height: 290px">
                 <div class="panel-body">
-                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px;"><b>产品分类</b>
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px;"><span class="glyphicon glyphicon-leaf">&nbsp;<b>产品分类</b></span>
                     </div>
                     <ul class="media-list">
                         <li class="media">
@@ -182,7 +180,7 @@
         <div ng-controller="baseShowController as baseShow" class="col-md-4">
             <div class="panel panel-default" style="height: 290px">
                 <div class="panel-body">
-                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>基地展示</b>
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><span class="glyphicon glyphicon-picture">&nbsp;<b>基地展示</b></span>
                     </div>
                     <ul class="media-list">
                         <li class="media">
@@ -199,7 +197,6 @@
                                 <a class="left carousel-control" href="#carousel-baseshow" data-slide="prev"></a>
                                 <a class="right carousel-control" href="#carousel-baseshow" data-slide="next"></a>
                             </div>
-
                         </li>
                     </ul>
                 </div>
@@ -209,7 +206,7 @@
             <div class="panel panel-default" style="height: 290px;background-image: url('/Scripts/static/img/contact.jpg')">
                 <div class="panel-body">
                     <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px">
-                        <b>{{classifyInfo.ChannelName}}</b>
+                        <span class="glyphicon glyphicon-phone">&nbsp;<b>{{classifyInfo.ChannelName}}</b></span>       
                     </div>
                     <ul class="media-list">
                         <li id="classifyInfo" class="media"></li>
@@ -224,7 +221,7 @@
             <!--产品图片滚动 -->
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><b>产品列表</b>
+                    <div style="border-bottom: 1px solid #dbdbdb; margin: 5px 5px"><span class="glyphicon glyphicon-grain">&nbsp;<b>产品列表</b></span>
                     </div>
 
                     <div style="padding: 0px">

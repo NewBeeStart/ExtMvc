@@ -7,7 +7,8 @@
     <link href="../../../Scripts/static/bootstrap/dist/css/nav-justified.css" rel="stylesheet">
     <script src="../../../Scripts/static/angular/angular.js"></script>
     <script src="../../../Scripts/static/bootstrap/dist/js/bootstrap.min.js"></script>
-      <script src="../../../Scripts/static/angular/angular-sanitize.min.js"></script>
+    <script src="../../../Scripts/static/angular/angular-sanitize.min.js"></script>
+    <script src="../../../Scripts/static/angular/angular-cookies.js"></script>
     <style>
         .footer {
             background: #007ACC;
@@ -22,20 +23,52 @@
             }
     </style>
     <script type="text/javascript">
-        var app = angular.module('index', []);
+      
+        var app = angular.module('index', ['ngCookies']);
+        app.directive('onFinishRenderFilters', function ($timeout) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attr) {
+                    if (scope.$last === true) {
+                        $timeout(function () {
+                            scope.$emit('ngRepeatFinished');
+                        });
+                    }
+                }
+            };
+        });
         //加载标题和菜单
         app.controller("headController", [
-            '$scope', '$http', function($scope, $http) {
+            '$cookies', '$scope', '$http', function($cookies, $scope, $http) {
+                function changeActive(code) {
+                    $cookies.menuCode=code;
+                }
+                this.click = changeActive;
+              
                 var titleUrl = "../Api/Cms/WebSite/Get/@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
-            var menusUrl = "../Api/Cms/CmsChannel/GetWebMenusByWebID?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
+                var menusUrl = "../Api/Cms/CmsChannel/GetWebMenusByWebID?webid=@System.Configuration.ConfigurationManager.AppSettings["WebSiteID"]";
+
+
                 $http.get(titleUrl).success(function(data) {
                     $scope.websiteTitle = data;
                 });
                 $http.post(menusUrl).success(function(data) {
                     $scope.menus = data;
                 });
+                //文档加载完成后出发此事件，选中菜单
+                $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
+                    $("ul > li").removeClass("active");
+                    if ($cookies.menuCode) {
+                        $("#" + $cookies.menuCode).parent().addClass("active");
+                    } else {
+                        $('#index').addClass("active");
+                    }
+                    
+                });
             }
+       
         ]);
+
 
         //加载图片轮转
         app.controller("imagesController", [
@@ -68,13 +101,13 @@
                 });
             }
         ]);
-       
+
     </script>
     @RenderSection("head",false)
 </head>
 <body ng-app="index">
     <!-- 导航 -->
-    <div ng-controller="headController" class="container  navbar-top">
+    <div ng-controller="headController as head" class="container  navbar-top">
         <div class="row">
             <div class="col-md-3">
                 <a class="navbar-brand" href="/WebSite/Index">
@@ -84,16 +117,14 @@
                             <td valign="middle"> <span style="font-size: 20px;font-family: Arial, 'DejaVu Sans', 'Liberation Sans', Freesans, sans-serif">{{websiteTitle.CompanyName}}</span></td>
                         </tr>
                     </table>
-                    
-                   
                 </a>
             </div>
             <div class="col-md-9">
                 <nav>
                     <ul class="nav nav-justified">
-                        <li class='active'><a href='/WebSite/Index'>首页</a></li>
-                        <li ng-repeat="menu in menus">
-                            <a ng-href='/WebSite/{{menu.ChannelCode}}'>{{menu.ChannelName}} </a>
+                        <li  class='active'><a id="index" href='/WebSite/Index' ng-click="head.click('index')">首页</a></li>
+                        <li ng-repeat="menu in menus" on-finish-render-filters>
+                            <a ng-href='/WebSite/{{menu.ChannelCode}}' id="{{menu.ChannelCode}}"  ng-click="head.click(menu.ChannelCode)">{{menu.ChannelName}} </a>
                         </li>
                     </ul>
                 </nav>
