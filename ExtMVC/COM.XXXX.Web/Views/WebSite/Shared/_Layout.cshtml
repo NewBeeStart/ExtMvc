@@ -25,6 +25,7 @@
     <script type="text/javascript">
       
         var app = angular.module('index', ['ngCookies']);
+
         app.directive('onFinishRenderFilters', function ($timeout) {
             return {
                 restrict: 'A',
@@ -37,6 +38,7 @@
                 }
             };
         });
+
         //加载标题和菜单
         app.controller("headController", [
             '$cookies', '$scope', '$http', function($cookies, $scope, $http) {
@@ -109,17 +111,17 @@
     <!-- 导航 -->
     <div ng-controller="headController as head" class="container  navbar-top">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <a class="navbar-brand" href="/WebSite/Index">
-                    <table>
-                        <tr>
-                            <td valign="top"><img src="../../../Scripts/static/img/logo.png" style="width: 35px; height: 35px; float: left" alt=""/></td>
-                            <td valign="middle"> <span style="font-size: 20px;font-family: Arial, 'DejaVu Sans', 'Liberation Sans', Freesans, sans-serif">{{websiteTitle.CompanyName}}</span></td>
-                        </tr>
-                    </table>
+                    <span>
+                        <span style="font-size: 30px; font-family: Arial, 'DejaVu Sans', 'Liberation Sans', Freesans, sans-serif">
+                        <img src="../../../Scripts/static/img/logo.png" style="width: 35px; height: 35px; float: left" align="absmiddle" alt=""/>
+                                        &nbsp;&nbsp;{{websiteTitle.CompanyName}}
+                        </span>
+                   </span>     
                 </a>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <nav>
                     <ul class="nav nav-justified">
                         <li  class='active'><a id="index" href='/WebSite/Index' ng-click="head.click('index')">首页</a></li>
