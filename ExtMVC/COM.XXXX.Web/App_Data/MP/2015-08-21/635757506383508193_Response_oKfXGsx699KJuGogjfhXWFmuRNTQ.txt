@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xml>
+  <ToUserName><![CDATA[oKfXGsx699KJuGogjfhXWFmuRNTQ]]></ToUserName>
+  <FromUserName><![CDATA[gh_f246954b2bc5]]></FromUserName>
+  <CreateTime>1440125038</CreateTime>
+  <MsgType><![CDATA[text]]></MsgType>
+  <Content><![CDATA[接收到了群发完成的信息。]]></Content>
+</xml>

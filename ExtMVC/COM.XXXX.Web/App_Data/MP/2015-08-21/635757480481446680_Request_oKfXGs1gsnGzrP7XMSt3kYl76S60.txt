@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xml>
+  <ToUserName><![CDATA[gh_f246954b2bc5]]></ToUserName>
+  <FromUserName><![CDATA[oKfXGs1gsnGzrP7XMSt3kYl76S60]]></FromUserName>
+  <CreateTime>1440122059</CreateTime>
+  <MsgType><![CDATA[image]]></MsgType>
+  <PicUrl><![CDATA[http://mmbiz.qpic.cn/mmbiz/tNfxW2pCc5ontaUm9moLeZ8BYnS2fMQgqBQ2w273F9iaOLjjpQicXIheEUn0pENLMz6ibLxRIfia4tUbESrWb41IcA/0]]></PicUrl>
+  <MsgId>6185277145863264001</MsgId>
+  <MediaId><![CDATA[xZO4i68b58HN5Ox7Oq2Itf4P_Nh_S5bURFtcsWA0TSccFbz5HR6hPzBVigpON1jX]]></MediaId>
+</xml>

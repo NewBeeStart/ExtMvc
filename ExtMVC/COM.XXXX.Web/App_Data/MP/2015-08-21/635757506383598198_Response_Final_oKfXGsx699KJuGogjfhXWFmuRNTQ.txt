@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xml>
+  <Encrypt><![CDATA[/2PCydUxmYkeMsx6i6Cnlm2aslQgVC2RFLFMm+Nth7JPL7a5X1oFqwDnVUqrkd/c8g1qxdeSPwxMCpx87sXcygflDcG37w0Bg24mYigJSBy+mkWyIEJASszrBHYklpry0MwnBkb35+NBQy6+3UAMPg9mOHiESeSmB+Z31hFfRL3dzbG5mnv5OO7oNVPBF7yzsMRrFq1QiIrPI3uuc7MVvXrPgdrahoNrAvNDS1iFTT1ebdK5uwVptkH2E54nEHIOVwdBC0tOijRNNkAAJV/D8Tumy4K75odY8iSuPGFf4PZ5hEvFlEUPwNzJjN8EhGoRNZDEkglOroHBboMR22sXQhR5u3grTNfyEDV6DKZkaoYZtn7L7zkB5kBGKLp2PrL+0IayrwyTBoYOdkW08F7vpe9MR3Qri9NmtuRl3lQICCqqc9kgvx+JWNkj6sgnS5Z8vIzBN1hKPUPse3hQvs54Fg==]]></Encrypt>
+  <MsgSignature><![CDATA[d4834e891154d1ba1bb7c3dcbb8d0282a2dfe00c]]></MsgSignature>
+  <TimeStamp><![CDATA[635757506383538195]]></TimeStamp>
+  <Nonce><![CDATA[635757506383538195]]></Nonce>
+</xml>

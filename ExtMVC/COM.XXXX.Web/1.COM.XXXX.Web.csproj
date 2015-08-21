@@ -9080,6 +9080,7 @@
     <Content Include="Areas\Cms\Views\_ViewStart.cshtml" />
     <Content Include="Areas\WeiXin\Views\Home\Index.cshtml" />
     <Content Include="Areas\WeiXin\Views\Web.config" />
+    <None Include="Properties\PublishProfiles\xycui.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Views\Shared\_Layout.cshtml" />
